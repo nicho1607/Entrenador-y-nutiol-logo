@@ -1,0 +1,11 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    "prisma/generated/",
+    "coverage/",
+    "playwright-report/",
+    "test-results/"
+  ]
+}

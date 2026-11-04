@@ -1,0 +1,45 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# next.js
+/.next/
+/out/
+
+# production build output
+/build
+/dist
+
+# testing
+/coverage
+/test-results
+/playwright-report
+/playwright/.cache
+
+# environment variables (never commit real secrets)
+.env
+.env*
+!.env.example
+
+# prisma
+# (keep migrations under version control; ignore local generated client)
+/prisma/generated
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# os / editor
+.DS_Store
+Thumbs.db
+*.pem
+
+# agent workflow scratch artifacts (not part of the product)
+/.agents
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
