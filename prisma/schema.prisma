@@ -1,0 +1,466 @@
+// FitMind AI — Prisma schema (foundation phase).
+//
+// Provider is PostgreSQL. The full relational domain is modeled now so later
+// phases do not have to re-migrate the core. Data-ownership rule: every
+// user-owned row references User and cascades on user deletion.
+//
+// Conventions:
+//  - PKs are cuid() strings.
+//  - createdAt / updatedAt timestamps on every mutable entity.
+//  - Monetary/derived aggregates (e.g. per-day nutrition totals) are stored
+//    only where they are a user-entered target or a cached summary that is
+//    expensive to recompute; raw logs remain the source of truth.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Auth / identity
+// ---------------------------------------------------------------------------
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  profile          UserProfile?
+  fitnessGoals     FitnessGoal[]
+  workoutPlans     WorkoutPlan[]
+  workoutSessions  WorkoutSession[]
+  bodyMeasurements BodyMeasurement[]
+  nutritionPlans   NutritionPlan[]
+  foodLogs         FoodLog[]
+  dailyNutrition   DailyNutrition[]
+  waterLogs        WaterLog[]
+  progressRecords  ProgressRecord[]
+
+  @@index([email])
+}
+
+enum Sex {
+  MALE
+  FEMALE
+}
+
+enum ActivityLevel {
+  SEDENTARY
+  LIGHT
+  MODERATE
+  ACTIVE
+  VERY_ACTIVE
+}
+
+enum ExperienceLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+// Equipment the user has access to (multi-select). Mirrors the domain/UI list.
+enum Equipment {
+  BODYWEIGHT
+  DUMBBELLS
+  BARBELL
+  KETTLEBELL
+  RESISTANCE_BANDS
+  PULL_UP_BAR
+  BENCH
+  CABLE_MACHINE
+  CARDIO_MACHINE
+  FULL_GYM
+}
+
+model UserProfile {
+  id            String         @id @default(cuid())
+  userId        String         @unique
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  birthDate     DateTime?
+  sex           Sex?
+  heightCm      Float?
+  weightKg      Float?
+  activityLevel ActivityLevel?
+  experienceLevel ExperienceLevel?
+  // Training availability.
+  daysPerWeek     Int?
+  sessionMinutes  Int?
+  // Available equipment (multi-select).
+  equipment       Equipment[]
+  // Nutrition preferences — all optional; the user records only what applies.
+  dietaryPreferences   String[]
+  allergies            String[]
+  dietaryRestrictions  String[]
+  // Optional weekly food budget (user-entered amount; currency is the user's).
+  foodBudget      Float?
+  // Safety flags that gate automatic calorie targeting (see domain library).
+  flaggedForProfessionalReview Boolean @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+enum GoalType {
+  HYPERTROPHY
+  FAT_LOSS
+  RECOMPOSITION
+  WEIGHT_GAIN
+  STRENGTH
+  ENDURANCE
+  MAINTENANCE
+}
+
+model FitnessGoal {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        GoalType
+  targetWeightKg Float?
+  targetDate  DateTime?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// Training domain
+// ---------------------------------------------------------------------------
+
+model WorkoutPlan {
+  id          String       @id @default(cuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  // Origin lets us distinguish native plans from imported ones.
+  source      PlanSource   @default(NATIVE)
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  days        WorkoutDay[]
+
+  @@index([userId])
+}
+
+enum PlanSource {
+  NATIVE
+  IMPORTED
+}
+
+model WorkoutDay {
+  id        String            @id @default(cuid())
+  planId    String
+  plan      WorkoutPlan       @relation(fields: [planId], references: [id], onDelete: Cascade)
+  // Position of this day within the plan (e.g. Day 1, Day 2).
+  order     Int
+  name      String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  exercises WorkoutExercise[]
+
+  @@unique([planId, order])
+  @@index([planId])
+}
+
+enum MuscleGroup {
+  CHEST
+  BACK
+  SHOULDERS
+  BICEPS
+  TRICEPS
+  QUADS
+  HAMSTRINGS
+  GLUTES
+  CALVES
+  CORE
+  FULL_BODY
+  OTHER
+}
+
+// Exercise is a shared catalog entity (not user-owned). Curated exercise data
+// is seeded from the public-domain Free Exercise DB (see docs/data-sources.md);
+// every row carries provenance so nothing is fabricated.
+model Exercise {
+  id            String            @id @default(cuid())
+  name          String            @unique
+  primaryMuscle MuscleGroup
+  // Additional muscles the movement trains (reuses the MuscleGroup enum).
+  secondaryMuscles MuscleGroup[]
+  // Equipment required to perform it (reuses the Equipment enum).
+  equipment     Equipment[]
+  // Relative difficulty (reuses the ExperienceLevel enum).
+  difficulty    ExperienceLevel?
+  description   String?
+  // Short how-to text, when the source provides it.
+  instructions  String?
+  // Provenance: stable source key (e.g. "free-exercise-db:<slug>"), the human
+  // source name, and the license under which the data is used.
+  sourceRef     String?
+  sourceName    String?
+  sourceLicense String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  workoutExercises WorkoutExercise[]
+
+  @@index([primaryMuscle])
+}
+
+model WorkoutExercise {
+  id         String      @id @default(cuid())
+  dayId      String
+  day        WorkoutDay  @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  exerciseId String
+  exercise   Exercise    @relation(fields: [exerciseId], references: [id], onDelete: Restrict)
+  order      Int
+  sets       Int
+  // Target reps range; min/max allow ranges like 8-12.
+  repsMin    Int
+  repsMax    Int
+  // Target rest in seconds; optional target RIR (reps in reserve).
+  restSeconds Int?
+  targetRir  Int?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  logs       ExerciseLog[]
+
+  @@unique([dayId, order])
+  @@index([dayId])
+  @@index([exerciseId])
+}
+
+model WorkoutSession {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Which day was performed (nullable so ad-hoc sessions are allowed).
+  dayId       String?
+  performedAt DateTime      @default(now())
+  notes       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  logs        ExerciseLog[]
+
+  @@index([userId])
+  @@index([performedAt])
+}
+
+model ExerciseLog {
+  id                String          @id @default(cuid())
+  sessionId         String
+  session           WorkoutSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  workoutExerciseId String
+  workoutExercise   WorkoutExercise @relation(fields: [workoutExerciseId], references: [id], onDelete: Restrict)
+  setNumber         Int
+  reps              Int
+  weightKg          Float
+  // Actual reps-in-reserve / rate of perceived exertion reported by the user.
+  rir               Int?
+  rpe               Float?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@unique([sessionId, workoutExerciseId, setNumber])
+  @@index([sessionId])
+  @@index([workoutExerciseId])
+}
+
+// ---------------------------------------------------------------------------
+// Body / progress tracking
+// ---------------------------------------------------------------------------
+
+model BodyMeasurement {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  measuredAt DateTime @default(now())
+  weightKg   Float?
+  bodyFatPct Float?
+  waistCm    Float?
+  hipCm      Float?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+  @@index([measuredAt])
+}
+
+enum ProgressMetric {
+  WEIGHT
+  BODY_FAT
+  STRENGTH
+  ENDURANCE
+}
+
+model ProgressRecord {
+  id         String         @id @default(cuid())
+  userId     String
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  metric     ProgressMetric
+  value      Float
+  recordedAt DateTime       @default(now())
+  note       String?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([metric])
+  @@index([recordedAt])
+}
+
+// ---------------------------------------------------------------------------
+// Nutrition domain
+// ---------------------------------------------------------------------------
+
+model NutritionPlan {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name           String
+  // User-entered or computed daily targets (a target, not a derived aggregate).
+  targetCalories Int?
+  targetProteinG Int?
+  targetCarbsG   Int?
+  targetFatG     Int?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  meals          Meal[]
+
+  @@index([userId])
+}
+
+// Food is a shared catalog entity (not user-owned). Curated nutrition data is
+// seeded from USDA FoodData Central (public domain — see docs/data-sources.md);
+// every curated row carries provenance so nothing is fabricated.
+model Food {
+  id              String     @id @default(cuid())
+  name            String     @unique
+  // Macros per 100g. Null means "unknown / not yet curated".
+  caloriesPer100g Float?
+  proteinPer100g  Float?
+  carbsPer100g    Float?
+  fatPer100g      Float?
+  // Reference quantity (grams) the per-reference macros describe. The per-100g
+  // fields stay authoritative; the default reference is 100 g.
+  referenceQtyG   Float?
+  // Coarse food category (e.g. PROTEIN/GRAIN/LEGUME/FRUIT/VEGETABLE/DAIRY/FAT),
+  // stored as a plain string to avoid introducing a new enum migration.
+  category        String?
+  // Provenance: stable source key (e.g. "usda-fdc:<fdcId>"), the human source
+  // name, and the license under which the data is used.
+  sourceRef       String?
+  sourceName      String?
+  sourceLicense   String?
+  // USDA FoodData Central ID when applicable.
+  fdcId           String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  mealItems       MealItem[]
+  foodLogs        FoodLog[]
+
+  @@index([name])
+}
+
+model Meal {
+  id        String     @id @default(cuid())
+  planId    String
+  plan      NutritionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  name      String
+  order     Int
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  items     MealItem[]
+
+  @@unique([planId, order])
+  @@index([planId])
+}
+
+model MealItem {
+  id        String   @id @default(cuid())
+  mealId    String
+  meal      Meal     @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  foodId    String
+  food      Food     @relation(fields: [foodId], references: [id], onDelete: Restrict)
+  quantityG Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([mealId])
+  @@index([foodId])
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}
+
+model FoodLog {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  foodId     String
+  food       Food     @relation(fields: [foodId], references: [id], onDelete: Restrict)
+  mealType   MealType
+  quantityG  Float
+  loggedAt   DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+  @@index([foodId])
+  @@index([loggedAt])
+}
+
+// DailyNutrition is a cached per-day summary (expensive to recompute across
+// many FoodLog rows for charts). It references its source day and is owned by
+// the user.
+model DailyNutrition {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Date (midnight) the summary is for.
+  date          DateTime
+  totalCalories Float    @default(0)
+  totalProteinG Float    @default(0)
+  totalCarbsG   Float    @default(0)
+  totalFatG     Float    @default(0)
+  totalWaterMl  Float    @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([userId])
+}
+
+// WaterLog is a user-owned raw log of water intake. Like FoodLog, raw logs are
+// the source of truth; DailyNutrition.totalWaterMl stays a cached summary.
+model WaterLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amountMl  Float
+  loggedAt  DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([loggedAt])
+}
