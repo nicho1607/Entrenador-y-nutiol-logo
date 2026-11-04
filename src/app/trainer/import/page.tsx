@@ -33,11 +33,11 @@ export default async function ImportRoutinePage() {
       <section className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Importar una rutina</h1>
         <p className="text-muted-foreground">
-          Pega o sube una rutina exportada como JSON o CSV. Mostramos una vista previa del plan
-          normalizado — días, ejercicios, series y repeticiones — y listamos las filas que no
-          pudimos mapear para que nada se descarte en silencio. Al confirmar, se guarda en tu
-          cuenta como un plan importado. Los nombres de los ejercicios deben coincidir con la
-          biblioteca de ejercicios.
+          Pega el enlace de una rutina o pega/sube una exportada como JSON o CSV. Mostramos una
+          vista previa del plan normalizado — días, ejercicios, series y repeticiones — y listamos
+          las filas que no pudimos mapear para que nada se descarte en silencio. Al confirmar, se
+          guarda en tu cuenta como un plan importado. Los nombres de los ejercicios deben coincidir
+          con la biblioteca de ejercicios.
         </p>
         <div className="flex flex-wrap gap-4 text-sm">
           <Link href="/trainer" className="underline underline-offset-4">
@@ -58,18 +58,16 @@ export default async function ImportRoutinePage() {
             <p>
               <strong>JSON:</strong> un plan con <code>name</code> y un arreglo <code>days</code>;
               cada día tiene un <code>name</code>, un <code>order</code> entero y un arreglo{" "}
-              <code>exercises</code>. Cada ejercicio necesita <code>name</code>,{" "}
-              <code>muscle</code>, <code>sets</code>, <code>repsMin</code> y <code>repsMax</code>{" "}
-              (con <code>repsMax ≥ repsMin</code>); <code>restSeconds</code> y{" "}
-              <code>targetRir</code> son opcionales.
+              <code>exercises</code>. Cada ejercicio necesita <code>name</code>, <code>muscle</code>
+              , <code>sets</code>, <code>repsMin</code> y <code>repsMax</code> (con{" "}
+              <code>repsMax ≥ repsMin</code>); <code>restSeconds</code> y <code>targetRir</code> son
+              opcionales.
             </p>
             <p>
               <strong>Encabezado CSV:</strong>{" "}
-              <code>
-                planName,dayName,dayOrder,exerciseName,muscle,sets,repsMin,repsMax
-              </code>{" "}
-              con las columnas opcionales <code>restSeconds,targetRir</code>. La agrupación por día
-              se deriva de <code>dayOrder</code> + <code>dayName</code>.
+              <code>planName,dayName,dayOrder,exerciseName,muscle,sets,repsMin,repsMax</code> con
+              las columnas opcionales <code>restSeconds,targetRir</code>. La agrupación por día se
+              deriva de <code>dayOrder</code> + <code>dayName</code>.
             </p>
             <p>
               <code>muscle</code> debe ser uno de: CHEST, BACK, SHOULDERS, BICEPS, TRICEPS, QUADS,
@@ -83,7 +81,7 @@ export default async function ImportRoutinePage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Pegar o subir una rutina</CardTitle>
+          <CardTitle>Importar desde un enlace o archivo</CardTitle>
         </CardHeader>
         <CardContent>
           <ImportRoutineForm />

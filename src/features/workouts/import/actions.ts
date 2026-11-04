@@ -14,14 +14,16 @@ import { revalidatePath } from "next/cache";
 
 import { getCurrentUser } from "@/features/auth/session";
 import { saveImportedPlan } from "@/features/trainer/service";
+import { detectRoutineFormat, fetchRoutineFromUrl, RoutineFetchError } from "./fetch-routine";
 import { importRoutineFromCsv, importRoutineFromJson } from "./importer";
 import type { ImportResult } from "./types";
 
-/** Raw, client-supplied import request. The parsed plan is never trusted. */
-export interface RoutineImportInput {
-  format: "json" | "csv";
-  content: string;
-}
+/**
+ * Raw, client-supplied import request: pasted/uploaded text, or a link the
+ * server downloads itself. The parsed plan is never trusted.
+ */
+export type RoutineImportInput =
+  { source: "text"; format: "json" | "csv"; content: string } | { source: "url"; url: string };
 
 export interface ParseRoutineActionState {
   status: "idle" | "success" | "error";
@@ -37,11 +39,43 @@ export interface ConfirmImportActionState {
   planId?: string;
 }
 
-/** Runs the parser for the chosen format on the raw content. */
-function parse(input: RoutineImportInput): ImportResult {
-  return input.format === "json"
-    ? importRoutineFromJson(input.content)
-    : importRoutineFromCsv(input.content);
+type Loaded = { result: ImportResult } | { error: string };
+
+/**
+ * Resolves the raw content (downloading it for a link) and runs the parser.
+ * For links the format is inferred from the downloaded text.
+ */
+async function load(input: RoutineImportInput): Promise<Loaded> {
+  let format: "json" | "csv";
+  let content: string;
+
+  if (input?.source === "url") {
+    if (typeof input.url !== "string" || !input.url.trim()) {
+      return { error: "Primero pega el enlace de tu rutina." };
+    }
+    try {
+      content = await fetchRoutineFromUrl(input.url);
+    } catch (error) {
+      return {
+        error:
+          error instanceof RoutineFetchError
+            ? error.message
+            : "No se pudo descargar la rutina desde ese enlace.",
+      };
+    }
+    if (!content.trim()) return { error: "El enlace no contiene ninguna rutina." };
+    format = detectRoutineFormat(content);
+  } else {
+    if (typeof input?.content !== "string" || !input.content.trim()) {
+      return { error: "Primero pega una rutina o elige un archivo." };
+    }
+    content = input.content;
+    format = input.format === "csv" ? "csv" : "json";
+  }
+
+  return {
+    result: format === "json" ? importRoutineFromJson(content) : importRoutineFromCsv(content),
+  };
 }
 
 /** Summarizes why a parse produced no plan, drawn from the rejected reasons. */
@@ -54,22 +88,28 @@ function rejectionMessage(result: ImportResult): string {
 }
 
 /**
- * Parses the pasted/uploaded routine for PREVIEW only (no write). Returns the
+ * Parses the pasted/uploaded/linked routine for PREVIEW only (no write). Returns the
  * full ImportResult so the client can render the normalized plan AND every
  * rejected/unmappable row with its reason.
  */
 export async function parseRoutineAction(
   rawInput: RoutineImportInput,
 ): Promise<ParseRoutineActionState> {
-  if (!rawInput.content.trim()) {
+  // A link preview makes an outbound request, so it needs a session too.
+  const user = await getCurrentUser();
+  if (!user) {
     return {
       status: "error",
-      message: "Primero pega una rutina o elige un archivo.",
+      message: "Debes iniciar sesión para importar una rutina.",
       result: null,
     };
   }
 
-  const result = parse(rawInput);
+  const loaded = await load(rawInput);
+  if ("error" in loaded) {
+    return { status: "error", message: loaded.error, result: null };
+  }
+  const { result } = loaded;
 
   if (!result.plan) {
     return { status: "error", message: rejectionMessage(result), result };
@@ -85,7 +125,7 @@ export async function parseRoutineAction(
 }
 
 /**
- * Persists the pasted/uploaded routine for the signed-in user. Ownership comes
+ * Persists the pasted/uploaded/linked routine for the signed-in user. Ownership comes
  * from `getCurrentUser()` (never the client); the parser is RE-RUN server-side
  * on the raw content (the client's previewed plan is never trusted). Rejects
  * when the parser yields no plan, surfacing the rejected reasons.
@@ -98,11 +138,11 @@ export async function confirmImportAction(
     return { status: "error", message: "Debes iniciar sesión para importar una rutina." };
   }
 
-  if (!rawInput.content.trim()) {
-    return { status: "error", message: "Primero pega una rutina o elige un archivo." };
+  const loaded = await load(rawInput);
+  if ("error" in loaded) {
+    return { status: "error", message: loaded.error };
   }
-
-  const result = parse(rawInput);
+  const { result } = loaded;
   if (!result.plan) {
     return { status: "error", message: rejectionMessage(result) };
   }
