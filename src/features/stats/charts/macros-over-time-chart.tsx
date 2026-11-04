@@ -37,9 +37,9 @@ interface MacroSeries {
 }
 
 const SERIES: MacroSeries[] = [
-  { consumedKey: "proteinG", targetKey: "targetProteinG", label: "Protein", colorIndex: 0 },
-  { consumedKey: "carbsG", targetKey: "targetCarbsG", label: "Carbs", colorIndex: 1 },
-  { consumedKey: "fatG", targetKey: "targetFatG", label: "Fat", colorIndex: 2 },
+  { consumedKey: "proteinG", targetKey: "targetProteinG", label: "Proteína", colorIndex: 0 },
+  { consumedKey: "carbsG", targetKey: "targetCarbsG", label: "Carbohidratos", colorIndex: 1 },
+  { consumedKey: "fatG", targetKey: "targetFatG", label: "Grasa", colorIndex: 2 },
 ];
 
 export function MacrosOverTimeChart({ rows }: { rows: MacrosOverTimeRow[] }) {
@@ -50,14 +50,14 @@ export function MacrosOverTimeChart({ rows }: { rows: MacrosOverTimeRow[] }) {
       <LineChart
         data={rows}
         margin={{ top: 8, right: 16, bottom: 28, left: 8 }}
-        aria-label="Macronutrients consumed versus target over time"
+        aria-label="Macronutrientes consumidos frente al objetivo a lo largo del tiempo"
       >
         <CartesianGrid stroke={BORDER} strokeDasharray="3 3" />
         <XAxis
           dataKey="day"
           stroke={MUTED}
           tick={{ fill: MUTED, fontSize: 12 }}
-          label={{ value: "Day", position: "insideBottom", offset: -12, fill: MUTED }}
+          label={{ value: "Día", position: "insideBottom", offset: -12, fill: MUTED }}
         />
         <YAxis
           stroke={MUTED}
@@ -88,7 +88,7 @@ export function MacrosOverTimeChart({ rows }: { rows: MacrosOverTimeRow[] }) {
             key={String(s.targetKey)}
             type="monotone"
             dataKey={String(s.targetKey)}
-            name={`${s.label} target (g)`}
+            name={`${s.label} objetivo (g)`}
             stroke={seriesColor(s.colorIndex)}
             strokeDasharray="5 4"
             dot={false}

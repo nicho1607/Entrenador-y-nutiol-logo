@@ -30,7 +30,8 @@ export function FoodLogForm({ foods }: { foods: FoodOption[] }) {
   if (foods.length === 0) {
     return (
       <p className="text-sm text-muted-foreground">
-        The food catalog is empty — seed it (see the README) before logging food.
+        El catálogo de alimentos está vacío — cárgalo (consulta el README) antes de registrar
+        alimentos.
       </p>
     );
   }
@@ -46,18 +47,18 @@ export function FoodLogForm({ foods }: { foods: FoodOption[] }) {
       quantityG: Number.isNaN(qty) ? undefined : qty,
     });
     if (!parsed.success) {
-      setMessage(parsed.error.issues[0]?.message ?? "Please fix the highlighted fields.");
+      setMessage(parsed.error.issues[0]?.message ?? "Corrige los campos resaltados.");
       return;
     }
 
     startTransition(async () => {
       const result = await logFoodAction(parsed.data);
       if (result.status === "success") {
-        setMessage("Food logged.");
+        setMessage("Alimento registrado.");
         setQuantityG("100");
         router.refresh();
       } else {
-        setMessage(result.message ?? "Could not log the food.");
+        setMessage(result.message ?? "No se pudo registrar el alimento.");
       }
     });
   }
@@ -67,7 +68,7 @@ export function FoodLogForm({ foods }: { foods: FoodOption[] }) {
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="log-food" className="text-sm font-medium">
-            Food
+            Alimento
           </label>
           <select
             id="log-food"
@@ -84,7 +85,7 @@ export function FoodLogForm({ foods }: { foods: FoodOption[] }) {
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="log-meal-type" className="text-sm font-medium">
-            Meal
+            Comida
           </label>
           <select
             id="log-meal-type"
@@ -101,7 +102,7 @@ export function FoodLogForm({ foods }: { foods: FoodOption[] }) {
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="log-qty" className="text-sm font-medium">
-            Grams
+            Gramos
           </label>
           <Input
             id="log-qty"
@@ -124,7 +125,7 @@ export function FoodLogForm({ foods }: { foods: FoodOption[] }) {
 
       <div>
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Logging..." : "Log food"}
+          {isPending ? "Registrando..." : "Registrar alimento"}
         </Button>
       </div>
     </form>

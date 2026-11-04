@@ -9,14 +9,14 @@ export { MUSCLE_GROUP_LABELS } from "@/features/trainer/labels";
 
 /** Human-readable label for a bucketing period. */
 export const PERIOD_LABELS: Record<BucketPeriod, string> = {
-  day: "Day",
-  week: "Week",
-  month: "Month",
+  day: "Día",
+  week: "Semana",
+  month: "Mes",
 };
 
 /** Plural/axis label for a bucketing period (e.g. "per week"). */
 export const PERIOD_UNIT_LABELS: Record<BucketPeriod, string> = {
-  day: "day",
-  week: "week",
-  month: "month",
+  day: "día",
+  week: "semana",
+  month: "mes",
 };

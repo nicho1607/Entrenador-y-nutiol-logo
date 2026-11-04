@@ -22,7 +22,7 @@ export async function saveProfileAction(
 ): Promise<ProfileActionState> {
   const user = await getCurrentUser();
   if (!user) {
-    return { status: "error", message: "You must be signed in to save a profile." };
+    return { status: "error", message: "Debes iniciar sesión para guardar un perfil." };
   }
 
   const parsed = profileSchema.safeParse(rawInput);
@@ -36,7 +36,7 @@ export async function saveProfileAction(
     }
     return {
       status: "error",
-      message: "Please fix the highlighted fields.",
+      message: "Corrige los campos resaltados.",
       fieldErrors,
     };
   }
@@ -44,10 +44,10 @@ export async function saveProfileAction(
   try {
     await saveProfile(user.id, parsed.data);
   } catch {
-    return { status: "error", message: "Could not save your profile. Please try again." };
+    return { status: "error", message: "No se pudo guardar tu perfil. Inténtalo de nuevo." };
   }
 
   revalidatePath("/profile");
   revalidatePath("/dashboard");
-  return { status: "success", message: "Profile saved." };
+  return { status: "success", message: "Perfil guardado." };
 }

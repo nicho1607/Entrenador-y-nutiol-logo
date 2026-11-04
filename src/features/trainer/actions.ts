@@ -61,14 +61,14 @@ export async function generatePlanAction(
 ): Promise<GeneratePlanActionState> {
   const user = await getCurrentUser();
   if (!user) {
-    return { status: "error", message: "You must be signed in to generate a plan." };
+    return { status: "error", message: "Debes iniciar sesión para generar un plan." };
   }
 
   const parsed = generatePlanSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
       status: "error",
-      message: "Please fix the highlighted fields.",
+      message: "Corrige los campos resaltados.",
       fieldErrors: collectFieldErrors(parsed.error.issues),
     };
   }
@@ -78,7 +78,7 @@ export async function generatePlanAction(
     return { status: "error", message: result.message, plan: null };
   }
 
-  return { status: "success", message: "Plan generated.", plan: result.value };
+  return { status: "success", message: "Plan generado.", plan: result.value };
 }
 
 /** Persists a generated plan for the signed-in user. */
@@ -87,16 +87,16 @@ export async function savePlanAction(
 ): Promise<SavePlanActionState> {
   const user = await getCurrentUser();
   if (!user) {
-    return { status: "error", message: "You must be signed in to save a plan." };
+    return { status: "error", message: "Debes iniciar sesión para guardar un plan." };
   }
 
   try {
     const planId = await savePlan(user.id, generated);
     revalidatePath("/trainer");
     revalidatePath("/dashboard");
-    return { status: "success", message: "Plan saved.", planId };
+    return { status: "success", message: "Plan guardado.", planId };
   } catch {
-    return { status: "error", message: "Could not save the plan. Please try again." };
+    return { status: "error", message: "No se pudo guardar el plan. Inténtalo de nuevo." };
   }
 }
 
@@ -106,14 +106,14 @@ export async function logSessionAction(
 ): Promise<LogSessionActionState> {
   const user = await getCurrentUser();
   if (!user) {
-    return { status: "error", message: "You must be signed in to log a session." };
+    return { status: "error", message: "Debes iniciar sesión para registrar una sesión." };
   }
 
   const parsed = logSessionSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
       status: "error",
-      message: "Please fix the highlighted fields.",
+      message: "Corrige los campos resaltados.",
       fieldErrors: collectFieldErrors(parsed.error.issues),
     };
   }
@@ -122,8 +122,8 @@ export async function logSessionAction(
     const sessionId = await logSession(user.id, parsed.data);
     revalidatePath("/trainer");
     revalidatePath("/dashboard");
-    return { status: "success", message: "Session logged.", sessionId };
+    return { status: "success", message: "Sesión registrada.", sessionId };
   } catch {
-    return { status: "error", message: "Could not log the session. Please try again." };
+    return { status: "error", message: "No se pudo registrar la sesión. Inténtalo de nuevo." };
   }
 }

@@ -14,14 +14,14 @@ export type RegisterResult =
 export async function registerUser(input: RegisterInput): Promise<RegisterResult> {
   const parsed = registerSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input." };
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Datos no válidos." };
   }
 
   const { email, password, name } = parsed.data;
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    return { ok: false, error: "An account with that email already exists." };
+    return { ok: false, error: "Ya existe una cuenta con ese correo electrónico." };
   }
 
   const passwordHash = await hashPassword(password);

@@ -44,14 +44,14 @@ export function MeasurementForm() {
       measuredAt: measuredAt.trim() === "" ? undefined : measuredAt,
     });
     if (!parsed.success) {
-      setMessage(parsed.error.issues[0]?.message ?? "Please fix the highlighted fields.");
+      setMessage(parsed.error.issues[0]?.message ?? "Corrige los campos resaltados.");
       return;
     }
 
     startTransition(async () => {
       const result = await logMeasurementAction(parsed.data);
       if (result.status === "success") {
-        setMessage("Measurement logged.");
+        setMessage("Medida registrada.");
         setWeightKg("");
         setBodyFatPct("");
         setWaistCm("");
@@ -59,7 +59,7 @@ export function MeasurementForm() {
         setMeasuredAt("");
         router.refresh();
       } else {
-        setMessage(result.message ?? "Could not log the measurement.");
+        setMessage(result.message ?? "No se pudo registrar la medida.");
       }
     });
   }
@@ -69,7 +69,7 @@ export function MeasurementForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="measure-weight" className="text-sm font-medium">
-            Weight (kg)
+            Peso (kg)
           </label>
           <Input
             id="measure-weight"
@@ -84,7 +84,7 @@ export function MeasurementForm() {
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="measure-body-fat" className="text-sm font-medium">
-            Body fat (%)
+            Grasa corporal (%)
           </label>
           <Input
             id="measure-body-fat"
@@ -99,7 +99,7 @@ export function MeasurementForm() {
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="measure-waist" className="text-sm font-medium">
-            Waist (cm)
+            Cintura (cm)
           </label>
           <Input
             id="measure-waist"
@@ -114,7 +114,7 @@ export function MeasurementForm() {
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="measure-hip" className="text-sm font-medium">
-            Hip (cm)
+            Cadera (cm)
           </label>
           <Input
             id="measure-hip"
@@ -129,7 +129,7 @@ export function MeasurementForm() {
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="measure-date" className="text-sm font-medium">
-            Date (optional)
+            Fecha (opcional)
           </label>
           <Input
             id="measure-date"
@@ -141,7 +141,7 @@ export function MeasurementForm() {
       </div>
 
       <p className="text-sm text-muted-foreground">
-        Enter at least one measurement. Leave a field blank to skip it.
+        Introduce al menos una medida. Deja un campo en blanco para omitirlo.
       </p>
 
       {message ? (
@@ -152,7 +152,7 @@ export function MeasurementForm() {
 
       <div>
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Logging..." : "Log measurement"}
+          {isPending ? "Registrando..." : "Registrar medida"}
         </Button>
       </div>
     </form>

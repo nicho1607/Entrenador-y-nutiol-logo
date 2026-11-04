@@ -35,20 +35,20 @@ export function CaloriesVsTargetChart({ rows }: { rows: CaloriesVsTargetRow[] })
       <LineChart
         data={rows}
         margin={{ top: 8, right: 16, bottom: 28, left: 8 }}
-        aria-label="Calories consumed versus daily target"
+        aria-label="Calorías consumidas frente al objetivo diario"
       >
         <CartesianGrid stroke={BORDER} strokeDasharray="3 3" />
         <XAxis
           dataKey="day"
           stroke={MUTED}
           tick={{ fill: MUTED, fontSize: 12 }}
-          label={{ value: "Day", position: "insideBottom", offset: -12, fill: MUTED }}
+          label={{ value: "Día", position: "insideBottom", offset: -12, fill: MUTED }}
         />
         <YAxis
           stroke={MUTED}
           tick={{ fill: MUTED, fontSize: 12 }}
           label={{
-            value: "Calories (kcal)",
+            value: "Calorías (kcal)",
             angle: -90,
             position: "insideLeft",
             fill: MUTED,
@@ -59,7 +59,7 @@ export function CaloriesVsTargetChart({ rows }: { rows: CaloriesVsTargetRow[] })
         <Line
           type="monotone"
           dataKey="consumed"
-          name="Consumed (kcal)"
+          name="Consumido (kcal)"
           stroke={seriesColor(0)}
           dot={false}
           strokeWidth={2}
@@ -68,7 +68,7 @@ export function CaloriesVsTargetChart({ rows }: { rows: CaloriesVsTargetRow[] })
         <Line
           type="monotone"
           dataKey="target"
-          name="Target (kcal)"
+          name="Objetivo (kcal)"
           stroke={seriesColor(2)}
           strokeDasharray="5 4"
           dot={false}

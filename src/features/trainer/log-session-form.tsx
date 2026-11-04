@@ -88,19 +88,19 @@ export function LogSessionForm({ options }: { options: WorkoutExerciseOption[] }
 
     const parsed = logSessionSchema.safeParse(payload);
     if (!parsed.success) {
-      setMessage(parsed.error.issues[0]?.message ?? "Please fix the highlighted fields.");
+      setMessage(parsed.error.issues[0]?.message ?? "Corrige los campos resaltados.");
       return;
     }
 
     startTransition(async () => {
       const result = await logSessionAction(parsed.data);
       if (result.status === "success") {
-        setMessage("Session logged.");
+        setMessage("Sesión registrada.");
         setRows([emptyRow(1)]);
         setNotes("");
         router.refresh();
       } else {
-        setMessage(result.message ?? "Could not log the session.");
+        setMessage(result.message ?? "No se pudo registrar la sesión.");
       }
     });
   }
@@ -108,12 +108,12 @@ export function LogSessionForm({ options }: { options: WorkoutExerciseOption[] }
   if (options.length === 0) {
     return (
       <p className="text-sm text-muted-foreground">
-        You have no saved plans yet, so there are no exercises to log against. Generate and
-        save a plan on the{" "}
+        Aún no tienes planes guardados, así que no hay ejercicios sobre los que registrar. Genera y
+        guarda un plan primero en la{" "}
         <a href="/trainer" className="underline underline-offset-4">
-          trainer page
-        </a>{" "}
-        first.
+          página del entrenador
+        </a>
+        .
       </p>
     );
   }
@@ -122,7 +122,7 @@ export function LogSessionForm({ options }: { options: WorkoutExerciseOption[] }
     <form className="flex flex-col gap-5" onSubmit={onSubmit} noValidate>
       <div className="flex flex-col gap-1.5">
         <label htmlFor="workoutExerciseId" className="text-sm font-medium">
-          Exercise
+          Ejercicio
         </label>
         <select
           id="workoutExerciseId"
@@ -139,10 +139,10 @@ export function LogSessionForm({ options }: { options: WorkoutExerciseOption[] }
       </div>
 
       <fieldset className="flex flex-col gap-3">
-        <legend className="text-sm font-medium">Sets</legend>
+        <legend className="text-sm font-medium">Series</legend>
         {rows.map((row, index) => (
           <div key={index} className="grid gap-2 sm:grid-cols-5">
-            <Field id={`set-${index}`} label="Set">
+            <Field id={`set-${index}`} label="Serie">
               <Input
                 id={`set-${index}`}
                 type="number"
@@ -152,7 +152,7 @@ export function LogSessionForm({ options }: { options: WorkoutExerciseOption[] }
                 onChange={(e) => updateRow(index, "setNumber", e.target.value)}
               />
             </Field>
-            <Field id={`reps-${index}`} label="Reps">
+            <Field id={`reps-${index}`} label="Repeticiones">
               <Input
                 id={`reps-${index}`}
                 type="number"
@@ -162,7 +162,7 @@ export function LogSessionForm({ options }: { options: WorkoutExerciseOption[] }
                 onChange={(e) => updateRow(index, "reps", e.target.value)}
               />
             </Field>
-            <Field id={`weight-${index}`} label="Weight (kg)">
+            <Field id={`weight-${index}`} label="Peso (kg)">
               <Input
                 id={`weight-${index}`}
                 type="number"
@@ -173,7 +173,7 @@ export function LogSessionForm({ options }: { options: WorkoutExerciseOption[] }
                 onChange={(e) => updateRow(index, "weightKg", e.target.value)}
               />
             </Field>
-            <Field id={`rir-${index}`} label="RIR (optional)">
+            <Field id={`rir-${index}`} label="RIR (opcional)">
               <Input
                 id={`rir-${index}`}
                 type="number"
@@ -183,7 +183,7 @@ export function LogSessionForm({ options }: { options: WorkoutExerciseOption[] }
                 onChange={(e) => updateRow(index, "rir", e.target.value)}
               />
             </Field>
-            <Field id={`rpe-${index}`} label="RPE (optional)">
+            <Field id={`rpe-${index}`} label="RPE (opcional)">
               <Input
                 id={`rpe-${index}`}
                 type="number"
@@ -201,9 +201,9 @@ export function LogSessionForm({ options }: { options: WorkoutExerciseOption[] }
                   type="button"
                   variant="ghost"
                   onClick={() => removeRow(index)}
-                  aria-label={`Remove set ${index + 1}`}
+                  aria-label={`Eliminar serie ${index + 1}`}
                 >
-                  Remove set
+                  Eliminar serie
                 </Button>
               </div>
             ) : null}
@@ -211,14 +211,14 @@ export function LogSessionForm({ options }: { options: WorkoutExerciseOption[] }
         ))}
         <div>
           <Button type="button" variant="secondary" onClick={addRow}>
-            Add another set
+            Añadir otra serie
           </Button>
         </div>
       </fieldset>
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="notes" className="text-sm font-medium">
-          Notes (optional)
+          Notas (opcional)
         </label>
         <Input
           id="notes"
@@ -236,7 +236,7 @@ export function LogSessionForm({ options }: { options: WorkoutExerciseOption[] }
 
       <div>
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Logging..." : "Log session"}
+          {isPending ? "Registrando..." : "Registrar sesión"}
         </Button>
       </div>
     </form>

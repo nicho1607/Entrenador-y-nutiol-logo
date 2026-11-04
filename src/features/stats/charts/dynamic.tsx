@@ -19,7 +19,7 @@ function ChartLoading() {
       aria-live="polite"
       className="flex h-[260px] w-full items-center justify-center rounded-md border border-dashed border-border text-sm text-muted-foreground"
     >
-      Loading chart…
+      Cargando gráfico…
     </div>
   );
 }

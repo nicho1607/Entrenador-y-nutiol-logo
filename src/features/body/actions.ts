@@ -38,14 +38,14 @@ export async function logMeasurementAction(
 ): Promise<BodyActionState> {
   const user = await getCurrentUser();
   if (!user) {
-    return { status: "error", message: "You must be signed in to log a measurement." };
+    return { status: "error", message: "Debes iniciar sesión para registrar una medida." };
   }
 
   const parsed = logMeasurementSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
       status: "error",
-      message: "Please fix the highlighted fields.",
+      message: "Corrige los campos resaltados.",
       fieldErrors: collectFieldErrors(parsed.error.issues),
     };
   }
@@ -54,8 +54,8 @@ export async function logMeasurementAction(
     await logBodyMeasurement(user.id, parsed.data);
     revalidatePath("/dashboard");
     revalidatePath("/dashboard/stats");
-    return { status: "success", message: "Measurement logged." };
+    return { status: "success", message: "Medida registrada." };
   } catch {
-    return { status: "error", message: "Could not log the measurement. Please try again." };
+    return { status: "error", message: "No se pudo registrar la medida. Inténtalo de nuevo." };
   }
 }

@@ -223,13 +223,14 @@ export default async function StatsPage() {
       </header>
 
       <section className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Full statistics</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Estadísticas completas</h1>
         <p className="text-muted-foreground">
-          Every chart below is built from your own logged data only. Charts you haven&apos;t
-          fed yet show an explicit &quot;no data&quot; note instead of a sample.
+          Cada gráfico de abajo se construye únicamente con tus propios datos registrados. Los
+          gráficos que aún no has alimentado muestran una nota explícita de &quot;sin datos&quot; en
+          lugar de una muestra.
         </p>
         <Link href="/dashboard" className="text-sm underline underline-offset-4">
-          ← Back to dashboard
+          ← Volver al panel
         </Link>
       </section>
 
@@ -237,24 +238,25 @@ export default async function StatsPage() {
       {/* Training                                                           */}
       {/* ------------------------------------------------------------------ */}
       <section className="flex flex-col gap-6">
-        <h2 className="text-2xl font-semibold tracking-tight">Training</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Entrenamiento</h2>
 
         <Card>
           <CardHeader>
-            <CardTitle>Workout frequency (sessions per week)</CardTitle>
+            <CardTitle>Frecuencia de entrenamiento (sesiones por semana)</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {frequencyRows.length > 0 ? (
               <>
                 <FrequencyBarChart rows={frequencyRows} />
                 <p className="text-sm text-muted-foreground">
-                  Sessions per week:{" "}
+                  Sesiones por semana:{" "}
                   {frequencyRows.map((r) => `${r.week}: ${r.sessions}`).join(" · ")}.
                 </p>
               </>
             ) : (
               <EmptyState>
-                No workouts logged yet — log a training session to see your weekly frequency.
+                Aún no has registrado entrenamientos — registra una sesión para ver tu frecuencia
+                semanal.
               </EmptyState>
             )}
           </CardContent>
@@ -262,20 +264,21 @@ export default async function StatsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Rep-volume by muscle (per week)</CardTitle>
+            <CardTitle>Volumen de repeticiones por músculo (por semana)</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {volumeRows.length > 0 && volumeSeries.length > 0 ? (
               <>
                 <VolumeByMuscleChart rows={volumeRows} series={volumeSeries} />
                 <p className="text-sm text-muted-foreground">
-                  Muscles tracked: {volumeSeries.map((s) => s.label).join(", ")}. Values are
-                  total reps per muscle per week.
+                  Músculos registrados: {volumeSeries.map((s) => s.label).join(", ")}. Los valores
+                  son el total de repeticiones por músculo por semana.
                 </p>
               </>
             ) : (
               <EmptyState>
-                No set volume yet — log exercises with reps to see per-muscle volume over time.
+                Aún no hay volumen de series — registra ejercicios con repeticiones para ver el
+                volumen por músculo a lo largo del tiempo.
               </EmptyState>
             )}
           </CardContent>
@@ -284,7 +287,7 @@ export default async function StatsPage() {
         <Card>
           <CardHeader>
             <CardTitle>
-              Strength progression (estimated 1RM
+              Progresión de fuerza (1RM estimado
               {strengthExerciseKey ? ` — ${strengthExerciseKey}` : ""})
             </CardTitle>
           </CardHeader>
@@ -293,14 +296,14 @@ export default async function StatsPage() {
               <>
                 <StrengthLineChart rows={strengthRows} />
                 <p className="text-sm text-muted-foreground">
-                  Weekly best estimated 1RM (kg):{" "}
+                  Mejor 1RM estimado por semana (kg):{" "}
                   {strengthRows.map((r) => `${r.week}: ${r.e1rm}`).join(" · ")}.
                 </p>
               </>
             ) : (
               <EmptyState>
-                No logged sets yet — log weight and reps for an exercise to chart its estimated
-                1RM over time.
+                Aún no hay series registradas — registra peso y repeticiones de un ejercicio para
+                graficar su 1RM estimado a lo largo del tiempo.
               </EmptyState>
             )}
           </CardContent>
@@ -308,16 +311,16 @@ export default async function StatsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Personal records</CardTitle>
+            <CardTitle>Récords personales</CardTitle>
           </CardHeader>
           <CardContent className="text-sm">
             {prList.length > 0 ? (
               <table className="w-full text-left">
                 <thead>
                   <tr className="text-xs text-muted-foreground">
-                    <th className="pb-2 font-medium">Exercise</th>
-                    <th className="pb-2 font-medium">Max weight (kg)</th>
-                    <th className="pb-2 font-medium">Best est. 1RM (kg)</th>
+                    <th className="pb-2 font-medium">Ejercicio</th>
+                    <th className="pb-2 font-medium">Peso máx. (kg)</th>
+                    <th className="pb-2 font-medium">Mejor 1RM est. (kg)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -331,31 +334,31 @@ export default async function StatsPage() {
                 </tbody>
               </table>
             ) : (
-              <EmptyState>No personal records yet — log some sets to populate this.</EmptyState>
+              <EmptyState>Aún no hay récords personales — registra algunas series para completarlo.</EmptyState>
             )}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Program adherence</CardTitle>
+            <CardTitle>Adherencia al programa</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
             {adherence.adherencePct.ok && adherence.planned > 0 ? (
               <p>
-                You completed{" "}
-                <span className="text-foreground">{adherence.completed}</span> of{" "}
-                <span className="text-foreground">{adherence.planned}</span> scheduled
-                training days —{" "}
+                Completaste{" "}
+                <span className="text-foreground">{adherence.completed}</span> de{" "}
+                <span className="text-foreground">{adherence.planned}</span> días de entrenamiento
+                programados —{" "}
                 <span className="text-foreground">
                   {round1(adherence.adherencePct.value)}%
                 </span>{" "}
-                adherence.
+                de adherencia.
               </p>
             ) : (
               <EmptyState>
-                No active plan with scheduled days yet — activate a plan and log sessions to
-                track adherence.
+                Aún no hay un plan activo con días programados — activa un plan y registra sesiones
+                para seguir tu adherencia.
               </EmptyState>
             )}
           </CardContent>
@@ -366,26 +369,27 @@ export default async function StatsPage() {
       {/* Nutrition                                                          */}
       {/* ------------------------------------------------------------------ */}
       <section className="flex flex-col gap-6">
-        <h2 className="text-2xl font-semibold tracking-tight">Nutrition</h2>
-        <p className="text-sm text-muted-foreground">Trailing 30 days.</p>
+        <h2 className="text-2xl font-semibold tracking-tight">Nutrición</h2>
+        <p className="text-sm text-muted-foreground">Últimos 30 días.</p>
 
         <Card>
           <CardHeader>
-            <CardTitle>Calories vs target</CardTitle>
+            <CardTitle>Calorías vs. objetivo</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {hasCaloriesData ? (
               <>
                 <CaloriesVsTargetChart rows={caloriesRows} />
                 <p className="text-sm text-muted-foreground">
-                  Consumed vs target calories (kcal) per day over the last 30 days. A dashed
-                  line marks the profile-derived target; it is omitted on days with no target.
+                  Calorías consumidas vs. objetivo (kcal) por día durante los últimos 30 días. Una
+                  línea discontinua marca el objetivo derivado del perfil; se omite en los días sin
+                  objetivo.
                 </p>
               </>
             ) : (
               <EmptyState>
-                No meals logged in the last 30 days — log food to see consumed vs target
-                calories.
+                No hay comidas registradas en los últimos 30 días — registra alimentos para ver las
+                calorías consumidas vs. el objetivo.
               </EmptyState>
             )}
           </CardContent>
@@ -393,20 +397,21 @@ export default async function StatsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Macros vs targets</CardTitle>
+            <CardTitle>Macros vs. objetivos</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {hasMacroData ? (
               <>
                 <MacrosOverTimeChart rows={macroRows} />
                 <p className="text-sm text-muted-foreground">
-                  Protein, carbs and fat consumed (solid) vs target (dashed), in grams per day.
+                  Proteína, carbohidratos y grasa consumidos (línea continua) vs. objetivo (línea
+                  discontinua), en gramos por día.
                 </p>
               </>
             ) : (
               <EmptyState>
-                No meals logged in the last 30 days — log food to see your macro split vs
-                targets.
+                No hay comidas registradas en los últimos 30 días — registra alimentos para ver tu
+                reparto de macros vs. los objetivos.
               </EmptyState>
             )}
           </CardContent>
@@ -414,18 +419,20 @@ export default async function StatsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Target compliance</CardTitle>
+            <CardTitle>Cumplimiento del objetivo</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
             {compliance.ok ? (
               <p>
-                <span className="text-foreground">{round1(compliance.value)}%</span> of logged
-                days hit your calorie target (±10%) with every macro at least 90% of target.
+                El <span className="text-foreground">{round1(compliance.value)}%</span> de los días
+                registrados alcanzó tu objetivo de calorías (±10%) con cada macro al menos al 90%
+                del objetivo.
               </p>
             ) : (
               <EmptyState>
-                A compliance score needs a profile-derived target. Set up your profile (weight,
-                height, age, sex, activity, goal) and log meals to see it.
+                Una puntuación de cumplimiento necesita un objetivo derivado del perfil. Configura
+                tu perfil (peso, altura, edad, sexo, actividad, objetivo) y registra comidas para
+                verla.
               </EmptyState>
             )}
           </CardContent>
@@ -433,7 +440,7 @@ export default async function StatsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Meal history</CardTitle>
+            <CardTitle>Historial de comidas</CardTitle>
           </CardHeader>
           <CardContent className="text-sm">
             {mealDays.length > 0 ? (
@@ -463,7 +470,7 @@ export default async function StatsPage() {
                 ))}
               </ul>
             ) : (
-              <EmptyState>No meals logged in the last 30 days.</EmptyState>
+              <EmptyState>No hay comidas registradas en los últimos 30 días.</EmptyState>
             )}
           </CardContent>
         </Card>
@@ -473,11 +480,11 @@ export default async function StatsPage() {
       {/* Body composition                                                   */}
       {/* ------------------------------------------------------------------ */}
       <section className="flex flex-col gap-6">
-        <h2 className="text-2xl font-semibold tracking-tight">Body composition</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Composición corporal</h2>
 
         <Card>
           <CardHeader>
-            <CardTitle>Log a body measurement</CardTitle>
+            <CardTitle>Registrar una medida corporal</CardTitle>
           </CardHeader>
           <CardContent>
             <MeasurementForm />
@@ -486,20 +493,21 @@ export default async function StatsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Weight over time</CardTitle>
+            <CardTitle>Peso a lo largo del tiempo</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {weightRows.length > 0 ? (
               <>
                 <WeightLineChart rows={weightRows} />
                 <p className="text-sm text-muted-foreground">
-                  Body weight (kg) per measurement:{" "}
+                  Peso corporal (kg) por medida:{" "}
                   {weightRows.map((r) => `${r.date}: ${r.weightKg}`).join(" · ")}.
                 </p>
               </>
             ) : (
               <EmptyState>
-                No weight logged yet — log a body measurement above to chart your weight.
+                Aún no has registrado tu peso — registra una medida corporal arriba para graficar
+                tu peso.
               </EmptyState>
             )}
           </CardContent>
@@ -507,20 +515,21 @@ export default async function StatsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Waist, hip &amp; body fat over time</CardTitle>
+            <CardTitle>Cintura, cadera y grasa corporal a lo largo del tiempo</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {hasMeasurementData ? (
               <>
                 <MeasurementsLineChart rows={measurementRows} />
                 <p className="text-sm text-muted-foreground">
-                  Waist (cm), hip (cm) and body fat (%) per measurement. Series with no value
-                  are simply absent.
+                  Cintura (cm), cadera (cm) y grasa corporal (%) por medida. Las series sin valor
+                  simplemente no aparecen.
                 </p>
               </>
             ) : (
               <EmptyState>
-                No waist / hip / body-fat logged yet — add them in a body measurement above.
+                Aún no has registrado cintura / cadera / grasa corporal — añádelas en una medida
+                corporal arriba.
               </EmptyState>
             )}
           </CardContent>
@@ -528,7 +537,7 @@ export default async function StatsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>This month vs last month</CardTitle>
+            <CardTitle>Este mes vs. el mes pasado</CardTitle>
           </CardHeader>
           <CardContent className="text-sm">
             {(["weightKg", "bodyFatPct", "waistCm"] as const).some(
@@ -537,18 +546,18 @@ export default async function StatsPage() {
               <table className="w-full text-left">
                 <thead>
                   <tr className="text-xs text-muted-foreground">
-                    <th className="pb-2 font-medium">Metric</th>
-                    <th className="pb-2 font-medium">Last month</th>
-                    <th className="pb-2 font-medium">This month</th>
-                    <th className="pb-2 font-medium">Change</th>
+                    <th className="pb-2 font-medium">Métrica</th>
+                    <th className="pb-2 font-medium">Mes pasado</th>
+                    <th className="pb-2 font-medium">Este mes</th>
+                    <th className="pb-2 font-medium">Cambio</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(
                     [
-                      { key: "weightKg", label: "Weight (kg)" },
-                      { key: "bodyFatPct", label: "Body fat (%)" },
-                      { key: "waistCm", label: "Waist (cm)" },
+                      { key: "weightKg", label: "Peso (kg)" },
+                      { key: "bodyFatPct", label: "Grasa corporal (%)" },
+                      { key: "waistCm", label: "Cintura (cm)" },
                     ] as const
                   ).map(({ key, label }) => {
                     const m = bodyComparison[key];
@@ -579,8 +588,8 @@ export default async function StatsPage() {
               </table>
             ) : (
               <EmptyState>
-                Not enough data for a month-over-month comparison yet — log measurements across
-                two months.
+                Aún no hay datos suficientes para una comparación mes a mes — registra medidas a lo
+                largo de dos meses.
               </EmptyState>
             )}
           </CardContent>
@@ -588,13 +597,13 @@ export default async function StatsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Progress photos</CardTitle>
+            <CardTitle>Fotos de progreso</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
             <p>
-              Not available yet. The data model has no photo field, so photo upload and
-              comparison are intentionally not built — this is a placeholder, not a working
-              feature.
+              Aún no disponible. El modelo de datos no tiene un campo de foto, así que la subida y
+              comparación de fotos no están implementadas a propósito — esto es un marcador, no una
+              función activa.
             </p>
           </CardContent>
         </Card>
@@ -605,19 +614,19 @@ export default async function StatsPage() {
       {/* ------------------------------------------------------------------ */}
       <Card>
         <CardHeader>
-          <CardTitle>Coming in later phases (placeholder)</CardTitle>
+          <CardTitle>Próximamente en fases posteriores (marcador)</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground">
-          End-to-end tests and hardening (phase 7) are not built yet. Adaptive recommendations
-          are now live on the{" "}
+          Las pruebas de extremo a extremo y el endurecimiento (fase 7) aún no están disponibles.
+          Las recomendaciones adaptativas ya están activas en la página de{" "}
           <Link href="/recommendations" className="underline underline-offset-4">
-            recommendations
+            recomendaciones
           </Link>{" "}
-          page and the routine-import UI on the{" "}
+          y la interfaz de importación de rutinas en la página de{" "}
           <Link href="/trainer/import" className="underline underline-offset-4">
-            import
-          </Link>{" "}
-          page. Nothing listed as a placeholder in this card is a working feature.
+            importación
+          </Link>
+          . Nada de lo que aparece como marcador en esta tarjeta es una función activa.
         </CardContent>
       </Card>
     </main>

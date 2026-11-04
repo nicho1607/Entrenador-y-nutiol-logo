@@ -31,34 +31,34 @@ export function WeightLineChart({ rows }: { rows: WeightLineRow[] }) {
       <LineChart
         data={rows}
         margin={{ top: 8, right: 16, bottom: 28, left: 8 }}
-        aria-label="Body weight over time"
+        aria-label="Peso corporal a lo largo del tiempo"
       >
         <CartesianGrid stroke={BORDER} strokeDasharray="3 3" />
         <XAxis
           dataKey="date"
           stroke={MUTED}
           tick={{ fill: MUTED, fontSize: 12 }}
-          label={{ value: "Date", position: "insideBottom", offset: -12, fill: MUTED }}
+          label={{ value: "Fecha", position: "insideBottom", offset: -12, fill: MUTED }}
         />
         <YAxis
           domain={["auto", "auto"]}
           stroke={MUTED}
           tick={{ fill: MUTED, fontSize: 12 }}
           label={{
-            value: "Weight (kg)",
+            value: "Peso (kg)",
             angle: -90,
             position: "insideLeft",
             fill: MUTED,
           }}
         />
         <Tooltip
-          formatter={(value: number) => [`${value} kg`, "Weight"]}
+          formatter={(value: number) => [`${value} kg`, "Peso"]}
           contentStyle={{ fontSize: 12 }}
         />
         <Line
           type="monotone"
           dataKey="weightKg"
-          name="Weight (kg)"
+          name="Peso (kg)"
           stroke={PRIMARY}
           dot={{ r: 3 }}
           strokeWidth={2}

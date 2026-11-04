@@ -52,14 +52,14 @@ export async function createPlanAction(
 ): Promise<NutritionActionState> {
   const user = await getCurrentUser();
   if (!user) {
-    return { status: "error", message: "You must be signed in to create a plan." };
+    return { status: "error", message: "Debes iniciar sesión para crear un plan." };
   }
 
   const parsed = createPlanSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
       status: "error",
-      message: "Please fix the highlighted fields.",
+      message: "Corrige los campos resaltados.",
       fieldErrors: collectFieldErrors(parsed.error.issues),
     };
   }
@@ -68,9 +68,9 @@ export async function createPlanAction(
     await createPlan(user.id, parsed.data);
     revalidatePath("/nutrition");
     revalidatePath("/dashboard");
-    return { status: "success", message: "Plan created." };
+    return { status: "success", message: "Plan creado." };
   } catch {
-    return { status: "error", message: "Could not create the plan. Please try again." };
+    return { status: "error", message: "No se pudo crear el plan. Inténtalo de nuevo." };
   }
 }
 
@@ -78,14 +78,14 @@ export async function createPlanAction(
 export async function addMealAction(rawInput: unknown): Promise<NutritionActionState> {
   const user = await getCurrentUser();
   if (!user) {
-    return { status: "error", message: "You must be signed in to add a meal." };
+    return { status: "error", message: "Debes iniciar sesión para añadir una comida." };
   }
 
   const parsed = addMealSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
       status: "error",
-      message: "Please fix the highlighted fields.",
+      message: "Corrige los campos resaltados.",
       fieldErrors: collectFieldErrors(parsed.error.issues),
     };
   }
@@ -94,9 +94,9 @@ export async function addMealAction(rawInput: unknown): Promise<NutritionActionS
     await addMeal(user.id, parsed.data);
     revalidatePath("/nutrition");
     revalidatePath("/dashboard");
-    return { status: "success", message: "Meal added." };
+    return { status: "success", message: "Comida añadida." };
   } catch {
-    return { status: "error", message: "Could not add the meal. Please try again." };
+    return { status: "error", message: "No se pudo añadir la comida. Inténtalo de nuevo." };
   }
 }
 
@@ -104,14 +104,14 @@ export async function addMealAction(rawInput: unknown): Promise<NutritionActionS
 export async function addMealItemAction(rawInput: unknown): Promise<NutritionActionState> {
   const user = await getCurrentUser();
   if (!user) {
-    return { status: "error", message: "You must be signed in to add a food." };
+    return { status: "error", message: "Debes iniciar sesión para añadir un alimento." };
   }
 
   const parsed = addMealItemSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
       status: "error",
-      message: "Please fix the highlighted fields.",
+      message: "Corrige los campos resaltados.",
       fieldErrors: collectFieldErrors(parsed.error.issues),
     };
   }
@@ -120,9 +120,9 @@ export async function addMealItemAction(rawInput: unknown): Promise<NutritionAct
     await addMealItem(user.id, parsed.data);
     revalidatePath("/nutrition");
     revalidatePath("/dashboard");
-    return { status: "success", message: "Food added to the meal." };
+    return { status: "success", message: "Alimento añadido a la comida." };
   } catch {
-    return { status: "error", message: "Could not add the food. Please try again." };
+    return { status: "error", message: "No se pudo añadir el alimento. Inténtalo de nuevo." };
   }
 }
 
@@ -132,14 +132,14 @@ export async function substituteMealItemAction(
 ): Promise<NutritionActionState> {
   const user = await getCurrentUser();
   if (!user) {
-    return { status: "error", message: "You must be signed in to substitute a food." };
+    return { status: "error", message: "Debes iniciar sesión para sustituir un alimento." };
   }
 
   const parsed = substituteMealItemSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
       status: "error",
-      message: "Please fix the highlighted fields.",
+      message: "Corrige los campos resaltados.",
       fieldErrors: collectFieldErrors(parsed.error.issues),
     };
   }
@@ -148,9 +148,9 @@ export async function substituteMealItemAction(
     await substituteMealItem(user.id, parsed.data);
     revalidatePath("/nutrition");
     revalidatePath("/dashboard");
-    return { status: "success", message: "Food substituted." };
+    return { status: "success", message: "Alimento sustituido." };
   } catch {
-    return { status: "error", message: "Could not substitute the food. Please try again." };
+    return { status: "error", message: "No se pudo sustituir el alimento. Inténtalo de nuevo." };
   }
 }
 
@@ -158,14 +158,14 @@ export async function substituteMealItemAction(
 export async function logFoodAction(rawInput: unknown): Promise<NutritionActionState> {
   const user = await getCurrentUser();
   if (!user) {
-    return { status: "error", message: "You must be signed in to log food." };
+    return { status: "error", message: "Debes iniciar sesión para registrar alimentos." };
   }
 
   const parsed = logFoodSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
       status: "error",
-      message: "Please fix the highlighted fields.",
+      message: "Corrige los campos resaltados.",
       fieldErrors: collectFieldErrors(parsed.error.issues),
     };
   }
@@ -174,9 +174,9 @@ export async function logFoodAction(rawInput: unknown): Promise<NutritionActionS
     await logFood(user.id, parsed.data);
     revalidatePath("/nutrition");
     revalidatePath("/dashboard");
-    return { status: "success", message: "Food logged." };
+    return { status: "success", message: "Alimento registrado." };
   } catch {
-    return { status: "error", message: "Could not log the food. Please try again." };
+    return { status: "error", message: "No se pudo registrar el alimento. Inténtalo de nuevo." };
   }
 }
 
@@ -184,14 +184,14 @@ export async function logFoodAction(rawInput: unknown): Promise<NutritionActionS
 export async function logWaterAction(rawInput: unknown): Promise<NutritionActionState> {
   const user = await getCurrentUser();
   if (!user) {
-    return { status: "error", message: "You must be signed in to log water." };
+    return { status: "error", message: "Debes iniciar sesión para registrar agua." };
   }
 
   const parsed = logWaterSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
       status: "error",
-      message: "Please fix the highlighted fields.",
+      message: "Corrige los campos resaltados.",
       fieldErrors: collectFieldErrors(parsed.error.issues),
     };
   }
@@ -200,8 +200,8 @@ export async function logWaterAction(rawInput: unknown): Promise<NutritionAction
     await logWater(user.id, parsed.data);
     revalidatePath("/nutrition");
     revalidatePath("/dashboard");
-    return { status: "success", message: "Water logged." };
+    return { status: "success", message: "Agua registrada." };
   } catch {
-    return { status: "error", message: "Could not log water. Please try again." };
+    return { status: "error", message: "No se pudo registrar el agua. Inténtalo de nuevo." };
   }
 }

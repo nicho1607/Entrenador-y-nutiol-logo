@@ -63,35 +63,35 @@ export const profileSchema = z.object({
   // Age in whole years. Adult range only — the energy equations are undefined
   // for children (see domain library assumptions).
   age: z
-    .number({ invalid_type_error: "Age must be a number." })
-    .int("Age must be a whole number.")
-    .min(13, "Age must be at least 13.")
-    .max(120, "Age must be 120 or below.")
+    .number({ invalid_type_error: "La edad debe ser un número." })
+    .int("La edad debe ser un número entero.")
+    .min(13, "La edad debe ser de al menos 13.")
+    .max(120, "La edad debe ser 120 o menos.")
     .optional(),
   sex: z.enum(SEX_VALUES).optional(),
   weightKg: z
-    .number({ invalid_type_error: "Weight must be a number." })
-    .positive("Weight must be a positive number.")
-    .max(500, "Weight must be below 500 kg.")
+    .number({ invalid_type_error: "El peso debe ser un número." })
+    .positive("El peso debe ser un número positivo.")
+    .max(500, "El peso debe ser menor que 500 kg.")
     .optional(),
   heightCm: z
-    .number({ invalid_type_error: "Height must be a number." })
-    .positive("Height must be a positive number.")
-    .max(300, "Height must be below 300 cm.")
+    .number({ invalid_type_error: "La altura debe ser un número." })
+    .positive("La altura debe ser un número positivo.")
+    .max(300, "La altura debe ser menor que 300 cm.")
     .optional(),
   experienceLevel: z.enum(EXPERIENCE_LEVEL_VALUES).optional(),
   goal: z.enum(GOAL_TYPE_VALUES).optional(),
   daysPerWeek: z
-    .number({ invalid_type_error: "Days per week must be a number." })
-    .int("Days per week must be a whole number.")
-    .min(0, "Days per week cannot be negative.")
-    .max(7, "Days per week cannot exceed 7.")
+    .number({ invalid_type_error: "Los días por semana deben ser un número." })
+    .int("Los días por semana deben ser un número entero.")
+    .min(0, "Los días por semana no pueden ser negativos.")
+    .max(7, "Los días por semana no pueden superar 7.")
     .optional(),
   sessionMinutes: z
-    .number({ invalid_type_error: "Session minutes must be a number." })
-    .int("Session minutes must be a whole number.")
-    .min(0, "Session minutes cannot be negative.")
-    .max(600, "Session minutes must be 600 or below.")
+    .number({ invalid_type_error: "Los minutos por sesión deben ser un número." })
+    .int("Los minutos por sesión deben ser un número entero.")
+    .min(0, "Los minutos por sesión no pueden ser negativos.")
+    .max(600, "Los minutos por sesión deben ser 600 o menos.")
     .optional(),
   activityLevel: z.enum(ACTIVITY_LEVEL_VALUES).optional(),
   equipment: z.array(z.enum(EQUIPMENT_VALUES)).default([]),
@@ -99,9 +99,9 @@ export const profileSchema = z.object({
   allergies: commaSeparatedList,
   dietaryRestrictions: commaSeparatedList,
   foodBudget: z
-    .number({ invalid_type_error: "Budget must be a number." })
-    .nonnegative("Budget cannot be negative.")
-    .max(100000, "Budget must be 100000 or below.")
+    .number({ invalid_type_error: "El presupuesto debe ser un número." })
+    .nonnegative("El presupuesto no puede ser negativo.")
+    .max(100000, "El presupuesto debe ser 100000 o menos.")
     .optional(),
   // Safety self-report that gates automatic calorie targeting.
   flaggedForProfessionalReview: z.boolean().default(false),

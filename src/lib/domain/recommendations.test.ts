@@ -69,13 +69,13 @@ describe("recovery/volume rule", () => {
     };
     const { recommendations } = buildRecommendations(input);
     expect(
-      recommendations.some((r) => r.category === "recovery_volume" && /increase/i.test(r.title)),
+      recommendations.some((r) => r.category === "recovery_volume" && /aumenta/i.test(r.title)),
     ).toBe(false);
   });
 
   it("emits an insufficient-data note when there is no volume and no progression", () => {
     const { insufficientData } = buildRecommendations(emptyInput());
-    expect(insufficientData.some((m) => /recovery\/volume/i.test(m))).toBe(true);
+    expect(insufficientData.some((m) => /recuperación\/volumen/i.test(m))).toBe(true);
   });
 });
 
@@ -93,7 +93,7 @@ describe("stalled-exercise rule", () => {
     expect(stalled).toBeDefined();
     expect(stalled?.basis).toBe("rule");
     expect(stalled?.category).toBe("stalled_exercise");
-    expect(stalled?.evidence[0]).toContain("estimated 1RM");
+    expect(stalled?.evidence[0]).toContain("1RM estimado");
   });
 
   it("does not flag a non-plateaued exercise", () => {
@@ -107,7 +107,7 @@ describe("stalled-exercise rule", () => {
 
   it("emits an insufficient-data note when no exercise has plateau data", () => {
     const { insufficientData } = buildRecommendations(emptyInput());
-    expect(insufficientData.some((m) => /stalled exercises/i.test(m))).toBe(true);
+    expect(insufficientData.some((m) => /ejercicios estancados/i.test(m))).toBe(true);
   });
 });
 
@@ -137,7 +137,7 @@ describe("adherence rule", () => {
   it("emits an insufficient-data note when adherence is null (no fabricated %)", () => {
     const { recommendations, insufficientData } = buildRecommendations(emptyInput());
     expect(recommendations.some((r) => r.category === "adherence")).toBe(false);
-    expect(insufficientData.some((m) => /adherence/i.test(m))).toBe(true);
+    expect(insufficientData.some((m) => /adherencia/i.test(m))).toBe(true);
   });
 });
 
@@ -159,7 +159,7 @@ describe("nutrition rule", () => {
 
   it("emits an insufficient-data note when nutrition is null", () => {
     const { insufficientData } = buildRecommendations(emptyInput());
-    expect(insufficientData.some((m) => /nutrition advice/i.test(m))).toBe(true);
+    expect(insufficientData.some((m) => /consejos de nutrición/i.test(m))).toBe(true);
   });
 
   it("SAFETY: clampedToFloor=true never recommends eating less, even when over target", () => {
@@ -172,7 +172,7 @@ describe("nutrition rule", () => {
     expect(recommendations.find((r) => r.id === "nutrition:floor")).toBeDefined();
     // ...and NO "eat less / over target" advice is produced.
     expect(recommendations.some((r) => r.id === "nutrition:calorie-over")).toBe(false);
-    expect(recommendations.some((r) => /eat less|reduce/i.test(r.title))).toBe(false);
+    expect(recommendations.some((r) => /come menos|reduce/i.test(r.title))).toBe(false);
   });
 
   it("SAFETY: professionalReviewRequired=true -> exactly one consult item, no numeric advice", () => {

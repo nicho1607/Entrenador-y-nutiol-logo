@@ -41,7 +41,7 @@ export function importRoutineFromJson(raw: string): ImportResult {
     return {
       plan: null,
       importedCount: 0,
-      rejected: [{ index: 1, raw, reason: "Invalid JSON syntax." }],
+      rejected: [{ index: 1, raw, reason: "Sintaxis JSON no válida." }],
     };
   }
 
@@ -86,7 +86,7 @@ export function importRoutineFromCsv(raw: string): ImportResult {
     return {
       plan: null,
       importedCount: 0,
-      rejected: [{ index: 1, raw, reason: "CSV is empty or has no data rows." }],
+      rejected: [{ index: 1, raw, reason: "El CSV está vacío o no tiene filas de datos." }],
     };
   }
 
@@ -96,7 +96,7 @@ export function importRoutineFromCsv(raw: string): ImportResult {
     return {
       plan: null,
       importedCount: 0,
-      rejected: [{ index: 1, raw: headers, reason: `Missing required header(s): ${missing.join(", ")}.` }],
+      rejected: [{ index: 1, raw: headers, reason: `Faltan encabezados obligatorios: ${missing.join(", ")}.` }],
     };
   }
 

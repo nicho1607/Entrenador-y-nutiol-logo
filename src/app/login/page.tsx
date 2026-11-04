@@ -22,7 +22,7 @@ export default function LoginPage() {
 
     const parsed = credentialsSchema.safeParse({ email, password });
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Invalid input.");
+      setError(parsed.error.issues[0]?.message ?? "Datos no válidos.");
       return;
     }
 
@@ -35,7 +35,7 @@ export default function LoginPage() {
     setLoading(false);
 
     if (!result || result.error) {
-      setError("Invalid email or password.");
+      setError("Correo o contraseña no válidos.");
       return;
     }
     router.push("/dashboard");
@@ -45,13 +45,13 @@ export default function LoginPage() {
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
       <Card>
         <CardHeader>
-          <CardTitle>Log in</CardTitle>
+          <CardTitle>Iniciar sesión</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="flex flex-col gap-4" onSubmit={onSubmit}>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="email" className="text-sm font-medium">
-                Email
+                Correo electrónico
               </label>
               <Input
                 id="email"
@@ -64,7 +64,7 @@ export default function LoginPage() {
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="password" className="text-sm font-medium">
-                Password
+                Contraseña
               </label>
               <Input
                 id="password"
@@ -81,13 +81,13 @@ export default function LoginPage() {
               </p>
             ) : null}
             <Button type="submit" disabled={loading}>
-              {loading ? "Logging in..." : "Log in"}
+              {loading ? "Iniciando sesión..." : "Iniciar sesión"}
             </Button>
           </form>
           <p className="mt-4 text-sm text-muted-foreground">
-            No account?{" "}
+            ¿No tienes cuenta?{" "}
             <Link href="/register" className="underline">
-              Create one
+              Crea una
             </Link>
           </p>
         </CardContent>

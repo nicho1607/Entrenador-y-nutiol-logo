@@ -155,11 +155,11 @@ function recoveryVolumeRule(input: EngineInput): {
         id: `recovery_volume:volume:${muscle}`,
         basis: "rule",
         category: "recovery_volume",
-        title: `Consider reducing ${muscle} volume`,
+        title: `Considera reducir el volumen de ${muscle}`,
         rationale:
-          "Weekly rep-volume for this muscle is above an orientational ceiling. This is a conservative heuristic, not a diagnosis — if recovery feels fine you may be fine; otherwise trimming volume or adding a recovery day can help.",
+          "El volumen de repeticiones semanal de este músculo supera un límite orientativo. Es una heurística conservadora, no un diagnóstico — si la recuperación se siente bien quizá estés bien; de lo contrario, reducir el volumen o añadir un día de recuperación puede ayudar.",
         evidence: [
-          `${muscle} weekly rep-volume: ${round1(volume)} (threshold ${HIGH_VOLUME_THRESHOLD}).`,
+          `Volumen de repeticiones semanal de ${muscle}: ${round1(volume)} (umbral ${HIGH_VOLUME_THRESHOLD}).`,
         ],
         severity: "info",
       });
@@ -178,11 +178,11 @@ function recoveryVolumeRule(input: EngineInput): {
       basis: "rule",
       category: "recovery_volume",
       title: reduce
-        ? `Reduce load on ${e.key} and rebuild`
-        : `Hold load on ${e.key} and prioritize recovery`,
+        ? `Reduce la carga en ${e.key} y reconstruye`
+        : `Mantén la carga en ${e.key} y prioriza la recuperación`,
       rationale:
-        "Based on the progression rule's own decision for this exercise (it never increases load from reps alone). Treat it as guidance for the next session, not a guarantee.",
-      evidence: [`${e.key}: progression action ${p.action} — ${p.rationale}`],
+        "Basado en la propia decisión de la regla de progresión para este ejercicio (nunca aumenta la carga solo por las repeticiones). Tómalo como orientación para la próxima sesión, no como una garantía.",
+      evidence: [`${e.key}: acción de progresión ${p.action} — ${p.rationale}`],
       severity: reduce ? "warning" : "info",
     });
   }
@@ -190,7 +190,7 @@ function recoveryVolumeRule(input: EngineInput): {
   const hasProgression = input.exercises.some((e) => e.progression != null);
   if (!hasProgression && !hasVolume) {
     insufficientData.push(
-      "Not enough data for recovery/volume advice — log sessions with reps and recovery so per-muscle volume and a progression call can be computed.",
+      "No hay datos suficientes para consejos de recuperación/volumen — registra sesiones con repeticiones y recuperación para poder calcular el volumen por músculo y una decisión de progresión.",
     );
   }
 
@@ -222,11 +222,11 @@ function stalledExerciseRule(input: EngineInput): {
       id: `stalled_exercise:${e.key}`,
       basis: "rule",
       category: "stalled_exercise",
-      title: `${e.key} looks stalled — try a deload or rep-scheme change`,
+      title: `${e.key} parece estancado — prueba una descarga o un cambio de esquema de repeticiones`,
       rationale:
-        "Estimated 1RM barely moved across the recent window, which can signal a plateau. This is a heuristic read of your logged sets, not a certainty — a deload, a change of rep scheme, or a technique check are reasonable responses.",
+        "El 1RM estimado apenas se movió en la ventana reciente, lo que puede indicar un estancamiento. Es una lectura heurística de tus series registradas, no una certeza — una descarga, un cambio de esquema de repeticiones o una revisión de técnica son respuestas razonables.",
       evidence: [
-        `${e.key}: estimated 1RM ${round1(p.startE1rm)} → ${round1(p.endE1rm)} kg (${round1(p.improvementPct)}% change over the window).`,
+        `${e.key}: 1RM estimado ${round1(p.startE1rm)} → ${round1(p.endE1rm)} kg (${round1(p.improvementPct)}% de cambio en la ventana).`,
       ],
       severity: "info",
     });
@@ -234,7 +234,7 @@ function stalledExerciseRule(input: EngineInput): {
 
   if (withPlateau.length === 0) {
     insufficientData.push(
-      "Not enough data to assess stalled exercises — log an exercise across several sessions so a plateau window can be evaluated.",
+      "No hay datos suficientes para evaluar ejercicios estancados — registra un ejercicio a lo largo de varias sesiones para poder evaluar una ventana de estancamiento.",
     );
   }
 
@@ -261,7 +261,7 @@ function adherenceRule(input: EngineInput): {
 
   if (input.adherencePct == null) {
     insufficientData.push(
-      "Not enough data to assess training adherence — activate a plan with scheduled days and log sessions so adherence can be measured.",
+      "No hay datos suficientes para evaluar la adherencia al entrenamiento — activa un plan con días programados y registra sesiones para poder medir la adherencia.",
     );
     return { recommendations, insufficientData };
   }
@@ -273,20 +273,20 @@ function adherenceRule(input: EngineInput): {
       id: "adherence:measured",
       basis: "calculation",
       category: "adherence",
-      title: "Your recent training adherence",
+      title: "Tu adherencia reciente al entrenamiento",
       rationale:
-        "A direct calculation from your scheduled vs completed training days — a fact, not a suggestion.",
-      evidence: [`Program adherence: ${round1(pct)}% (threshold ${LOW_ADHERENCE_THRESHOLD}%).`],
+        "Un cálculo directo a partir de tus días de entrenamiento programados vs. completados — un hecho, no una sugerencia.",
+      evidence: [`Adherencia al programa: ${round1(pct)}% (umbral ${LOW_ADHERENCE_THRESHOLD}%).`],
       severity: "info",
     });
     recommendations.push({
       id: "adherence:reduce-days",
       basis: "rule",
       category: "adherence",
-      title: "Consider fewer planned training days",
+      title: "Considera menos días de entrenamiento planificados",
       rationale:
-        "Adherence is below a conservative threshold. Scheduling fewer, more achievable days often beats an ambitious plan you cannot keep — this is guidance, not a rule you must follow.",
-      evidence: [`Measured adherence ${round1(pct)}% is below ${LOW_ADHERENCE_THRESHOLD}%.`],
+        "La adherencia está por debajo de un umbral conservador. Programar menos días, más alcanzables, suele ser mejor que un plan ambicioso que no puedes cumplir — esto es orientación, no una regla que debas seguir.",
+      evidence: [`La adherencia medida del ${round1(pct)}% está por debajo del ${LOW_ADHERENCE_THRESHOLD}%.`],
       severity: "warning",
     });
   }
@@ -317,7 +317,7 @@ function nutritionRule(input: EngineInput): {
   const n = input.nutrition;
   if (n == null) {
     insufficientData.push(
-      "Not enough data for nutrition advice — set up your profile (weight, height, age, sex, activity, goal) and log meals so a target can be computed.",
+      "No hay datos suficientes para consejos de nutrición — configura tu perfil (peso, altura, edad, sexo, actividad, objetivo) y registra comidas para poder calcular un objetivo.",
     );
     return { recommendations, insufficientData };
   }
@@ -328,10 +328,10 @@ function nutritionRule(input: EngineInput): {
       id: "nutrition:professional-review",
       basis: "rule",
       category: "nutrition",
-      title: "Consult a qualified professional before changing your nutrition",
+      title: "Consulta a un profesional cualificado antes de cambiar tu nutrición",
       rationale:
-        "Your profile flags a situation where automatic calorie targeting is disabled for safety. No numeric nutrition advice is shown — please work with a qualified professional.",
-      evidence: ["A safety gate (professional review required) is active on your calorie target."],
+        "Tu perfil señala una situación en la que el cálculo automático de calorías está desactivado por seguridad. No se muestra ningún consejo numérico de nutrición — por favor, trabaja con un profesional cualificado.",
+      evidence: ["Hay una restricción de seguridad (se requiere revisión profesional) activa en tu objetivo de calorías."],
       severity: "critical",
     });
     return { recommendations, insufficientData };
@@ -345,10 +345,10 @@ function nutritionRule(input: EngineInput): {
       id: "nutrition:floor",
       basis: "rule",
       category: "nutrition",
-      title: "Your calorie target already sits at your safety floor",
+      title: "Tu objetivo de calorías ya está en tu límite de seguridad",
       rationale:
-        "The requested deficit was reduced to respect your BMR floor, so eating less is not recommended. If progress has stalled, adjust through training or activity rather than cutting calories further.",
-      evidence: ["Calorie target was clamped to the BMR floor (clampedToFloor = true)."],
+        "El déficit solicitado se redujo para respetar tu límite de TMB, así que no se recomienda comer menos. Si el progreso se ha estancado, ajústalo mediante el entrenamiento o la actividad en lugar de recortar más las calorías.",
+      evidence: ["El objetivo de calorías se ajustó al límite de la TMB (clampedToFloor = true)."],
       severity: "info",
     });
   }
@@ -359,11 +359,11 @@ function nutritionRule(input: EngineInput): {
       id: "nutrition:compliance",
       basis: "rule",
       category: "nutrition",
-      title: "Tighten nutrition consistency",
+      title: "Mejora la constancia de tu nutrición",
       rationale:
-        "Fewer than most of your logged days hit your target band. Consistency usually matters more than any single day — this is a heuristic prompt, not a prescription.",
+        "Menos de la mayoría de tus días registrados cayeron dentro de tu banda objetivo. La constancia suele importar más que cualquier día aislado — esto es un aviso heurístico, no una prescripción.",
       evidence: [
-        `Target compliance: ${round1(compliance)}% of logged days on target (threshold ${LOW_TARGET_COMPLIANCE_THRESHOLD}%).`,
+        `Cumplimiento del objetivo: ${round1(compliance)}% de los días registrados dentro del objetivo (umbral ${LOW_TARGET_COMPLIANCE_THRESHOLD}%).`,
       ],
       severity: "info",
     });
@@ -380,10 +380,10 @@ function nutritionRule(input: EngineInput): {
         id: "nutrition:calorie-under",
         basis: "rule",
         category: "nutrition",
-        title: "You are eating under your calorie target",
+        title: "Estás comiendo por debajo de tu objetivo de calorías",
         rationale:
-          "On a typical recent day your intake sat below target. Nudging intake up toward target can help — adjust gradually and with whole foods. Heuristic guidance, not a prescription.",
-        evidence: [`Recent calories ran about ${absKcal} kcal below target.`],
+          "En un día reciente típico tu consumo quedó por debajo del objetivo. Acercar el consumo hacia el objetivo puede ayudar — ajústalo de forma gradual y con alimentos integrales. Orientación heurística, no una prescripción.",
+        evidence: [`Las calorías recientes estuvieron unas ${absKcal} kcal por debajo del objetivo.`],
         severity: "info",
       });
     } else if (delta > 0 && !n.clampedToFloor) {
@@ -392,10 +392,10 @@ function nutritionRule(input: EngineInput): {
         id: "nutrition:calorie-over",
         basis: "rule",
         category: "nutrition",
-        title: "You are eating over your calorie target",
+        title: "Estás comiendo por encima de tu objetivo de calorías",
         rationale:
-          "On a typical recent day your intake sat above target. A modest reduction toward target can help — heuristic guidance, not a prescription.",
-        evidence: [`Recent calories ran about ${absKcal} kcal above target.`],
+          "En un día reciente típico tu consumo quedó por encima del objetivo. Una reducción moderada hacia el objetivo puede ayudar — orientación heurística, no una prescripción.",
+        evidence: [`Las calorías recientes estuvieron unas ${absKcal} kcal por encima del objetivo.`],
         severity: "info",
       });
     }
@@ -408,10 +408,10 @@ function nutritionRule(input: EngineInput): {
       id: "nutrition:protein-under",
       basis: "rule",
       category: "nutrition",
-      title: "Prioritize protein",
+      title: "Prioriza la proteína",
       rationale:
-        "Recent protein intake sat below target. Hitting protein supports recovery and muscle retention — heuristic guidance, not a prescription.",
-      evidence: [`Recent protein ran about ${absG} g below target.`],
+        "El consumo reciente de proteína quedó por debajo del objetivo. Alcanzar la proteína favorece la recuperación y la retención muscular — orientación heurística, no una prescripción.",
+      evidence: [`La proteína reciente estuvo unos ${absG} g por debajo del objetivo.`],
       severity: "info",
     });
   }

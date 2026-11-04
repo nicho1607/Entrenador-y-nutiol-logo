@@ -28,17 +28,17 @@ export function WaterLogForm() {
       amountMl: Number.isNaN(amount) ? undefined : amount,
     });
     if (!parsed.success) {
-      setMessage(parsed.error.issues[0]?.message ?? "Please enter a valid amount.");
+      setMessage(parsed.error.issues[0]?.message ?? "Introduce una cantidad válida.");
       return;
     }
 
     startTransition(async () => {
       const result = await logWaterAction(parsed.data);
       if (result.status === "success") {
-        setMessage("Water logged.");
+        setMessage("Agua registrada.");
         router.refresh();
       } else {
-        setMessage(result.message ?? "Could not log water.");
+        setMessage(result.message ?? "No se pudo registrar el agua.");
       }
     });
   }
@@ -47,7 +47,7 @@ export function WaterLogForm() {
     <form className="flex flex-col gap-3 sm:flex-row sm:items-end" onSubmit={onSubmit} noValidate>
       <div className="flex flex-1 flex-col gap-1.5">
         <label htmlFor="amountMl" className="text-sm font-medium">
-          Amount (ml)
+          Cantidad (ml)
         </label>
         <Input
           id="amountMl"
@@ -61,7 +61,7 @@ export function WaterLogForm() {
         />
       </div>
       <Button type="submit" disabled={isPending}>
-        {isPending ? "Logging..." : "Log water"}
+        {isPending ? "Registrando..." : "Registrar agua"}
       </Button>
       {message ? (
         <p role="status" className="text-sm text-foreground sm:self-center">

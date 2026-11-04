@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 export function SignOutButton() {
   return (
     <Button variant="ghost" onClick={() => signOut({ callbackUrl: "/" })}>
-      Sign out
+      Cerrar sesión
     </Button>
   );
 }

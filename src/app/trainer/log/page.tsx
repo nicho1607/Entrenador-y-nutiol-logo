@@ -61,19 +61,19 @@ export default async function LogWorkoutPage() {
       </header>
 
       <section className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Log a workout</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Registrar un entrenamiento</h1>
         <p className="text-muted-foreground">
-          Record the sets you performed. Weight, reps, and an optional RIR or RPE per set feed
-          the volume and progression math.
+          Anota las series que realizaste. El peso, las repeticiones y un RIR o RPE opcional por
+          serie alimentan los cálculos de volumen y progresión.
         </p>
         <Link href="/trainer" className="text-sm underline underline-offset-4">
-          ← Back to the trainer
+          ← Volver al entrenador
         </Link>
       </section>
 
       <Card>
         <CardHeader>
-          <CardTitle>Record a session</CardTitle>
+          <CardTitle>Registrar una sesión</CardTitle>
         </CardHeader>
         <CardContent>
           <LogSessionForm options={options} />
@@ -82,13 +82,14 @@ export default async function LogWorkoutPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Training volume by muscle (all-time)</CardTitle>
+          <CardTitle>Volumen de entrenamiento por músculo (histórico)</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-3 text-sm">
           {volumeEntries.length === 0 ? (
             <p className="text-muted-foreground">
-              No logged sets yet. Log a session above to see per-muscle volume here. This is a
-              rep-volume metric (sets × reps), computed by the domain library.
+              Aún no hay series registradas. Registra una sesión arriba para ver aquí el volumen
+              por músculo. Esta es una métrica de volumen de repeticiones (series × repeticiones),
+              calculada por la biblioteca de dominio.
             </p>
           ) : (
             <ul className="flex flex-col gap-2">
@@ -97,14 +98,14 @@ export default async function LogWorkoutPage() {
                 .map(([muscle, sets]) => (
                   <li key={muscle} className="flex justify-between">
                     <span className="text-foreground">{MUSCLE_GROUP_LABELS[muscle]}</span>
-                    <span className="text-muted-foreground">{sets} reps total</span>
+                    <span className="text-muted-foreground">{sets} repeticiones en total</span>
                   </li>
                 ))}
             </ul>
           )}
           <p className="text-xs text-muted-foreground">
-            Volume charts and trend lines are a later phase; this card shows the raw numeric
-            totals only.
+            Los gráficos de volumen y las líneas de tendencia llegarán en una fase posterior; esta
+            tarjeta solo muestra los totales numéricos.
           </p>
         </CardContent>
       </Card>

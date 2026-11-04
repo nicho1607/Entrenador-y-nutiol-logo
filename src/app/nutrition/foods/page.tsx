@@ -57,39 +57,40 @@ export default async function FoodsPage({
       </header>
 
       <section className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Food catalog</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Catálogo de alimentos</h1>
         <p className="text-muted-foreground">
-          A curated, provenance-tracked catalog. Calories and macros are shown per 100 g.
-          Nothing here is fabricated — each entry cites its USDA source and license.
+          Un catálogo seleccionado y con procedencia rastreada. Las calorías y los macros se
+          muestran por cada 100 g. Nada de lo que aparece aquí es inventado — cada entrada cita su
+          fuente USDA y su licencia.
         </p>
         <Link href="/nutrition" className="text-sm underline underline-offset-4">
-          ← Back to nutrition
+          ← Volver a nutrición
         </Link>
       </section>
 
       <Card>
         <CardHeader>
-          <CardTitle>Search</CardTitle>
+          <CardTitle>Buscar</CardTitle>
         </CardHeader>
         <CardContent>
           <form method="get" className="flex flex-col gap-4 sm:flex-row sm:items-end">
             <div className="flex flex-1 flex-col gap-1.5">
               <label htmlFor="q" className="text-sm font-medium">
-                Food name
+                Nombre del alimento
               </label>
               <Input
                 id="q"
                 name="q"
                 type="search"
                 defaultValue={filter.q ?? ""}
-                placeholder="e.g. chicken"
+                placeholder="p. ej. pollo"
               />
             </div>
             <div className="flex gap-3">
-              <Button type="submit">Search</Button>
+              <Button type="submit">Buscar</Button>
               <Link href="/nutrition/foods">
                 <Button type="button" variant="ghost">
-                  Clear
+                  Limpiar
                 </Button>
               </Link>
             </div>
@@ -97,16 +98,17 @@ export default async function FoodsPage({
         </CardContent>
       </Card>
 
-      <section aria-label="Food results" className="flex flex-col gap-4">
+      <section aria-label="Resultados de alimentos" className="flex flex-col gap-4">
         <p className="text-sm text-muted-foreground">
           {foods.length === 0
-            ? "No foods match this search."
-            : `${foods.length} food${foods.length === 1 ? "" : "s"}.`}
+            ? "Ningún alimento coincide con esta búsqueda."
+            : `${foods.length} alimento${foods.length === 1 ? "" : "s"}.`}
         </p>
         {foods.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            If the catalog looks empty, the food catalog has not been seeded into your
-            database yet — run the seed (see the README) once your PostgreSQL is set up.
+            Si el catálogo se ve vacío, el catálogo de alimentos aún no se ha cargado en tu base de
+            datos — ejecuta la carga inicial (consulta el README) una vez que tu PostgreSQL esté
+            configurado.
           </p>
         ) : (
           <ul className="flex flex-col gap-4">
@@ -122,17 +124,17 @@ export default async function FoodsPage({
                     ) : null}
                     <p className="text-foreground">
                       {food.caloriesPer100g == null
-                        ? "Calories unknown"
+                        ? "Calorías desconocidas"
                         : `${Math.round(food.caloriesPer100g)} kcal`}{" "}
-                      per 100 g
+                      por 100 g
                     </p>
                     <p className="text-muted-foreground">
-                      Protein {g(food.proteinPer100g)} · Carbs {g(food.carbsPer100g)} · Fat{" "}
-                      {g(food.fatPer100g)} (per 100 g)
+                      Proteína {g(food.proteinPer100g)} · Carbohidratos {g(food.carbsPer100g)} ·
+                      Grasa {g(food.fatPer100g)} (por 100 g)
                     </p>
                     {food.sourceName ? (
                       <p className="text-xs text-muted-foreground">
-                        Source: {food.sourceName}
+                        Fuente: {food.sourceName}
                         {food.sourceLicense ? ` (${food.sourceLicense})` : ""}
                         {food.fdcId ? ` · FDC ${food.fdcId}` : ""}
                       </p>

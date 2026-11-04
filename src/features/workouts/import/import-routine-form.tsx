@@ -75,10 +75,10 @@ export function ImportRoutineForm() {
       const state = await confirmImportAction(input);
       if (state.status === "success") {
         setSaved(true);
-        setMessage(state.message ?? "Routine imported and saved.");
+        setMessage(state.message ?? "Rutina importada y guardada.");
         router.refresh();
       } else {
-        setMessage(state.message ?? "Could not import the routine.");
+        setMessage(state.message ?? "No se pudo importar la rutina.");
       }
     });
   }
@@ -86,7 +86,7 @@ export function ImportRoutineForm() {
   return (
     <div className="flex flex-col gap-6">
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-sm font-medium">Format</legend>
+        <legend className="text-sm font-medium">Formato</legend>
         <div className="flex flex-wrap gap-4 text-sm">
           <label className="flex items-center gap-2">
             <input
@@ -113,7 +113,7 @@ export function ImportRoutineForm() {
 
       <div className="flex flex-col gap-2">
         <label htmlFor="routine-content" className="text-sm font-medium">
-          Paste your {format.toUpperCase()} routine
+          Pega tu rutina en {format.toUpperCase()}
         </label>
         <textarea
           id="routine-content"
@@ -132,7 +132,7 @@ export function ImportRoutineForm() {
 
       <div className="flex flex-col gap-2">
         <label htmlFor="routine-file" className="text-sm font-medium">
-          …or choose a {format.toUpperCase()} file
+          …o elige un archivo {format.toUpperCase()}
         </label>
         <input
           id="routine-file"
@@ -145,7 +145,7 @@ export function ImportRoutineForm() {
 
       <div className="flex flex-wrap items-center gap-3">
         <Button type="button" onClick={onPreview} disabled={isPreviewing || !content.trim()}>
-          {isPreviewing ? "Previewing..." : "Preview"}
+          {isPreviewing ? "Generando vista previa..." : "Vista previa"}
         </Button>
         {previewPlan && !saved ? (
           <Button
@@ -154,7 +154,7 @@ export function ImportRoutineForm() {
             onClick={onConfirm}
             disabled={isSaving}
           >
-            {isSaving ? "Saving..." : "Confirm & save"}
+            {isSaving ? "Guardando..." : "Confirmar y guardar"}
           </Button>
         ) : null}
       </div>
@@ -167,7 +167,8 @@ export function ImportRoutineForm() {
 
       {!result && !message ? (
         <p className="text-sm text-muted-foreground">
-          Nothing to preview yet. Paste a routine or choose a file, then select Preview.
+          Aún no hay nada que previsualizar. Pega una rutina o elige un archivo y luego selecciona
+          Vista previa.
         </p>
       ) : null}
 
@@ -182,7 +183,7 @@ export function ImportRoutineForm() {
 
 function PlanPreview({ plan }: { plan: NormalizedWorkoutPlan }) {
   return (
-    <section aria-label="Imported plan preview" className="flex flex-col gap-5">
+    <section aria-label="Vista previa del plan importado" className="flex flex-col gap-5">
       <div>
         <h3 className="text-lg font-semibold">{plan.name}</h3>
         {plan.description ? (
@@ -192,14 +193,14 @@ function PlanPreview({ plan }: { plan: NormalizedWorkoutPlan }) {
 
       {plan.days.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          This routine has no valid days to preview.
+          Esta rutina no tiene días válidos para previsualizar.
         </p>
       ) : (
         <ol className="flex flex-col gap-5">
           {plan.days.map((day) => (
             <li key={day.order} className="rounded-md border border-border p-4">
               <h4 className="text-sm font-semibold">
-                Day {day.order}: {day.name}
+                Día {day.order}: {day.name}
               </h4>
               <ul className="mt-3 flex flex-col gap-3">
                 {day.exercises.map((exercise) => (
@@ -210,7 +211,7 @@ function PlanPreview({ plan }: { plan: NormalizedWorkoutPlan }) {
                         {MUSCLE_GROUP_LABELS[exercise.primaryMuscle]} ·{" "}
                         {exercise.sets} × {exercise.repsMin}-{exercise.repsMax} reps
                         {exercise.restSeconds != null
-                          ? ` · ${exercise.restSeconds}s rest`
+                          ? ` · ${exercise.restSeconds}s de descanso`
                           : ""}
                         {exercise.targetRir != null ? ` · RIR ${exercise.targetRir}` : ""}
                       </span>
@@ -229,20 +230,21 @@ function PlanPreview({ plan }: { plan: NormalizedWorkoutPlan }) {
 function RejectedRows({ rows }: { rows: RejectedRow[] }) {
   return (
     <section
-      aria-label="Rejected rows"
+      aria-label="Filas rechazadas"
       className="flex flex-col gap-2 rounded-md border border-border p-4"
     >
       <h4 className="text-sm font-semibold">
-        {rows.length} row{rows.length === 1 ? "" : "s"} could not be imported
+        No se {rows.length === 1 ? "pudo" : "pudieron"} importar {rows.length} fila
+        {rows.length === 1 ? "" : "s"}
       </h4>
       <p className="text-xs text-muted-foreground">
-        These rows were skipped (never silently dropped). Fix them in your source and preview
-        again to include them.
+        Estas filas se omitieron (nunca se descartan en silencio). Corrígelas en tu origen y vuelve
+        a previsualizar para incluirlas.
       </p>
       <ul className="flex flex-col gap-2">
         {rows.map((row) => (
           <li key={row.index} className="text-xs text-foreground">
-            <span className="font-medium">Row {row.index}:</span>{" "}
+            <span className="font-medium">Fila {row.index}:</span>{" "}
             <span className="text-muted-foreground">{row.reason}</span>
           </li>
         ))}

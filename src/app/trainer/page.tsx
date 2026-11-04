@@ -34,28 +34,29 @@ export default async function TrainerPage() {
       </header>
 
       <section className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Your trainer</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Tu entrenador</h1>
         <p className="text-muted-foreground">
-          Generate a workout plan from your profile and active goal. Every recommendation
-          shows why it was proposed. Load is never auto-increased — progression defers to the
-          RIR- and recovery-aware rule once you start logging sessions.
+          Genera un plan de entrenamiento a partir de tu perfil y tu objetivo activo. Cada
+          recomendación muestra por qué se propuso. La carga nunca se aumenta automáticamente — la
+          progresión queda en manos de la regla basada en RIR y recuperación en cuanto empieces a
+          registrar sesiones.
         </p>
         <div className="flex flex-wrap gap-4 text-sm">
           <Link href="/exercises" className="underline underline-offset-4">
-            Browse the exercise library →
+            Explorar la biblioteca de ejercicios →
           </Link>
           <Link href="/trainer/log" className="underline underline-offset-4">
-            Log a workout session →
+            Registrar una sesión de entrenamiento →
           </Link>
           <Link href="/trainer/import" className="underline underline-offset-4">
-            Import a routine →
+            Importar una rutina →
           </Link>
         </div>
       </section>
 
       <Card>
         <CardHeader>
-          <CardTitle>Generate a plan</CardTitle>
+          <CardTitle>Generar un plan</CardTitle>
         </CardHeader>
         <CardContent>
           <GeneratePlanForm />
@@ -64,13 +65,12 @@ export default async function TrainerPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Your saved plans</CardTitle>
+          <CardTitle>Tus planes guardados</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {plans.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              You haven&apos;t saved any plans yet. Generate one above and save it to see it
-              here.
+              Aún no has guardado ningún plan. Genera uno arriba y guárdalo para verlo aquí.
             </p>
           ) : (
             <ul className="flex flex-col gap-3">
@@ -86,8 +86,8 @@ export default async function TrainerPage() {
                     ) : null}
                   </div>
                   <span className="text-xs text-muted-foreground">
-                    {plan._count.days} day{plan._count.days === 1 ? "" : "s"} ·{" "}
-                    {plan.source === "NATIVE" ? "Generated" : "Imported"} ·{" "}
+                    {plan._count.days} día{plan._count.days === 1 ? "" : "s"} ·{" "}
+                    {plan.source === "NATIVE" ? "Generado" : "Importado"} ·{" "}
                     {new Date(plan.updatedAt).toLocaleDateString()}
                   </span>
                 </li>
@@ -99,12 +99,12 @@ export default async function TrainerPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Plan detail view (placeholder)</CardTitle>
+          <CardTitle>Vista de detalle del plan (marcador)</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground">
-          A per-plan detail page (day-by-day editing and scheduling) is not built yet. The
-          plans above are saved to your account and can be logged against from the logging
-          page.
+          Una página de detalle por plan (edición día a día y programación) aún no está
+          disponible. Los planes de arriba están guardados en tu cuenta y puedes registrar sesiones
+          sobre ellos desde la página de registro.
         </CardContent>
       </Card>
     </main>

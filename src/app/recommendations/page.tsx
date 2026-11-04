@@ -23,20 +23,20 @@ import type {
 const BASIS_SECTIONS: { basis: RecommendationBasis; label: string; blurb: string }[] = [
   {
     basis: "calculation",
-    label: "From your numbers",
-    blurb: "Direct calculations from your logged data — facts, not suggestions.",
+    label: "A partir de tus números",
+    blurb: "Cálculos directos de tus datos registrados — hechos, no sugerencias.",
   },
   {
     basis: "rule",
-    label: "Rule-based guidance",
+    label: "Orientación basada en reglas",
     blurb:
-      "Conservative heuristics applied to your data. Treat them as guidance, not certainties.",
+      "Heurísticas conservadoras aplicadas a tus datos. Tómalas como orientación, no como certezas.",
   },
   {
     basis: "ai",
-    label: "AI-assisted",
+    label: "Asistido por IA",
     blurb:
-      "Optional AI suggestions. AI is off by default and never overrides the rule-based or safety guidance above.",
+      "Sugerencias opcionales de IA. La IA está desactivada por defecto y nunca anula la orientación basada en reglas ni de seguridad de arriba.",
   },
 ];
 
@@ -68,17 +68,17 @@ export default async function RecommendationsPage() {
       </header>
 
       <section className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Recommendations</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Recomendaciones</h1>
         <p className="text-muted-foreground">
-          Built only from your own logged data. Each item is labelled by how it was produced,
-          with the evidence behind it. Where there isn&apos;t enough data, we say so rather than
-          guess.
+          Creadas únicamente a partir de tus propios datos registrados. Cada elemento está señalado
+          según cómo se generó, con la evidencia que lo respalda. Donde no hay datos suficientes, lo
+          decimos en lugar de adivinar.
         </p>
         <p className="text-xs text-muted-foreground">
-          Generated {generatedAt.toLocaleString()}.
+          Generado el {generatedAt.toLocaleString()}.
         </p>
         <Link href="/dashboard" className="text-sm underline underline-offset-4">
-          ← Back to dashboard
+          ← Volver al panel
         </Link>
       </section>
 
@@ -107,12 +107,12 @@ export default async function RecommendationsPage() {
       {hasInsufficient ? (
         <Card>
           <CardHeader>
-            <CardTitle>Not enough data yet</CardTitle>
+            <CardTitle>Aún no hay datos suficientes</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-2 text-sm text-muted-foreground">
             <p>
-              We couldn&apos;t compute the following — log more or complete your profile and
-              they&apos;ll appear here. Nothing below is a recommendation.
+              No pudimos calcular lo siguiente — registra más o completa tu perfil y aparecerá
+              aquí. Nada de lo de abajo es una recomendación.
             </p>
             <ul className="flex flex-col gap-2">
               {insufficientData.map((note, i) => (
@@ -129,11 +129,12 @@ export default async function RecommendationsPage() {
       {isEmpty ? (
         <Card>
           <CardHeader>
-            <CardTitle>No recommendations yet</CardTitle>
+            <CardTitle>Aún no hay recomendaciones</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
-            There&apos;s nothing to recommend and nothing missing right now. Log training
-            sessions, complete your profile, and log meals so FitMind AI has data to work from.
+            No hay nada que recomendar ni nada pendiente por ahora. Registra sesiones de
+            entrenamiento, completa tu perfil y registra comidas para que FitMind AI tenga datos con
+            los que trabajar.
           </CardContent>
         </Card>
       ) : null}

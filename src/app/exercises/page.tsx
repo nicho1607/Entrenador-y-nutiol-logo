@@ -67,26 +67,27 @@ export default async function ExercisesPage({
       </header>
 
       <section className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Exercise library</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Biblioteca de ejercicios</h1>
         <p className="text-muted-foreground">
-          A curated, provenance-tracked catalog. Filter by muscle group, equipment, or
-          difficulty. Nothing here is fabricated — each entry cites its source and license.
+          Un catálogo seleccionado y con procedencia rastreada. Filtra por grupo muscular, equipo
+          o dificultad. Nada de lo que aparece aquí es inventado — cada entrada cita su fuente y su
+          licencia.
         </p>
         <Link href="/trainer" className="text-sm underline underline-offset-4">
-          Generate a plan from these exercises →
+          Generar un plan a partir de estos ejercicios →
         </Link>
       </section>
 
       <Card>
         <CardHeader>
-          <CardTitle>Filter</CardTitle>
+          <CardTitle>Filtrar</CardTitle>
         </CardHeader>
         <CardContent>
           <form method="get" className="flex flex-col gap-4">
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="muscle" className="text-sm font-medium">
-                  Muscle group
+                  Grupo muscular
                 </label>
                 <select
                   id="muscle"
@@ -94,7 +95,7 @@ export default async function ExercisesPage({
                   className={selectClasses}
                   defaultValue={filter.muscle ?? ""}
                 >
-                  <option value="">All</option>
+                  <option value="">Todos</option>
                   {MUSCLE_GROUP_VALUES.map((v) => (
                     <option key={v} value={v}>
                       {MUSCLE_GROUP_LABELS[v]}
@@ -104,7 +105,7 @@ export default async function ExercisesPage({
               </div>
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="equipment" className="text-sm font-medium">
-                  Equipment
+                  Equipo
                 </label>
                 <select
                   id="equipment"
@@ -112,7 +113,7 @@ export default async function ExercisesPage({
                   className={selectClasses}
                   defaultValue={filter.equipment ?? ""}
                 >
-                  <option value="">All</option>
+                  <option value="">Todos</option>
                   {EQUIPMENT_VALUES.map((v) => (
                     <option key={v} value={v}>
                       {EQUIPMENT_LABELS[v]}
@@ -122,7 +123,7 @@ export default async function ExercisesPage({
               </div>
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="difficulty" className="text-sm font-medium">
-                  Difficulty
+                  Dificultad
                 </label>
                 <select
                   id="difficulty"
@@ -130,7 +131,7 @@ export default async function ExercisesPage({
                   className={selectClasses}
                   defaultValue={filter.difficulty ?? ""}
                 >
-                  <option value="">All</option>
+                  <option value="">Todas</option>
                   {EXPERIENCE_LEVEL_VALUES.map((v) => (
                     <option key={v} value={v}>
                       {EXPERIENCE_LEVEL_LABELS[v]}
@@ -140,10 +141,10 @@ export default async function ExercisesPage({
               </div>
             </div>
             <div className="flex gap-3">
-              <Button type="submit">Apply filters</Button>
+              <Button type="submit">Aplicar filtros</Button>
               <Link href="/exercises">
                 <Button type="button" variant="ghost">
-                  Clear
+                  Limpiar
                 </Button>
               </Link>
             </div>
@@ -151,16 +152,17 @@ export default async function ExercisesPage({
         </CardContent>
       </Card>
 
-      <section aria-label="Exercise results" className="flex flex-col gap-4">
+      <section aria-label="Resultados de ejercicios" className="flex flex-col gap-4">
         <p className="text-sm text-muted-foreground">
           {exercises.length === 0
-            ? "No exercises match these filters."
-            : `${exercises.length} exercise${exercises.length === 1 ? "" : "s"}.`}
+            ? "Ningún ejercicio coincide con estos filtros."
+            : `${exercises.length} ejercicio${exercises.length === 1 ? "" : "s"}.`}
         </p>
         {exercises.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            If the catalog looks empty, the exercise library has not been seeded into your
-            database yet — run the seed (see the README) once your PostgreSQL is set up.
+            Si el catálogo se ve vacío, la biblioteca de ejercicios aún no se ha cargado en tu base
+            de datos — ejecuta la carga inicial (consulta el README) una vez que tu PostgreSQL esté
+            configurado.
           </p>
         ) : (
           <ul className="flex flex-col gap-4">
@@ -172,18 +174,18 @@ export default async function ExercisesPage({
                   </CardHeader>
                   <CardContent className="flex flex-col gap-2 text-sm">
                     <p className="text-muted-foreground">
-                      Primary: {MUSCLE_GROUP_LABELS[exercise.primaryMuscle]}
+                      Principal: {MUSCLE_GROUP_LABELS[exercise.primaryMuscle]}
                       {exercise.secondaryMuscles.length > 0
-                        ? ` · Also: ${exercise.secondaryMuscles
+                        ? ` · También: ${exercise.secondaryMuscles
                             .map((m) => MUSCLE_GROUP_LABELS[m])
                             .join(", ")}`
                         : ""}
                     </p>
                     <p className="text-muted-foreground">
-                      Equipment:{" "}
+                      Equipo:{" "}
                       {exercise.equipment.length > 0
                         ? exercise.equipment.map((e) => EQUIPMENT_LABELS[e]).join(", ")
-                        : "None listed"}
+                        : "Ninguno indicado"}
                       {exercise.difficulty
                         ? ` · ${EXPERIENCE_LEVEL_LABELS[exercise.difficulty]}`
                         : ""}
@@ -193,7 +195,7 @@ export default async function ExercisesPage({
                     ) : null}
                     {exercise.sourceName ? (
                       <p className="text-xs text-muted-foreground">
-                        Source: {exercise.sourceName}
+                        Fuente: {exercise.sourceName}
                         {exercise.sourceLicense ? ` (${exercise.sourceLicense})` : ""}
                       </p>
                     ) : null}

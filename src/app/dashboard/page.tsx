@@ -41,7 +41,7 @@ function remaining(
   if (!result.ok) return "—";
   const c = result.value[key];
   const rounded = Math.round(c.remaining);
-  return c.over ? `${rounded} (over)` : `${rounded} left`;
+  return c.over ? `${rounded} (excedido)` : `${rounded} restante`;
 }
 
 export default async function DashboardPage() {
@@ -91,49 +91,49 @@ export default async function DashboardPage() {
       <section className="flex flex-col gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            Welcome{user.name ? `, ${user.name}` : ""}
+            Bienvenido{user.name ? `, ${user.name}` : ""}
           </h1>
-          <p className="text-muted-foreground">Signed in as {user.email}.</p>
+          <p className="text-muted-foreground">Sesión iniciada como {user.email}.</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href="/dashboard/stats">
-            <Button>Full statistics</Button>
+            <Button>Estadísticas completas</Button>
           </Link>
           <Link href="/dashboard/stats">
-            <Button variant="secondary">Log a body measurement</Button>
+            <Button variant="secondary">Registrar una medida corporal</Button>
           </Link>
         </div>
       </section>
 
       <Card>
         <CardHeader>
-          <CardTitle>Profile summary</CardTitle>
+          <CardTitle>Resumen del perfil</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {profile && derived ? (
             <>
               <p className="text-sm text-muted-foreground">
-                Goal:{" "}
+                Objetivo:{" "}
                 <span className="text-foreground">
-                  {profile.goal ? GOAL_TYPE_LABELS[profile.goal] : "not set"}
+                  {profile.goal ? GOAL_TYPE_LABELS[profile.goal] : "sin definir"}
                 </span>
               </p>
               <DerivedValuesList derived={derived} />
               <div>
                 <Link href="/profile">
-                  <Button variant="secondary">Edit profile</Button>
+                  <Button variant="secondary">Editar perfil</Button>
                 </Link>
               </div>
             </>
           ) : (
             <div className="flex flex-col gap-4">
               <p className="text-sm text-muted-foreground">
-                You haven&apos;t set up your profile yet. Add your details to see your BMI,
-                BMR, TDEE, daily calorie target, and macro split.
+                Aún no has configurado tu perfil. Añade tus datos para ver tu IMC, TMB, GET,
+                objetivo diario de calorías y reparto de macros.
               </p>
               <div>
                 <Link href="/profile">
-                  <Button>Set up your profile</Button>
+                  <Button>Configurar tu perfil</Button>
                 </Link>
               </div>
             </div>
@@ -143,27 +143,27 @@ export default async function DashboardPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Trainer summary</CardTitle>
+          <CardTitle>Resumen del entrenador</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <div className="flex flex-col gap-2 text-sm">
             <p className="text-muted-foreground">
-              Active plan:{" "}
+              Plan activo:{" "}
               <span className="text-foreground">
-                {activePlan ? activePlan.name : "none yet"}
+                {activePlan ? activePlan.name : "ninguno aún"}
               </span>
             </p>
             <p className="text-muted-foreground">
-              Logged sessions:{" "}
+              Sesiones registradas:{" "}
               <span className="text-foreground">{sessionCount}</span>
               {lastSession
-                ? ` · last on ${new Date(lastSession.performedAt).toLocaleDateString()}`
+                ? ` · última el ${new Date(lastSession.performedAt).toLocaleDateString()}`
                 : ""}
             </p>
             <div className="text-muted-foreground">
-              Top volume by muscle:{" "}
+              Mayor volumen por músculo:{" "}
               {topVolume.length === 0 ? (
-                <span className="text-foreground">no logged sets yet</span>
+                <span className="text-foreground">aún no hay series registradas</span>
               ) : (
                 <span className="text-foreground">
                   {topVolume
@@ -175,13 +175,13 @@ export default async function DashboardPage() {
           </div>
           <div className="flex flex-wrap gap-3">
             <Link href="/trainer">
-              <Button>Open trainer</Button>
+              <Button>Abrir entrenador</Button>
             </Link>
             <Link href="/exercises">
-              <Button variant="secondary">Exercise library</Button>
+              <Button variant="secondary">Biblioteca de ejercicios</Button>
             </Link>
             <Link href="/trainer/import">
-              <Button variant="secondary">Import a routine</Button>
+              <Button variant="secondary">Importar una rutina</Button>
             </Link>
           </div>
         </CardContent>
@@ -189,24 +189,24 @@ export default async function DashboardPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Nutrition summary</CardTitle>
+          <CardTitle>Resumen de nutrición</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 text-sm">
           {daily.target.ok ? (
             <div className="flex flex-col gap-2">
-              <p className="text-muted-foreground">Today, consumed vs target:</p>
+              <p className="text-muted-foreground">Hoy, consumido vs. objetivo:</p>
               <table className="w-full text-left">
                 <thead>
                   <tr className="text-xs text-muted-foreground">
                     <th className="pb-2 font-medium">Macro</th>
-                    <th className="pb-2 font-medium">Consumed</th>
-                    <th className="pb-2 font-medium">Target</th>
-                    <th className="pb-2 font-medium">Remaining</th>
+                    <th className="pb-2 font-medium">Consumido</th>
+                    <th className="pb-2 font-medium">Objetivo</th>
+                    <th className="pb-2 font-medium">Restante</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border-t border-border">
-                    <td className="py-2 text-foreground">Calories</td>
+                    <td className="py-2 text-foreground">Calorías</td>
                     <td className="py-2 text-muted-foreground">
                       {macroValue(daily.consumed, "calories")} kcal
                     </td>
@@ -218,7 +218,7 @@ export default async function DashboardPage() {
                     </td>
                   </tr>
                   <tr className="border-t border-border">
-                    <td className="py-2 text-foreground">Protein</td>
+                    <td className="py-2 text-foreground">Proteína</td>
                     <td className="py-2 text-muted-foreground">
                       {macroValue(daily.consumed, "proteinG")} g
                     </td>
@@ -230,7 +230,7 @@ export default async function DashboardPage() {
                     </td>
                   </tr>
                   <tr className="border-t border-border">
-                    <td className="py-2 text-foreground">Carbs</td>
+                    <td className="py-2 text-foreground">Carbohidratos</td>
                     <td className="py-2 text-muted-foreground">
                       {macroValue(daily.consumed, "carbsG")} g
                     </td>
@@ -242,7 +242,7 @@ export default async function DashboardPage() {
                     </td>
                   </tr>
                   <tr className="border-t border-border">
-                    <td className="py-2 text-foreground">Fat</td>
+                    <td className="py-2 text-foreground">Grasa</td>
                     <td className="py-2 text-muted-foreground">
                       {macroValue(daily.consumed, "fatG")} g
                     </td>
@@ -258,48 +258,50 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <p className="text-muted-foreground">
-              Set up your profile (weight, height, age, sex, activity, and a goal) to compute
-              a daily calorie and macro target. Until then, only consumed totals are tracked.
+              Configura tu perfil (peso, altura, edad, sexo, actividad y un objetivo) para
+              calcular un objetivo diario de calorías y macros. Hasta entonces, solo se registran
+              los totales consumidos.
             </p>
           )}
 
           <p className="text-muted-foreground">
-            Water today:{" "}
+            Agua hoy:{" "}
             <span className="text-foreground">{Math.round(daily.waterConsumedMl)} ml</span>
             {daily.waterTargetMl.ok
-              ? ` of ${Math.round(daily.waterTargetMl.value)} ml target`
+              ? ` de ${Math.round(daily.waterTargetMl.value)} ml de objetivo`
               : ""}
           </p>
 
           <div className="flex flex-wrap gap-3">
             <Link href="/nutrition">
-              <Button>Open nutrition</Button>
+              <Button>Abrir nutrición</Button>
             </Link>
             <Link href="/nutrition/foods">
-              <Button variant="secondary">Food catalog</Button>
+              <Button variant="secondary">Catálogo de alimentos</Button>
             </Link>
             <Link href="/nutrition/log">
-              <Button variant="secondary">Daily log</Button>
+              <Button variant="secondary">Registro diario</Button>
             </Link>
           </div>
 
           <p className="text-xs text-muted-foreground">
-            Orientational estimates, not medical advice. For flagged situations the app
-            disables automatic targeting and asks you to consult a professional.
+            Estimaciones orientativas, no consejo médico. En situaciones señaladas, la app
+            desactiva el cálculo automático de objetivos y te pide que consultes a un profesional.
           </p>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Insights</CardTitle>
+          <CardTitle>Análisis</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 text-sm">
           {hasRecommendations ? (
             <>
               <p className="text-muted-foreground">
-                Your top recommendations, each labelled by how it was produced. See the full
-                set, grouped by basis with the evidence behind it, on the recommendations page.
+                Tus principales recomendaciones, cada una señalada según cómo se generó. Consulta
+                el conjunto completo, agrupado por base y con la evidencia que lo respalda, en la
+                página de recomendaciones.
               </p>
               <div className="flex flex-col gap-3">
                 {topRecommendations.map((r) => (
@@ -309,19 +311,19 @@ export default async function DashboardPage() {
             </>
           ) : hasInsufficient ? (
             <p className="text-muted-foreground">
-              Not enough data for recommendations yet. Log training sessions, complete your
-              profile, and log meals so FitMind AI has data to work from — we say what is
-              missing rather than guess.
+              Aún no hay datos suficientes para recomendaciones. Registra sesiones de
+              entrenamiento, completa tu perfil y registra comidas para que FitMind AI tenga datos
+              con los que trabajar — indicamos qué falta en lugar de adivinar.
             </p>
           ) : (
             <p className="text-muted-foreground">
-              Nothing to recommend and nothing missing right now. Keep logging and insights
-              will appear here.
+              Nada que recomendar y nada pendiente por ahora. Sigue registrando y los análisis
+              aparecerán aquí.
             </p>
           )}
           <div className="flex flex-wrap gap-3">
             <Link href="/recommendations">
-              <Button>View all recommendations</Button>
+              <Button>Ver todas las recomendaciones</Button>
             </Link>
           </div>
         </CardContent>
@@ -329,23 +331,24 @@ export default async function DashboardPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Coming in later phases (placeholder)</CardTitle>
+          <CardTitle>Próximamente en fases posteriores (marcador)</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground">
-          Progress photos and end-to-end tests / hardening (phase 7) are not built yet — they
-          arrive in a later phase. Adaptive recommendations are now live on the{" "}
+          Las fotos de progreso y las pruebas de extremo a extremo / el endurecimiento (fase 7) aún
+          no están disponibles — llegarán en una fase posterior. Las recomendaciones adaptativas ya
+          están activas en la página de{" "}
           <Link href="/recommendations" className="underline underline-offset-4">
-            recommendations
-          </Link>{" "}
-          page, the routine-import UI on the{" "}
+            recomendaciones
+          </Link>
+          , la interfaz de importación de rutinas en la página de{" "}
           <Link href="/trainer/import" className="underline underline-offset-4">
-            import
+            importación
           </Link>{" "}
-          page, and progress charts and body measurements on the{" "}
+          y los gráficos de progreso y las medidas corporales en la página de{" "}
           <Link href="/dashboard/stats" className="underline underline-offset-4">
-            Full statistics
-          </Link>{" "}
-          page. Nothing listed as a placeholder in this card is a working feature.
+            Estadísticas completas
+          </Link>
+          . Nada de lo que aparece como marcador en esta tarjeta es una función activa.
         </CardContent>
       </Card>
     </main>

@@ -172,7 +172,7 @@ function prescriptionFor(goal: GoalType): GoalPrescription {
 
 function goalBasisNote(goal: GoalType, p: GoalPrescription): string {
   if (goal === p.basis) return "";
-  return ` (mapped from ${goal} to the ${p.basis} rep/rest profile)`;
+  return ` (asignado de ${goal} al perfil de repeticiones/descanso ${p.basis})`;
 }
 
 /** A named training day targeting a set of muscle groups, in priority order. */
@@ -207,24 +207,24 @@ function buildSplit(daysPerWeek: number): readonly SplitDay[] {
   if (daysPerWeek <= 3) {
     // 1-2 and 3 are both full body; the day count follows daysPerWeek.
     for (let i = 0; i < daysPerWeek; i += 1) {
-      days.push({ name: `Full Body ${i + 1}`, muscles: FULL });
+      days.push({ name: `Cuerpo completo ${i + 1}`, muscles: FULL });
     }
     return days;
   }
   if (daysPerWeek === 4) {
     const cycle: readonly SplitDay[] = [
-      { name: "Upper A", muscles: UPPER },
-      { name: "Lower A", muscles: LOWER },
-      { name: "Upper B", muscles: UPPER },
-      { name: "Lower B", muscles: LOWER },
+      { name: "Superior A", muscles: UPPER },
+      { name: "Inferior A", muscles: LOWER },
+      { name: "Superior B", muscles: UPPER },
+      { name: "Inferior B", muscles: LOWER },
     ];
     return cycle;
   }
   // 5-6: push / pull / legs, repeating to fill the requested days.
   const ppl: readonly SplitDay[] = [
-    { name: "Push", muscles: PUSH },
-    { name: "Pull", muscles: PULL },
-    { name: "Legs", muscles: LEGS },
+    { name: "Empuje", muscles: PUSH },
+    { name: "Tracción", muscles: PULL },
+    { name: "Piernas", muscles: LEGS },
   ];
   for (let i = 0; i < daysPerWeek; i += 1) {
     const base = ppl[i % ppl.length]!;
@@ -392,10 +392,10 @@ export function generatePlan(
 
   const basisNote = goalBasisNote(input.goal, prescription);
   const description =
-    `Auto-generated ${input.daysPerWeek}-day ${prescription.basis.toLowerCase()} plan ` +
-    `for a ${input.experienceLevel.toLowerCase()} lifter with a ${input.goal} goal` +
-    `${basisNote}. Load progression is not auto-applied: use the RIR- and ` +
-    `recovery-aware progression rule after logging each session.`;
+    `Plan ${prescription.basis.toLowerCase()} de ${input.daysPerWeek} días generado automáticamente ` +
+    `para un atleta ${input.experienceLevel.toLowerCase()} con un objetivo ${input.goal}` +
+    `${basisNote}. La progresión de carga no se aplica automáticamente: usa la regla de ` +
+    `progresión basada en RIR y recuperación después de registrar cada sesión.`;
 
   return ok({
     name: `${titleCaseGoal(input.goal)} ${input.daysPerWeek}-Day Plan`,
@@ -412,11 +412,11 @@ function toGeneratedExercise(
 ): GeneratedExercise {
   const basisNote = goalBasisNote(input.goal, p);
   const reason =
-    `Targets ${e.primaryMuscle} for a ${input.goal} goal${basisNote}; ` +
-    `fits the available equipment (${e.equipment.join(", ")}). ` +
-    `${p.repsMin}-${p.repsMax} reps x ${p.sets} sets, ~${p.restSeconds}s rest, ` +
-    `target RIR ${p.targetRir}. Increase load only when the RIR/recovery-aware ` +
-    `progression rule allows it.`;
+    `Trabaja ${e.primaryMuscle} para un objetivo ${input.goal}${basisNote}; ` +
+    `se ajusta al equipo disponible (${e.equipment.join(", ")}). ` +
+    `${p.repsMin}-${p.repsMax} reps x ${p.sets} series, ~${p.restSeconds}s de descanso, ` +
+    `RIR objetivo ${p.targetRir}. Aumenta la carga solo cuando la regla de progresión ` +
+    `basada en RIR/recuperación lo permita.`;
   return {
     order,
     exerciseName: e.name,

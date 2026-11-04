@@ -27,15 +27,15 @@ export default function Error({
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center gap-8 px-6 py-12">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Something went wrong</CardTitle>
+          <CardTitle>Algo salió mal</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 text-sm text-muted-foreground">
           <p>
-            We hit an unexpected error while loading this page. You can try again, and if the
-            problem keeps happening please come back a little later.
+            Ocurrió un error inesperado al cargar esta página. Puedes intentarlo de nuevo y, si el
+            problema persiste, vuelve un poco más tarde.
           </p>
           <div>
-            <Button onClick={() => reset()}>Try again</Button>
+            <Button onClick={() => reset()}>Intentar de nuevo</Button>
           </div>
         </CardContent>
       </Card>

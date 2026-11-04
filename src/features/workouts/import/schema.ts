@@ -29,7 +29,7 @@ export const muscleGroupSchema = z.enum(MUSCLE_GROUPS);
 /** A single exercise as it appears in the external JSON format. */
 export const externalExerciseSchema = z
   .object({
-    name: z.string().trim().min(1, "exercise name is required"),
+    name: z.string().trim().min(1, "se requiere el nombre del ejercicio"),
     muscle: muscleGroupSchema,
     sets: z.number().int().positive(),
     repsMin: z.number().int().positive(),
@@ -38,19 +38,19 @@ export const externalExerciseSchema = z
     targetRir: z.number().int().nonnegative().nullable().optional(),
   })
   .refine((e) => e.repsMax >= e.repsMin, {
-    message: "repsMax must be >= repsMin",
+    message: "repsMax debe ser >= repsMin",
   });
 
 export const externalDaySchema = z.object({
-  name: z.string().trim().min(1, "day name is required"),
+  name: z.string().trim().min(1, "se requiere el nombre del día"),
   order: z.number().int().positive(),
-  exercises: z.array(externalExerciseSchema).min(1, "a day needs at least one exercise"),
+  exercises: z.array(externalExerciseSchema).min(1, "un día necesita al menos un ejercicio"),
 });
 
 export const externalPlanSchema = z.object({
-  name: z.string().trim().min(1, "plan name is required"),
+  name: z.string().trim().min(1, "se requiere el nombre del plan"),
   description: z.string().trim().nullable().optional(),
-  days: z.array(externalDaySchema).min(1, "a plan needs at least one day"),
+  days: z.array(externalDaySchema).min(1, "un plan necesita al menos un día"),
 });
 
 export type ExternalPlan = z.infer<typeof externalPlanSchema>;
@@ -62,10 +62,10 @@ export type ExternalExercise = z.infer<typeof externalExerciseSchema>;
  */
 export const csvRowSchema = z
   .object({
-    planName: z.string().trim().min(1, "planName is required"),
-    dayName: z.string().trim().min(1, "dayName is required"),
+    planName: z.string().trim().min(1, "se requiere planName"),
+    dayName: z.string().trim().min(1, "se requiere dayName"),
     dayOrder: z.coerce.number().int().positive(),
-    exerciseName: z.string().trim().min(1, "exerciseName is required"),
+    exerciseName: z.string().trim().min(1, "se requiere exerciseName"),
     muscle: muscleGroupSchema,
     sets: z.coerce.number().int().positive(),
     repsMin: z.coerce.number().int().positive(),
@@ -80,7 +80,7 @@ export const csvRowSchema = z
       .optional(),
   })
   .refine((r) => r.repsMax >= r.repsMin, {
-    message: "repsMax must be >= repsMin",
+    message: "repsMax debe ser >= repsMin",
   });
 
 export type CsvRow = z.infer<typeof csvRowSchema>;

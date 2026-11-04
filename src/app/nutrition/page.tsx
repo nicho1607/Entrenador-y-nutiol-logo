@@ -69,27 +69,28 @@ export default async function NutritionPage() {
       </header>
 
       <section className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Nutrition</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Nutrición</h1>
         <p className="text-muted-foreground">
-          Your orientational targets, water tracking, and meal planning. Browse foods in the{" "}
+          Tus objetivos orientativos, el control del agua y la planificación de comidas. Explora
+          alimentos en el{" "}
           <Link href="/nutrition/foods" className="underline underline-offset-4">
-            food catalog
+            catálogo de alimentos
           </Link>
-          , open the{" "}
+          , abre el{" "}
           <Link href="/nutrition/log" className="underline underline-offset-4">
-            daily log
-          </Link>
-          , or build a{" "}
-          <Link href="/nutrition/market" className="underline underline-offset-4">
-            market list
+            registro diario
           </Link>{" "}
-          from a plan.
+          o crea una{" "}
+          <Link href="/nutrition/market" className="underline underline-offset-4">
+            lista de compras
+          </Link>{" "}
+          a partir de un plan.
         </p>
       </section>
 
       <Card>
         <CardHeader>
-          <CardTitle>Daily targets</CardTitle>
+          <CardTitle>Objetivos diarios</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {targets.hasProfile ? (
@@ -97,35 +98,35 @@ export default async function NutritionPage() {
           ) : (
             <div className="flex flex-col gap-3">
               <p className="text-sm text-muted-foreground">
-                You haven&apos;t set up your profile yet. Add your details to compute your
-                calorie target, macros, and water target.
+                Aún no has configurado tu perfil. Añade tus datos para calcular tu objetivo de
+                calorías, macros y objetivo de agua.
               </p>
               <div>
                 <Link href="/profile">
-                  <Button>Set up your profile</Button>
+                  <Button>Configurar tu perfil</Button>
                 </Link>
               </div>
             </div>
           )}
           <p className="mt-2 text-xs text-muted-foreground">
-            These are orientational estimates, not medical advice. FitMind AI does not
-            diagnose disease or replace a clinical nutritionist. For flagged situations
-            (eating-disorder risk, pregnancy, metabolic disease) the app disables automatic
-            targeting and asks you to consult a qualified professional.
+            Estas son estimaciones orientativas, no consejo médico. FitMind AI no diagnostica
+            enfermedades ni sustituye a un nutricionista clínico. En situaciones señaladas (riesgo
+            de trastorno alimentario, embarazo, enfermedad metabólica), la app desactiva el cálculo
+            automático de objetivos y te pide que consultes a un profesional cualificado.
           </p>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Water</CardTitle>
+          <CardTitle>Agua</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <p className="text-sm text-muted-foreground">
-            Today:{" "}
+            Hoy:{" "}
             <span className="text-foreground">{Math.round(daily.waterConsumedMl)} ml</span>
             {daily.waterTargetMl.ok
-              ? ` of ${Math.round(daily.waterTargetMl.value)} ml target`
+              ? ` de ${Math.round(daily.waterTargetMl.value)} ml de objetivo`
               : ""}
           </p>
           <WaterLogForm />
@@ -133,19 +134,19 @@ export default async function NutritionPage() {
       </Card>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-2xl font-bold tracking-tight">Meal plans</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Planes de comidas</h2>
         <p className="text-xs text-muted-foreground">
-          Meal-plan totals are orientational and not medical advice. Generate a{" "}
+          Los totales de los planes de comidas son orientativos y no consejo médico. Genera una{" "}
           <Link href="/nutrition/market" className="underline underline-offset-4">
-            market list
+            lista de compras
           </Link>{" "}
-          from any plan to see aggregated quantities screened against your allergies and
-          restrictions.
+          desde cualquier plan para ver las cantidades agregadas revisadas frente a tus alergias y
+          restricciones.
         </p>
 
         <Card>
           <CardHeader>
-            <CardTitle>Create a plan</CardTitle>
+            <CardTitle>Crear un plan</CardTitle>
           </CardHeader>
           <CardContent>
             <CreatePlanForm />
@@ -154,7 +155,7 @@ export default async function NutritionPage() {
 
         {fullPlans.filter((p) => p != null).length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            No plans yet. Create one above to start organizing meals.
+            Aún no hay planes. Crea uno arriba para empezar a organizar tus comidas.
           </p>
         ) : (
           fullPlans.map((plan) => {
@@ -167,13 +168,13 @@ export default async function NutritionPage() {
                 </CardHeader>
                 <CardContent className="flex flex-col gap-5">
                   <p className="text-sm text-muted-foreground">
-                    Daily total:{" "}
+                    Total diario:{" "}
                     <span className="text-foreground">{macroLine(summary.dailyTotals)}</span>
                   </p>
 
                   {summary.meals.length === 0 ? (
                     <p className="text-sm text-muted-foreground">
-                      No meals yet. Add one below.
+                      Aún no hay comidas. Añade una abajo.
                     </p>
                   ) : (
                     <ul className="flex flex-col gap-4">
@@ -186,7 +187,7 @@ export default async function NutritionPage() {
                             </span>
                           </div>
                           {meal.items.length === 0 ? (
-                            <p className="text-xs text-muted-foreground">No foods yet.</p>
+                            <p className="text-xs text-muted-foreground">Aún no hay alimentos.</p>
                           ) : (
                             <ul className="flex flex-col gap-1">
                               {meal.items.map((item) => (

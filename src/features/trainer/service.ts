@@ -139,11 +139,11 @@ export async function generatePlanForUser(
   const availableEquipment = overrides?.availableEquipment ?? profile?.equipment ?? [];
 
   const missing: string[] = [];
-  if (!experienceLevel) missing.push("experience level");
-  if (!resolvedGoal) missing.push("a fitness goal");
-  if (daysPerWeek == null) missing.push("training days per week");
-  if (sessionMinutes == null) missing.push("session length in minutes");
-  if (availableEquipment.length === 0) missing.push("available equipment");
+  if (!experienceLevel) missing.push("nivel de experiencia");
+  if (!resolvedGoal) missing.push("un objetivo de fitness");
+  if (daysPerWeek == null) missing.push("días de entrenamiento por semana");
+  if (sessionMinutes == null) missing.push("duración de la sesión en minutos");
+  if (availableEquipment.length === 0) missing.push("equipo disponible");
 
   if (
     !experienceLevel ||
@@ -155,7 +155,7 @@ export async function generatePlanForUser(
     return {
       ok: false,
       reason: "MISSING_INPUT",
-      message: `Complete your profile first — missing: ${missing.join(", ")}.`,
+      message: `Completa tu perfil primero — falta: ${missing.join(", ")}.`,
     };
   }
 

@@ -10,11 +10,11 @@ import type { DomainResult } from "@/lib/domain/types";
 function signalText(reason: string): string {
   switch (reason) {
     case "PROFESSIONAL_REVIEW_REQUIRED":
-      return "Consult a qualified professional — automatic targeting is disabled.";
+      return "Consulta a un profesional cualificado — el cálculo automático está desactivado.";
     case "MISSING_INPUT":
-      return "Add the missing inputs to compute this.";
+      return "Añade los datos que faltan para calcular esto.";
     default:
-      return "Not available with the current inputs.";
+      return "No disponible con los datos actuales.";
   }
 }
 
@@ -50,40 +50,40 @@ export function DerivedValuesList({ derived }: { derived: DerivedValues }) {
   return (
     <div className="flex flex-col">
       <Row
-        label="BMI (orientational, not a diagnosis)"
+        label="IMC (orientativo, no es un diagnóstico)"
         result={bmi}
         render={() =>
           bmi.ok ? `${bmi.value.bmi.toFixed(1)} — ${categoryLabel(bmi.value.category)}` : ""
         }
       />
       <Row
-        label="BMR (Mifflin-St Jeor)"
+        label="TMB (Mifflin-St Jeor)"
         result={bmr}
-        render={() => (bmr.ok ? `${Math.round(bmr.value)} kcal/day` : "")}
+        render={() => (bmr.ok ? `${Math.round(bmr.value)} kcal/día` : "")}
       />
       <Row
-        label="TDEE (maintenance estimate)"
+        label="GET (estimación de mantenimiento)"
         result={tdee}
-        render={() => (tdee.ok ? `${Math.round(tdee.value)} kcal/day` : "")}
+        render={() => (tdee.ok ? `${Math.round(tdee.value)} kcal/día` : "")}
       />
       <Row
-        label="Daily calorie target (for your goal)"
+        label="Objetivo diario de calorías (para tu meta)"
         result={calorieTarget}
-        render={() => (calorieTarget.ok ? `${calorieTarget.value.calories} kcal/day` : "")}
+        render={() => (calorieTarget.ok ? `${calorieTarget.value.calories} kcal/día` : "")}
         note={
           calorieTarget.ok && calorieTarget.value.clampedToFloor
-            ? "clamped to the BMR safety floor"
+            ? "ajustado al límite de seguridad de la TMB"
             : undefined
         }
       />
       <Row
-        label="Macro split (30% protein / 40% carbs / 30% fat)"
+        label="Reparto de macros (30% proteína / 40% carbohidratos / 30% grasa)"
         result={macros}
         render={() =>
           macros.ok
-            ? `${Math.round(macros.value.proteinG)}g protein · ${Math.round(
+            ? `${Math.round(macros.value.proteinG)}g proteína · ${Math.round(
                 macros.value.carbsG,
-              )}g carbs · ${Math.round(macros.value.fatG)}g fat`
+              )}g carbohidratos · ${Math.round(macros.value.fatG)}g grasa`
             : ""
         }
       />
@@ -94,13 +94,13 @@ export function DerivedValuesList({ derived }: { derived: DerivedValues }) {
 function categoryLabel(category: string): string {
   switch (category) {
     case "UNDERWEIGHT":
-      return "underweight";
+      return "bajo peso";
     case "NORMAL":
       return "normal";
     case "OVERWEIGHT":
-      return "overweight";
+      return "sobrepeso";
     case "OBESE":
-      return "obese";
+      return "obesidad";
     default:
       return category.toLowerCase();
   }

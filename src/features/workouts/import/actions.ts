@@ -47,10 +47,10 @@ function parse(input: RoutineImportInput): ImportResult {
 /** Summarizes why a parse produced no plan, drawn from the rejected reasons. */
 function rejectionMessage(result: ImportResult): string {
   if (result.rejected.length === 0) {
-    return "Nothing could be imported from that input.";
+    return "No se pudo importar nada de esa entrada.";
   }
-  const reasons = result.rejected.map((r) => `Row ${r.index}: ${r.reason}`).join(" ");
-  return `Could not import this routine. ${reasons}`;
+  const reasons = result.rejected.map((r) => `Fila ${r.index}: ${r.reason}`).join(" ");
+  return `No se pudo importar esta rutina. ${reasons}`;
 }
 
 /**
@@ -64,7 +64,7 @@ export async function parseRoutineAction(
   if (!rawInput.content.trim()) {
     return {
       status: "error",
-      message: "Paste a routine or choose a file first.",
+      message: "Primero pega una rutina o elige un archivo.",
       result: null,
     };
   }
@@ -77,7 +77,7 @@ export async function parseRoutineAction(
 
   return {
     status: "success",
-    message: `Previewing ${result.importedCount} exercise${
+    message: `Vista previa de ${result.importedCount} ejercicio${
       result.importedCount === 1 ? "" : "s"
     }.`,
     result,
@@ -95,11 +95,11 @@ export async function confirmImportAction(
 ): Promise<ConfirmImportActionState> {
   const user = await getCurrentUser();
   if (!user) {
-    return { status: "error", message: "You must be signed in to import a routine." };
+    return { status: "error", message: "Debes iniciar sesión para importar una rutina." };
   }
 
   if (!rawInput.content.trim()) {
-    return { status: "error", message: "Paste a routine or choose a file first." };
+    return { status: "error", message: "Primero pega una rutina o elige un archivo." };
   }
 
   const result = parse(rawInput);
@@ -111,12 +111,12 @@ export async function confirmImportAction(
     const planId = await saveImportedPlan(user.id, result.plan);
     revalidatePath("/trainer");
     revalidatePath("/dashboard");
-    return { status: "success", message: "Routine imported and saved.", planId };
+    return { status: "success", message: "Rutina importada y guardada.", planId };
   } catch (error) {
     const message =
       error instanceof Error
         ? error.message
-        : "Could not save the imported routine. Please try again.";
+        : "No se pudo guardar la rutina importada. Inténtalo de nuevo.";
     return { status: "error", message };
   }
 }

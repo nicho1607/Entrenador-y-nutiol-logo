@@ -31,33 +31,33 @@ export function StrengthLineChart({ rows }: { rows: StrengthLineRow[] }) {
       <LineChart
         data={rows}
         margin={{ top: 8, right: 16, bottom: 28, left: 8 }}
-        aria-label="Estimated one-rep-max over time"
+        aria-label="1RM estimado a lo largo del tiempo"
       >
         <CartesianGrid stroke={BORDER} strokeDasharray="3 3" />
         <XAxis
           dataKey="week"
           stroke={MUTED}
           tick={{ fill: MUTED, fontSize: 12 }}
-          label={{ value: "Week", position: "insideBottom", offset: -12, fill: MUTED }}
+          label={{ value: "Semana", position: "insideBottom", offset: -12, fill: MUTED }}
         />
         <YAxis
           stroke={MUTED}
           tick={{ fill: MUTED, fontSize: 12 }}
           label={{
-            value: "Estimated 1RM (kg)",
+            value: "1RM estimado (kg)",
             angle: -90,
             position: "insideLeft",
             fill: MUTED,
           }}
         />
         <Tooltip
-          formatter={(value: number) => [`${value} kg`, "Est. 1RM"]}
+          formatter={(value: number) => [`${value} kg`, "1RM est."]}
           contentStyle={{ fontSize: 12 }}
         />
         <Line
           type="monotone"
           dataKey="e1rm"
-          name="Estimated 1RM (kg)"
+          name="1RM estimado (kg)"
           stroke={PRIMARY}
           dot={{ r: 3 }}
           strokeWidth={2}

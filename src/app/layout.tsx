@@ -5,12 +5,12 @@ import { SessionProvider } from "@/components/session-provider";
 
 export const metadata: Metadata = {
   title: "FitMind AI",
-  description: "Intelligent personal trainer and sports-nutrition platform.",
+  description: "Plataforma inteligente de entrenamiento personal y nutrición deportiva.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <body>
         <SessionProvider>
           <ThemeProvider>{children}</ThemeProvider>

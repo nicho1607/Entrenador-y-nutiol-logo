@@ -31,49 +31,51 @@ export default async function ImportRoutinePage() {
       </header>
 
       <section className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Import a routine</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Importar una rutina</h1>
         <p className="text-muted-foreground">
-          Paste or upload a routine exported as JSON or CSV. We preview the normalized plan —
-          days, exercises, sets and reps — and list any rows we could not map so nothing is
-          dropped silently. Confirming saves it to your account as an imported plan. Exercise
-          names must match the exercise library.
+          Pega o sube una rutina exportada como JSON o CSV. Mostramos una vista previa del plan
+          normalizado — días, ejercicios, series y repeticiones — y listamos las filas que no
+          pudimos mapear para que nada se descarte en silencio. Al confirmar, se guarda en tu
+          cuenta como un plan importado. Los nombres de los ejercicios deben coincidir con la
+          biblioteca de ejercicios.
         </p>
         <div className="flex flex-wrap gap-4 text-sm">
           <Link href="/trainer" className="underline underline-offset-4">
-            ← Back to the trainer
+            ← Volver al entrenador
           </Link>
         </div>
         <details className="rounded-md border border-border p-4 text-sm text-muted-foreground">
           <summary className="cursor-pointer font-medium text-foreground">
-            Supported JSON / CSV format
+            Formato JSON / CSV admitido
           </summary>
           <div className="mt-3 flex flex-col gap-3">
             <p>
-              Routines import as <strong>JSON</strong> (one plan object) or <strong>CSV</strong>{" "}
-              (one row per exercise). Every field is validated; rows we cannot map are listed as
-              rejected with a reason rather than dropped silently.
+              Las rutinas se importan como <strong>JSON</strong> (un objeto de plan) o{" "}
+              <strong>CSV</strong> (una fila por ejercicio). Cada campo se valida; las filas que no
+              podemos mapear se listan como rechazadas con un motivo en lugar de descartarse en
+              silencio.
             </p>
             <p>
-              <strong>JSON:</strong> a plan with <code>name</code> and a <code>days</code> array;
-              each day has a <code>name</code>, an integer <code>order</code>, and an{" "}
-              <code>exercises</code> array. Each exercise needs <code>name</code>,{" "}
-              <code>muscle</code>, <code>sets</code>, <code>repsMin</code> and <code>repsMax</code>{" "}
-              (with <code>repsMax ≥ repsMin</code>); <code>restSeconds</code> and{" "}
-              <code>targetRir</code> are optional.
+              <strong>JSON:</strong> un plan con <code>name</code> y un arreglo <code>days</code>;
+              cada día tiene un <code>name</code>, un <code>order</code> entero y un arreglo{" "}
+              <code>exercises</code>. Cada ejercicio necesita <code>name</code>,{" "}
+              <code>muscle</code>, <code>sets</code>, <code>repsMin</code> y <code>repsMax</code>{" "}
+              (con <code>repsMax ≥ repsMin</code>); <code>restSeconds</code> y{" "}
+              <code>targetRir</code> son opcionales.
             </p>
             <p>
-              <strong>CSV header:</strong>{" "}
+              <strong>Encabezado CSV:</strong>{" "}
               <code>
                 planName,dayName,dayOrder,exerciseName,muscle,sets,repsMin,repsMax
               </code>{" "}
-              with optional <code>restSeconds,targetRir</code> columns. Day grouping is derived
-              from <code>dayOrder</code> + <code>dayName</code>.
+              con las columnas opcionales <code>restSeconds,targetRir</code>. La agrupación por día
+              se deriva de <code>dayOrder</code> + <code>dayName</code>.
             </p>
             <p>
-              <code>muscle</code> must be one of: CHEST, BACK, SHOULDERS, BICEPS, TRICEPS, QUADS,
-              HAMSTRINGS, GLUTES, CALVES, CORE, FULL_BODY, OTHER. Exercise names must match the
-              exercise library. The full reference lives in{" "}
-              <code>docs/routine-import-format.md</code> in the project repository.
+              <code>muscle</code> debe ser uno de: CHEST, BACK, SHOULDERS, BICEPS, TRICEPS, QUADS,
+              HAMSTRINGS, GLUTES, CALVES, CORE, FULL_BODY, OTHER. Los nombres de los ejercicios
+              deben coincidir con la biblioteca de ejercicios. La referencia completa está en{" "}
+              <code>docs/routine-import-format.md</code> en el repositorio del proyecto.
             </p>
           </div>
         </details>
@@ -81,7 +83,7 @@ export default async function ImportRoutinePage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Paste or upload a routine</CardTitle>
+          <CardTitle>Pegar o subir una rutina</CardTitle>
         </CardHeader>
         <CardContent>
           <ImportRoutineForm />

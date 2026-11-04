@@ -23,7 +23,7 @@ export default function RegisterPage() {
 
     const parsed = registerSchema.safeParse({ name, email, password });
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Invalid input.");
+      setError(parsed.error.issues[0]?.message ?? "Datos no válidos.");
       return;
     }
 
@@ -39,7 +39,7 @@ export default function RegisterPage() {
       const message =
         data && typeof data === "object" && "error" in data
           ? String((data as { error: unknown }).error)
-          : "Registration failed.";
+          : "No se pudo completar el registro.";
       setError(message);
       setLoading(false);
       return;
@@ -64,13 +64,13 @@ export default function RegisterPage() {
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
       <Card>
         <CardHeader>
-          <CardTitle>Create account</CardTitle>
+          <CardTitle>Crear cuenta</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="flex flex-col gap-4" onSubmit={onSubmit}>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="name" className="text-sm font-medium">
-                Name
+                Nombre
               </label>
               <Input
                 id="name"
@@ -83,7 +83,7 @@ export default function RegisterPage() {
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="email" className="text-sm font-medium">
-                Email
+                Correo electrónico
               </label>
               <Input
                 id="email"
@@ -96,7 +96,7 @@ export default function RegisterPage() {
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="password" className="text-sm font-medium">
-                Password
+                Contraseña
               </label>
               <Input
                 id="password"
@@ -113,13 +113,13 @@ export default function RegisterPage() {
               </p>
             ) : null}
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create account"}
+              {loading ? "Creando..." : "Crear cuenta"}
             </Button>
           </form>
           <p className="mt-4 text-sm text-muted-foreground">
-            Already have an account?{" "}
+            ¿Ya tienes una cuenta?{" "}
             <Link href="/login" className="underline">
-              Log in
+              Iniciar sesión
             </Link>
           </p>
         </CardContent>

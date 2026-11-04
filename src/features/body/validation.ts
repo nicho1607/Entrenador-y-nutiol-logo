@@ -13,27 +13,27 @@ import { z } from "zod";
 
 /** Body weight in kilograms (mirrors the nullable Float column). */
 const weightKg = z
-  .number({ invalid_type_error: "Weight must be a number." })
-  .positive("Weight must be a positive number.")
-  .max(500, "Weight must be 500 kg or below.");
+  .number({ invalid_type_error: "El peso debe ser un número." })
+  .positive("El peso debe ser un número positivo.")
+  .max(500, "El peso debe ser 500 kg o menos.");
 
 /** Body-fat percentage (0..100). */
 const bodyFatPct = z
-  .number({ invalid_type_error: "Body fat must be a number." })
-  .min(0, "Body fat cannot be negative.")
-  .max(100, "Body fat must be 100% or below.");
+  .number({ invalid_type_error: "La grasa corporal debe ser un número." })
+  .min(0, "La grasa corporal no puede ser negativa.")
+  .max(100, "La grasa corporal debe ser 100% o menos.");
 
 /** Waist circumference in centimetres. */
 const waistCm = z
-  .number({ invalid_type_error: "Waist must be a number." })
-  .positive("Waist must be a positive number.")
-  .max(300, "Waist must be 300 cm or below.");
+  .number({ invalid_type_error: "La cintura debe ser un número." })
+  .positive("La cintura debe ser un número positivo.")
+  .max(300, "La cintura debe ser 300 cm o menos.");
 
 /** Hip circumference in centimetres. */
 const hipCm = z
-  .number({ invalid_type_error: "Hip must be a number." })
-  .positive("Hip must be a positive number.")
-  .max(300, "Hip must be 300 cm or below.");
+  .number({ invalid_type_error: "La cadera debe ser un número." })
+  .positive("La cadera debe ser un número positivo.")
+  .max(300, "La cadera debe ser 300 cm o menos.");
 
 /**
  * Log a body measurement. Every metric is optional, but at least one must be
@@ -54,7 +54,7 @@ export const logMeasurementSchema = z
       v.bodyFatPct != null ||
       v.waistCm != null ||
       v.hipCm != null,
-    { message: "Enter at least one measurement." },
+    { message: "Introduce al menos una medida." },
   );
 
 export type LogMeasurementInput = z.infer<typeof logMeasurementSchema>;

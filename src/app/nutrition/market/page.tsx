@@ -52,30 +52,30 @@ export default async function MarketListPage({
       </header>
 
       <section className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Market list</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Lista de compras</h1>
         <p className="text-muted-foreground">
-          A shopping list aggregated from one of your meal plans — total grams per food,
-          budget-aware, and screened against your declared allergies and dietary
-          restrictions.
+          Una lista de compras agregada a partir de uno de tus planes de comidas — total de gramos
+          por alimento, ajustada a tu presupuesto y revisada frente a las alergias y restricciones
+          alimentarias que declaraste.
         </p>
         <Link href="/nutrition" className="text-sm underline underline-offset-4">
-          ← Back to nutrition
+          ← Volver a nutrición
         </Link>
       </section>
 
       {plans.length === 0 ? (
         <Card>
           <CardHeader>
-            <CardTitle>No plans yet</CardTitle>
+            <CardTitle>Aún no hay planes</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4 text-sm text-muted-foreground">
             <p>
-              Create a meal plan and add foods to it first, then come back to generate a
-              market list from it.
+              Primero crea un plan de comidas y añádele alimentos, luego vuelve para generar una
+              lista de compras a partir de él.
             </p>
             <div>
               <Link href="/nutrition">
-                <Button>Go to meal plans</Button>
+                <Button>Ir a los planes de comidas</Button>
               </Link>
             </div>
           </CardContent>
@@ -84,10 +84,10 @@ export default async function MarketListPage({
         <>
           <Card>
             <CardHeader>
-              <CardTitle>Choose a plan</CardTitle>
+              <CardTitle>Elige un plan</CardTitle>
             </CardHeader>
             <CardContent>
-              <nav aria-label="Your plans" className="flex flex-wrap gap-2">
+              <nav aria-label="Tus planes" className="flex flex-wrap gap-2">
                 {plans.map((plan) => (
                   <Link
                     key={plan.id}
@@ -106,18 +106,18 @@ export default async function MarketListPage({
             <>
               <Card>
                 <CardHeader>
-                  <CardTitle>Shopping list — {selectedPlan.name}</CardTitle>
+                  <CardTitle>Lista de compras — {selectedPlan.name}</CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4 text-sm">
                   <p className="rounded-md border border-border bg-muted px-3 py-2 text-xs text-muted-foreground">
-                    Pricing not populated — no verifiable price data; quantities only.
+                    Precios no incluidos — no hay datos de precios verificables; solo cantidades.
                   </p>
                   <p className="text-muted-foreground">
-                    Food budget:{" "}
+                    Presupuesto para comida:{" "}
                     <span className="text-foreground">
                       {market.budget.amount != null
                         ? `${market.budget.amount}`
-                        : "not set"}
+                        : "sin definir"}
                     </span>
                     {" · "}
                     {market.budget.note}
@@ -125,9 +125,9 @@ export default async function MarketListPage({
 
                   {market.items.length === 0 ? (
                     <p className="text-muted-foreground">
-                      This plan has no foods yet. Add foods to its meals on the{" "}
+                      Este plan aún no tiene alimentos. Añade alimentos a sus comidas en la{" "}
                       <Link href="/nutrition" className="underline underline-offset-4">
-                        nutrition page
+                        página de nutrición
                       </Link>
                       .
                     </p>
@@ -135,8 +135,8 @@ export default async function MarketListPage({
                     <table className="w-full text-left">
                       <thead>
                         <tr className="text-xs text-muted-foreground">
-                          <th className="pb-2 font-medium">Food</th>
-                          <th className="pb-2 font-medium">Total quantity</th>
+                          <th className="pb-2 font-medium">Alimento</th>
+                          <th className="pb-2 font-medium">Cantidad total</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -156,19 +156,21 @@ export default async function MarketListPage({
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Allergy &amp; restriction warnings</CardTitle>
+                  <CardTitle>Avisos de alergias y restricciones</CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-3 text-sm">
                   {market.conflicts.length === 0 ? (
                     <p className="text-muted-foreground">
-                      No foods in this plan match your declared allergies or dietary
-                      restrictions. This is a conservative name-based check, not an
-                      ingredient analysis — always read labels yourself.
+                      Ningún alimento de este plan coincide con las alergias o restricciones
+                      alimentarias que declaraste. Esta es una comprobación conservadora basada en
+                      el nombre, no un análisis de ingredientes — lee siempre las etiquetas por tu
+                      cuenta.
                     </p>
                   ) : (
                     <>
                       <p className="text-muted-foreground">
-                        These foods match something you flagged. Review them before shopping:
+                        Estos alimentos coinciden con algo que señalaste. Revísalos antes de
+                        comprar:
                       </p>
                       <ul className="flex flex-col gap-2" role="list">
                         {market.conflicts.map((c) => (
@@ -188,20 +190,20 @@ export default async function MarketListPage({
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Safety</CardTitle>
+                  <CardTitle>Seguridad</CardTitle>
                 </CardHeader>
                 <CardContent className="text-xs text-muted-foreground">
-                  This list is an orientational aid, not medical advice. FitMind AI does not
-                  diagnose disease or replace a clinical nutritionist. For flagged situations
-                  (eating-disorder risk, pregnancy, metabolic disease) the app disables
-                  automatic calorie targeting and asks you to consult a qualified
-                  professional.
+                  Esta lista es una ayuda orientativa, no consejo médico. FitMind AI no diagnostica
+                  enfermedades ni sustituye a un nutricionista clínico. En situaciones señaladas
+                  (riesgo de trastorno alimentario, embarazo, enfermedad metabólica), la app
+                  desactiva el cálculo automático de calorías y te pide que consultes a un
+                  profesional cualificado.
                 </CardContent>
               </Card>
             </>
           ) : (
             <p className="text-sm text-muted-foreground">
-              Select a plan above to generate its market list.
+              Selecciona un plan arriba para generar su lista de compras.
             </p>
           )}
         </>

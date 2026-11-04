@@ -131,7 +131,7 @@ export async function getNutritionTargets(userId: string): Promise<NutritionTarg
     const missing: DomainResult<never> = {
       ok: false,
       reason: "MISSING_INPUT",
-      message: "Set up your profile to compute nutrition targets.",
+      message: "Configura tu perfil para calcular los objetivos de nutrición.",
     };
     return {
       derived: {
@@ -413,8 +413,8 @@ export async function generateMarketList(
   const amount = profile?.foodBudget ?? null;
   const note =
     amount != null
-      ? "Budget shown for context only. Per-food prices are NOT populated (no verifiable price data), so quantities are listed without a cost estimate."
-      : "Per-food prices are NOT populated (no verifiable price data). Only quantities are listed; no cost is estimated.";
+      ? "El presupuesto se muestra solo como contexto. Los precios por alimento NO están incluidos (no hay datos de precios verificables), así que las cantidades se listan sin una estimación de costo."
+      : "Los precios por alimento NO están incluidos (no hay datos de precios verificables). Solo se listan las cantidades; no se estima ningún costo.";
 
   return {
     items,

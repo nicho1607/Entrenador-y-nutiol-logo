@@ -33,9 +33,9 @@ interface MeasurementSeries {
 }
 
 const SERIES: MeasurementSeries[] = [
-  { key: "waistCm", label: "Waist (cm)", colorIndex: 1 },
-  { key: "hipCm", label: "Hip (cm)", colorIndex: 3 },
-  { key: "bodyFatPct", label: "Body fat (%)", colorIndex: 4 },
+  { key: "waistCm", label: "Cintura (cm)", colorIndex: 1 },
+  { key: "hipCm", label: "Cadera (cm)", colorIndex: 3 },
+  { key: "bodyFatPct", label: "Grasa corporal (%)", colorIndex: 4 },
 ];
 
 export function MeasurementsLineChart({ rows }: { rows: MeasurementsLineRow[] }) {
@@ -46,14 +46,14 @@ export function MeasurementsLineChart({ rows }: { rows: MeasurementsLineRow[] })
       <LineChart
         data={rows}
         margin={{ top: 8, right: 16, bottom: 28, left: 8 }}
-        aria-label="Waist, hip and body-fat over time"
+        aria-label="Cintura, cadera y grasa corporal a lo largo del tiempo"
       >
         <CartesianGrid stroke={BORDER} strokeDasharray="3 3" />
         <XAxis
           dataKey="date"
           stroke={MUTED}
           tick={{ fill: MUTED, fontSize: 12 }}
-          label={{ value: "Date", position: "insideBottom", offset: -12, fill: MUTED }}
+          label={{ value: "Fecha", position: "insideBottom", offset: -12, fill: MUTED }}
         />
         <YAxis
           stroke={MUTED}

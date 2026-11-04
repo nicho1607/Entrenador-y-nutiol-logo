@@ -47,16 +47,16 @@ export const generatePlanSchema = z.object({
   goal: z.enum(GOAL_TYPE_VALUES).optional(),
   experienceLevel: z.enum(EXPERIENCE_LEVEL_VALUES).optional(),
   daysPerWeek: z
-    .number({ invalid_type_error: "Days per week must be a number." })
-    .int("Days per week must be a whole number.")
-    .min(1, "Days per week must be at least 1.")
-    .max(7, "Days per week cannot exceed 7.")
+    .number({ invalid_type_error: "Los días por semana deben ser un número." })
+    .int("Los días por semana deben ser un número entero.")
+    .min(1, "Los días por semana deben ser al menos 1.")
+    .max(7, "Los días por semana no pueden superar 7.")
     .optional(),
   sessionMinutes: z
-    .number({ invalid_type_error: "Session minutes must be a number." })
-    .int("Session minutes must be a whole number.")
-    .min(1, "Session minutes must be at least 1.")
-    .max(600, "Session minutes must be 600 or below.")
+    .number({ invalid_type_error: "Los minutos por sesión deben ser un número." })
+    .int("Los minutos por sesión deben ser un número entero.")
+    .min(1, "Los minutos por sesión deben ser al menos 1.")
+    .max(600, "Los minutos por sesión deben ser 600 o menos.")
     .optional(),
   availableEquipment: z.array(z.enum(EQUIPMENT_VALUES)).optional(),
   limitations: z.array(z.string().trim().min(1)).optional(),
@@ -79,29 +79,29 @@ export type ExerciseFilterInput = z.infer<typeof exerciseFilterSchema>;
  * bodyweight), rir is a non-negative integer, rpe is 1-10.
  */
 export const logEntrySchema = z.object({
-  workoutExerciseId: z.string().min(1, "A workout exercise id is required."),
+  workoutExerciseId: z.string().min(1, "Se requiere un id de ejercicio de entrenamiento."),
   setNumber: z
-    .number({ invalid_type_error: "Set number must be a number." })
-    .int("Set number must be a whole number.")
-    .min(1, "Set number must be at least 1."),
+    .number({ invalid_type_error: "El número de serie debe ser un número." })
+    .int("El número de serie debe ser un número entero.")
+    .min(1, "El número de serie debe ser al menos 1."),
   reps: z
-    .number({ invalid_type_error: "Reps must be a number." })
-    .int("Reps must be a whole number.")
-    .min(0, "Reps cannot be negative."),
+    .number({ invalid_type_error: "Las repeticiones deben ser un número." })
+    .int("Las repeticiones deben ser un número entero.")
+    .min(0, "Las repeticiones no pueden ser negativas."),
   weightKg: z
-    .number({ invalid_type_error: "Weight must be a number." })
-    .nonnegative("Weight cannot be negative.")
-    .max(1000, "Weight must be 1000 kg or below."),
+    .number({ invalid_type_error: "El peso debe ser un número." })
+    .nonnegative("El peso no puede ser negativo.")
+    .max(1000, "El peso debe ser 1000 kg o menos."),
   rir: z
-    .number({ invalid_type_error: "RIR must be a number." })
-    .int("RIR must be a whole number.")
-    .min(0, "RIR cannot be negative.")
-    .max(20, "RIR must be 20 or below.")
+    .number({ invalid_type_error: "El RIR debe ser un número." })
+    .int("El RIR debe ser un número entero.")
+    .min(0, "El RIR no puede ser negativo.")
+    .max(20, "El RIR debe ser 20 o menos.")
     .optional(),
   rpe: z
-    .number({ invalid_type_error: "RPE must be a number." })
-    .min(1, "RPE must be at least 1.")
-    .max(10, "RPE must be 10 or below.")
+    .number({ invalid_type_error: "El RPE debe ser un número." })
+    .min(1, "El RPE debe ser al menos 1.")
+    .max(10, "El RPE debe ser 10 o menos.")
     .optional(),
 });
 
@@ -110,9 +110,9 @@ export type LogEntryInput = z.infer<typeof logEntrySchema>;
 /** A logged workout session with at least one set. */
 export const logSessionSchema = z.object({
   dayId: z.string().min(1).optional(),
-  notes: z.string().trim().max(2000, "Notes must be 2000 characters or below.").optional(),
+  notes: z.string().trim().max(2000, "Las notas deben tener 2000 caracteres o menos.").optional(),
   performedAt: z.coerce.date().optional(),
-  entries: z.array(logEntrySchema).min(1, "Log at least one set."),
+  entries: z.array(logEntrySchema).min(1, "Registra al menos una serie."),
 });
 
 export type LogSessionInput = z.infer<typeof logSessionSchema>;

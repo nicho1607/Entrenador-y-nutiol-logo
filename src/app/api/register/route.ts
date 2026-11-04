@@ -7,13 +7,13 @@ export async function POST(request: Request): Promise<NextResponse> {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+    return NextResponse.json({ error: "Cuerpo de la solicitud no válido." }, { status: 400 });
   }
 
   const parsed = registerSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
-      { error: parsed.error.issues[0]?.message ?? "Invalid input." },
+      { error: parsed.error.issues[0]?.message ?? "Datos no válidos." },
       { status: 400 },
     );
   }

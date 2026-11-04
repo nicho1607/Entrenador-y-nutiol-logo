@@ -22,7 +22,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="en">
+    <html lang="es">
       <body
         style={{
           margin: 0,
@@ -39,11 +39,11 @@ export default function GlobalError({
       >
         <main style={{ maxWidth: "28rem", textAlign: "center" }}>
           <h1 style={{ fontSize: "1.25rem", fontWeight: 600, marginBottom: "0.75rem" }}>
-            Something went wrong
+            Algo salió mal
           </h1>
           <p style={{ fontSize: "0.875rem", lineHeight: 1.5, marginBottom: "1.5rem" }}>
-            We hit an unexpected error. You can try again, and if the problem keeps happening
-            please come back a little later.
+            Ocurrió un error inesperado. Puedes intentarlo de nuevo y, si el problema persiste,
+            vuelve un poco más tarde.
           </p>
           <button
             type="button"
@@ -62,7 +62,7 @@ export default function GlobalError({
               cursor: "pointer",
             }}
           >
-            Try again
+            Intentar de nuevo
           </button>
         </main>
       </body>

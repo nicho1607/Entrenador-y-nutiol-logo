@@ -95,6 +95,6 @@ describe("importRoutineFromCsv", () => {
     const csv = "foo,bar\n1,2";
     const result = importRoutineFromCsv(csv);
     expect(result.plan).toBeNull();
-    expect(result.rejected[0]!.reason).toMatch(/header/i);
+    expect(result.rejected[0]!.reason).toMatch(/encabezado/i);
   });
 });

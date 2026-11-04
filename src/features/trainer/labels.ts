@@ -12,16 +12,16 @@ export {
 } from "@/features/profile/labels";
 
 export const MUSCLE_GROUP_LABELS: Record<MuscleGroup, string> = {
-  CHEST: "Chest",
-  BACK: "Back",
-  SHOULDERS: "Shoulders",
-  BICEPS: "Biceps",
-  TRICEPS: "Triceps",
-  QUADS: "Quads",
-  HAMSTRINGS: "Hamstrings",
-  GLUTES: "Glutes",
-  CALVES: "Calves",
+  CHEST: "Pecho",
+  BACK: "Espalda",
+  SHOULDERS: "Hombros",
+  BICEPS: "Bíceps",
+  TRICEPS: "Tríceps",
+  QUADS: "Cuádriceps",
+  HAMSTRINGS: "Isquiotibiales",
+  GLUTES: "Glúteos",
+  CALVES: "Pantorrillas",
   CORE: "Core",
-  FULL_BODY: "Full body",
-  OTHER: "Other",
+  FULL_BODY: "Cuerpo completo",
+  OTHER: "Otro",
 };

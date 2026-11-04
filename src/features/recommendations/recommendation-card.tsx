@@ -17,9 +17,9 @@ import type {
 
 /** Human label for each basis. */
 const BASIS_LABEL: Record<RecommendationBasis, string> = {
-  calculation: "Calculation",
-  rule: "Rule-based",
-  ai: "AI-assisted",
+  calculation: "Cálculo",
+  rule: "Basado en reglas",
+  ai: "Asistido por IA",
 };
 
 /** Badge styling per basis (only the project's defined theme tokens). */
@@ -31,9 +31,9 @@ const BASIS_BADGE: Record<RecommendationBasis, string> = {
 
 /** Human label for each severity. */
 const SEVERITY_LABEL: Record<RecommendationSeverity, string> = {
-  info: "Info",
-  warning: "Worth attention",
-  critical: "Important",
+  info: "Información",
+  warning: "Merece atención",
+  critical: "Importante",
 };
 
 /** Left-border accent per severity (only the project's defined theme tokens). */
@@ -68,7 +68,7 @@ export function RecommendationCard({ recommendation }: { recommendation: Recomme
         {evidence.length > 0 ? (
           <div className="flex flex-col gap-1">
             <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Evidence
+              Evidencia
             </p>
             <ul className="flex flex-col gap-1 text-sm text-foreground">
               {evidence.map((item, i) => (

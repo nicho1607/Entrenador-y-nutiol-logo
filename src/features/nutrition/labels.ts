@@ -9,10 +9,10 @@ import type { MealType } from "./validation";
 export { GOAL_TYPE_LABELS, SEX_LABELS, ACTIVITY_LEVEL_LABELS } from "@/features/profile/labels";
 
 export const MEAL_TYPE_LABELS: Record<MealType, string> = {
-  BREAKFAST: "Breakfast",
-  LUNCH: "Lunch",
-  DINNER: "Dinner",
-  SNACK: "Snack",
+  BREAKFAST: "Desayuno",
+  LUNCH: "Almuerzo",
+  DINNER: "Cena",
+  SNACK: "Tentempié",
 };
 
 /**
@@ -21,11 +21,11 @@ export const MEAL_TYPE_LABELS: Record<MealType, string> = {
  * value falls back to the raw string in the UI.
  */
 export const FOOD_CATEGORY_LABELS: Record<string, string> = {
-  PROTEIN: "Protein",
-  GRAIN: "Grain",
-  LEGUME: "Legume",
-  FRUIT: "Fruit",
-  VEGETABLE: "Vegetable",
-  DAIRY: "Dairy",
-  FAT: "Fat",
+  PROTEIN: "Proteína",
+  GRAIN: "Cereal",
+  LEGUME: "Legumbre",
+  FRUIT: "Fruta",
+  VEGETABLE: "Verdura",
+  DAIRY: "Lácteo",
+  FAT: "Grasa",
 };

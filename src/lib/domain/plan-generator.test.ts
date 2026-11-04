@@ -153,9 +153,9 @@ describe("generatePlan — split shape", () => {
     if (r.ok) {
       expect(r.value.days).toHaveLength(3);
       expect(r.value.days.map((d) => d.name)).toEqual([
-        "Full Body 1",
-        "Full Body 2",
-        "Full Body 3",
+        "Cuerpo completo 1",
+        "Cuerpo completo 2",
+        "Cuerpo completo 3",
       ]);
       expect(r.value.days.map((d) => d.order)).toEqual([1, 2, 3]);
     }
@@ -166,10 +166,10 @@ describe("generatePlan — split shape", () => {
     expect(r.ok).toBe(true);
     if (r.ok) {
       expect(r.value.days.map((d) => d.name)).toEqual([
-        "Upper A",
-        "Lower A",
-        "Upper B",
-        "Lower B",
+        "Superior A",
+        "Inferior A",
+        "Superior B",
+        "Inferior B",
       ]);
     }
   });
@@ -179,12 +179,12 @@ describe("generatePlan — split shape", () => {
     expect(r.ok).toBe(true);
     if (r.ok) {
       expect(r.value.days.map((d) => d.name)).toEqual([
-        "Push 1",
-        "Pull 1",
-        "Legs 1",
-        "Push 2",
-        "Pull 2",
-        "Legs 2",
+        "Empuje 1",
+        "Tracción 1",
+        "Piernas 1",
+        "Empuje 2",
+        "Tracción 2",
+        "Piernas 2",
       ]);
     }
   });
@@ -194,7 +194,7 @@ describe("generatePlan — split shape", () => {
     expect(r.ok).toBe(true);
     if (r.ok) {
       expect(r.value.days).toHaveLength(1);
-      expect(r.value.days[0]?.name).toBe("Full Body 1");
+      expect(r.value.days[0]?.name).toBe("Cuerpo completo 1");
     }
   });
 });
@@ -292,7 +292,7 @@ describe("generatePlan — reasons and progression deferral", () => {
       for (const ex of day.exercises) {
         expect(ex.reason.trim().length).toBeGreaterThan(0);
         // Progression is deferred, never auto-applied in the generator.
-        expect(ex.reason.toLowerCase()).toContain("progression");
+        expect(ex.reason.toLowerCase()).toContain("progresión");
       }
     }
   });

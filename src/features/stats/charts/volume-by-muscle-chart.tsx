@@ -42,20 +42,20 @@ export function VolumeByMuscleChart({
       <LineChart
         data={rows}
         margin={{ top: 8, right: 16, bottom: 28, left: 8 }}
-        aria-label="Weekly rep-volume by muscle group"
+        aria-label="Volumen de repeticiones semanal por grupo muscular"
       >
         <CartesianGrid stroke={BORDER} strokeDasharray="3 3" />
         <XAxis
           dataKey="week"
           stroke={MUTED}
           tick={{ fill: MUTED, fontSize: 12 }}
-          label={{ value: "Week", position: "insideBottom", offset: -12, fill: MUTED }}
+          label={{ value: "Semana", position: "insideBottom", offset: -12, fill: MUTED }}
         />
         <YAxis
           stroke={MUTED}
           tick={{ fill: MUTED, fontSize: 12 }}
           label={{
-            value: "Volume (reps)",
+            value: "Volumen (repeticiones)",
             angle: -90,
             position: "insideLeft",
             fill: MUTED,

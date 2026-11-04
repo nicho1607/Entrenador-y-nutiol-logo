@@ -32,32 +32,32 @@ export function FrequencyBarChart({ rows }: { rows: FrequencyBarRow[] }) {
       <BarChart
         data={rows}
         margin={{ top: 8, right: 16, bottom: 28, left: 8 }}
-        aria-label="Workouts logged per week"
+        aria-label="Entrenamientos registrados por semana"
       >
         <CartesianGrid stroke={BORDER} strokeDasharray="3 3" vertical={false} />
         <XAxis
           dataKey="week"
           stroke={MUTED}
           tick={{ fill: MUTED, fontSize: 12 }}
-          label={{ value: "Week", position: "insideBottom", offset: -12, fill: MUTED }}
+          label={{ value: "Semana", position: "insideBottom", offset: -12, fill: MUTED }}
         />
         <YAxis
           allowDecimals={false}
           stroke={MUTED}
           tick={{ fill: MUTED, fontSize: 12 }}
           label={{
-            value: "Sessions (count)",
+            value: "Sesiones (cantidad)",
             angle: -90,
             position: "insideLeft",
             fill: MUTED,
           }}
         />
         <Tooltip
-          formatter={(value: number) => [`${value}`, "Sessions"]}
+          formatter={(value: number) => [`${value}`, "Sesiones"]}
           contentStyle={{ fontSize: 12 }}
         />
         <Legend />
-        <Bar dataKey="sessions" name="Sessions / week" fill={PRIMARY} radius={[4, 4, 0, 0]} />
+        <Bar dataKey="sessions" name="Sesiones / semana" fill={PRIMARY} radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

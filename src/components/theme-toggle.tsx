@@ -21,10 +21,10 @@ export function ThemeToggle() {
   return (
     <Button
       variant="secondary"
-      aria-label={mounted ? `Switch to ${isDark ? "light" : "dark"} mode` : "Toggle theme"}
+      aria-label={mounted ? `Cambiar a modo ${isDark ? "claro" : "oscuro"}` : "Alternar tema"}
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
-      {mounted ? (isDark ? "Light mode" : "Dark mode") : "Theme"}
+      {mounted ? (isDark ? "Modo claro" : "Modo oscuro") : "Tema"}
     </Button>
   );
 }

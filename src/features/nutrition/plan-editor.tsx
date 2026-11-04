@@ -46,18 +46,18 @@ export function AddMealForm({ planId }: { planId: string }) {
 
     const parsed = addMealSchema.safeParse({ planId, name, type });
     if (!parsed.success) {
-      setMessage(parsed.error.issues[0]?.message ?? "Please fix the highlighted fields.");
+      setMessage(parsed.error.issues[0]?.message ?? "Corrige los campos resaltados.");
       return;
     }
 
     startTransition(async () => {
       const result = await addMealAction(parsed.data);
       if (result.status === "success") {
-        setMessage("Meal added.");
+        setMessage("Comida añadida.");
         setName("");
         router.refresh();
       } else {
-        setMessage(result.message ?? "Could not add the meal.");
+        setMessage(result.message ?? "No se pudo añadir la comida.");
       }
     });
   }
@@ -66,19 +66,19 @@ export function AddMealForm({ planId }: { planId: string }) {
     <form className="flex flex-col gap-3 sm:flex-row sm:items-end" onSubmit={onSubmit} noValidate>
       <div className="flex flex-1 flex-col gap-1.5">
         <label htmlFor={`meal-name-${planId}`} className="text-sm font-medium">
-          Meal name
+          Nombre de la comida
         </label>
         <Input
           id={`meal-name-${planId}`}
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="e.g. Breakfast"
+          placeholder="p. ej. Desayuno"
         />
       </div>
       <div className="flex flex-col gap-1.5">
         <label htmlFor={`meal-type-${planId}`} className="text-sm font-medium">
-          Type
+          Tipo
         </label>
         <select
           id={`meal-type-${planId}`}
@@ -94,7 +94,7 @@ export function AddMealForm({ planId }: { planId: string }) {
         </select>
       </div>
       <Button type="submit" disabled={isPending}>
-        {isPending ? "Adding..." : "Add meal"}
+        {isPending ? "Añadiendo..." : "Añadir comida"}
       </Button>
       {message ? (
         <p role="status" className="text-sm text-foreground sm:self-center">
@@ -121,7 +121,8 @@ export function AddMealItemForm({
   if (foods.length === 0) {
     return (
       <p className="text-sm text-muted-foreground">
-        The food catalog is empty — seed it (see the README) to add foods to meals.
+        El catálogo de alimentos está vacío — cárgalo (consulta el README) para añadir alimentos a
+        las comidas.
       </p>
     );
   }
@@ -137,18 +138,18 @@ export function AddMealItemForm({
       quantityG: Number.isNaN(qty) ? undefined : qty,
     });
     if (!parsed.success) {
-      setMessage(parsed.error.issues[0]?.message ?? "Please fix the highlighted fields.");
+      setMessage(parsed.error.issues[0]?.message ?? "Corrige los campos resaltados.");
       return;
     }
 
     startTransition(async () => {
       const result = await addMealItemAction(parsed.data);
       if (result.status === "success") {
-        setMessage("Food added.");
+        setMessage("Alimento añadido.");
         setQuantityG("100");
         router.refresh();
       } else {
-        setMessage(result.message ?? "Could not add the food.");
+        setMessage(result.message ?? "No se pudo añadir el alimento.");
       }
     });
   }
@@ -157,7 +158,7 @@ export function AddMealItemForm({
     <form className="flex flex-col gap-3 sm:flex-row sm:items-end" onSubmit={onSubmit} noValidate>
       <div className="flex flex-1 flex-col gap-1.5">
         <label htmlFor={`item-food-${mealId}`} className="text-sm font-medium">
-          Food
+          Alimento
         </label>
         <select
           id={`item-food-${mealId}`}
@@ -174,7 +175,7 @@ export function AddMealItemForm({
       </div>
       <div className="flex flex-col gap-1.5">
         <label htmlFor={`item-qty-${mealId}`} className="text-sm font-medium">
-          Grams
+          Gramos
         </label>
         <Input
           id={`item-qty-${mealId}`}
@@ -188,7 +189,7 @@ export function AddMealItemForm({
         />
       </div>
       <Button type="submit" disabled={isPending}>
-        {isPending ? "Adding..." : "Add food"}
+        {isPending ? "Añadiendo..." : "Añadir alimento"}
       </Button>
       {message ? (
         <p role="status" className="text-sm text-foreground sm:self-center">
@@ -226,17 +227,17 @@ export function SubstituteMealItemForm({
       quantityG: qty != null && Number.isNaN(qty) ? undefined : qty,
     });
     if (!parsed.success) {
-      setMessage(parsed.error.issues[0]?.message ?? "Please fix the highlighted fields.");
+      setMessage(parsed.error.issues[0]?.message ?? "Corrige los campos resaltados.");
       return;
     }
 
     startTransition(async () => {
       const result = await substituteMealItemAction(parsed.data);
       if (result.status === "success") {
-        setMessage("Substituted.");
+        setMessage("Sustituido.");
         router.refresh();
       } else {
-        setMessage(result.message ?? "Could not substitute the food.");
+        setMessage(result.message ?? "No se pudo sustituir el alimento.");
       }
     });
   }
@@ -245,7 +246,7 @@ export function SubstituteMealItemForm({
     <form className="flex flex-col gap-2 sm:flex-row sm:items-end" onSubmit={onSubmit} noValidate>
       <div className="flex flex-1 flex-col gap-1.5">
         <label htmlFor={`sub-food-${mealItemId}`} className="text-xs font-medium">
-          Substitute with
+          Sustituir por
         </label>
         <select
           id={`sub-food-${mealItemId}`}
@@ -262,7 +263,7 @@ export function SubstituteMealItemForm({
       </div>
       <div className="flex flex-col gap-1.5">
         <label htmlFor={`sub-qty-${mealItemId}`} className="text-xs font-medium">
-          Grams (optional)
+          Gramos (opcional)
         </label>
         <Input
           id={`sub-qty-${mealItemId}`}
@@ -273,11 +274,11 @@ export function SubstituteMealItemForm({
           step="1"
           value={quantityG}
           onChange={(e) => setQuantityG(e.target.value)}
-          placeholder="keep"
+          placeholder="mantener"
         />
       </div>
       <Button type="submit" variant="secondary" disabled={isPending}>
-        {isPending ? "Saving..." : "Substitute"}
+        {isPending ? "Guardando..." : "Sustituir"}
       </Button>
       {message ? (
         <p role="status" className="text-xs text-foreground sm:self-center">

@@ -36,37 +36,38 @@ export default async function ProfilePage() {
       </header>
 
       <section>
-        <h1 className="text-3xl font-bold tracking-tight">Your profile</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Tu perfil</h1>
         <p className="text-muted-foreground">
           {profile
-            ? "Update your details and we'll recompute your estimates."
-            : "Tell us about yourself to see your personalized estimates. Everything except what's needed for the math is optional."}
+            ? "Actualiza tus datos y recalcularemos tus estimaciones."
+            : "Cuéntanos sobre ti para ver tus estimaciones personalizadas. Todo lo que no sea necesario para los cálculos es opcional."}
         </p>
       </section>
 
       <Card>
         <CardHeader>
-          <CardTitle>Computed values</CardTitle>
+          <CardTitle>Valores calculados</CardTitle>
         </CardHeader>
         <CardContent>
           {derived ? (
             <DerivedValuesList derived={derived} />
           ) : (
             <p className="text-sm text-muted-foreground">
-              No profile yet. Fill in the form below and save to see your BMI, BMR, TDEE,
-              daily calorie target, and macro split.
+              Aún no tienes un perfil. Completa el formulario de abajo y guárdalo para ver tu IMC,
+              TMB, GET, objetivo diario de calorías y reparto de macros.
             </p>
           )}
           <p className="mt-4 text-xs text-muted-foreground">
-            These are orientational estimates, not medical advice. For flagged situations the
-            app disables automatic targeting and asks you to consult a professional.
+            Estas son estimaciones orientativas, no consejo médico. En situaciones señaladas, la
+            app desactiva el cálculo automático de objetivos y te pide que consultes a un
+            profesional.
           </p>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>{profile ? "Edit your details" : "Create your profile"}</CardTitle>
+          <CardTitle>{profile ? "Edita tus datos" : "Crea tu perfil"}</CardTitle>
         </CardHeader>
         <CardContent>
           <ProfileForm profile={profile} />

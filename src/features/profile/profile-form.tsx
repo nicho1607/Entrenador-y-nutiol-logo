@@ -141,7 +141,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
         if (typeof key === "string" && !(key in next)) next[key] = issue.message;
       }
       setErrors(next);
-      setMessage("Please fix the highlighted fields.");
+      setMessage("Corrige los campos resaltados.");
       return;
     }
     setErrors({});
@@ -150,11 +150,11 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
     startTransition(async () => {
       const result = await saveProfileAction(payload);
       if (result.status === "success") {
-        setMessage("Profile saved.");
+        setMessage("Perfil guardado.");
         router.refresh();
       } else {
         setErrors(result.fieldErrors ?? {});
-        setMessage(result.message ?? "Could not save your profile.");
+        setMessage(result.message ?? "No se pudo guardar tu perfil.");
       }
     });
   }
@@ -162,9 +162,9 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
   return (
     <form className="flex flex-col gap-6" onSubmit={onSubmit} noValidate>
       <fieldset className="flex flex-col gap-4">
-        <legend className="text-sm font-semibold">About you</legend>
+        <legend className="text-sm font-semibold">Sobre ti</legend>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field id="age" label="Age (years)" error={errors.age}>
+          <Field id="age" label="Edad (años)" error={errors.age}>
             <Input
               id="age"
               type="number"
@@ -174,7 +174,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
               aria-invalid={Boolean(errors.age)}
             />
           </Field>
-          <Field id="sex" label="Physiological sex (for energy calculations)" error={errors.sex}>
+          <Field id="sex" label="Sexo fisiológico (para los cálculos de energía)" error={errors.sex}>
             <select
               id="sex"
               className={selectClasses}
@@ -182,7 +182,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
               onChange={(e) => set("sex", e.target.value)}
               aria-invalid={Boolean(errors.sex)}
             >
-              <option value="">Prefer not to say</option>
+              <option value="">Prefiero no decirlo</option>
               {SEX_VALUES.map((v) => (
                 <option key={v} value={v}>
                   {SEX_LABELS[v]}
@@ -190,7 +190,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
               ))}
             </select>
           </Field>
-          <Field id="weightKg" label="Weight (kg)" error={errors.weightKg}>
+          <Field id="weightKg" label="Peso (kg)" error={errors.weightKg}>
             <Input
               id="weightKg"
               type="number"
@@ -201,7 +201,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
               aria-invalid={Boolean(errors.weightKg)}
             />
           </Field>
-          <Field id="heightCm" label="Height (cm)" error={errors.heightCm}>
+          <Field id="heightCm" label="Altura (cm)" error={errors.heightCm}>
             <Input
               id="heightCm"
               type="number"
@@ -214,7 +214,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
           </Field>
           <Field
             id="activityLevel"
-            label="Everyday activity level"
+            label="Nivel de actividad diaria"
             error={errors.activityLevel}
           >
             <select
@@ -224,7 +224,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
               onChange={(e) => set("activityLevel", e.target.value)}
               aria-invalid={Boolean(errors.activityLevel)}
             >
-              <option value="">Not set</option>
+              <option value="">Sin definir</option>
               {ACTIVITY_LEVEL_VALUES.map((v) => (
                 <option key={v} value={v}>
                   {ACTIVITY_LEVEL_LABELS[v]}
@@ -232,7 +232,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
               ))}
             </select>
           </Field>
-          <Field id="experienceLevel" label="Experience level" error={errors.experienceLevel}>
+          <Field id="experienceLevel" label="Nivel de experiencia" error={errors.experienceLevel}>
             <select
               id="experienceLevel"
               className={selectClasses}
@@ -240,7 +240,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
               onChange={(e) => set("experienceLevel", e.target.value)}
               aria-invalid={Boolean(errors.experienceLevel)}
             >
-              <option value="">Not set</option>
+              <option value="">Sin definir</option>
               {EXPERIENCE_LEVEL_VALUES.map((v) => (
                 <option key={v} value={v}>
                   {EXPERIENCE_LEVEL_LABELS[v]}
@@ -252,9 +252,9 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
       </fieldset>
 
       <fieldset className="flex flex-col gap-4">
-        <legend className="text-sm font-semibold">Goal and training availability</legend>
+        <legend className="text-sm font-semibold">Objetivo y disponibilidad para entrenar</legend>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field id="goal" label="Primary goal" error={errors.goal}>
+          <Field id="goal" label="Objetivo principal" error={errors.goal}>
             <select
               id="goal"
               className={selectClasses}
@@ -262,7 +262,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
               onChange={(e) => set("goal", e.target.value)}
               aria-invalid={Boolean(errors.goal)}
             >
-              <option value="">Not set</option>
+              <option value="">Sin definir</option>
               {GOAL_TYPE_VALUES.map((v) => (
                 <option key={v} value={v}>
                   {GOAL_TYPE_LABELS[v]}
@@ -270,7 +270,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
               ))}
             </select>
           </Field>
-          <Field id="daysPerWeek" label="Days available per week" error={errors.daysPerWeek}>
+          <Field id="daysPerWeek" label="Días disponibles por semana" error={errors.daysPerWeek}>
             <Input
               id="daysPerWeek"
               type="number"
@@ -284,7 +284,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
           </Field>
           <Field
             id="sessionMinutes"
-            label="Time per session (minutes)"
+            label="Tiempo por sesión (minutos)"
             error={errors.sessionMinutes}
           >
             <Input
@@ -299,7 +299,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
           </Field>
         </div>
         <fieldset className="flex flex-col gap-2">
-          <legend className="text-sm font-medium">Available equipment</legend>
+          <legend className="text-sm font-medium">Equipo disponible</legend>
           <div className="grid gap-2 sm:grid-cols-2">
             {EQUIPMENT_VALUES.map((v) => (
               <label key={v} className="flex items-center gap-2 text-sm">
@@ -317,12 +317,12 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
       </fieldset>
 
       <fieldset className="flex flex-col gap-4">
-        <legend className="text-sm font-semibold">Nutrition preferences (optional)</legend>
+        <legend className="text-sm font-semibold">Preferencias de nutrición (opcional)</legend>
         <Field
           id="dietaryPreferences"
-          label="Dietary preferences (comma-separated)"
+          label="Preferencias alimentarias (separadas por comas)"
           error={errors.dietaryPreferences}
-          hint="e.g. vegetarian, high-protein"
+          hint="p. ej. vegetariano, alto en proteína"
         >
           <Input
             id="dietaryPreferences"
@@ -333,9 +333,9 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
         </Field>
         <Field
           id="allergies"
-          label="Allergies / intolerances (comma-separated)"
+          label="Alergias / intolerancias (separadas por comas)"
           error={errors.allergies}
-          hint="e.g. peanuts, lactose"
+          hint="p. ej. cacahuetes, lactosa"
         >
           <Input
             id="allergies"
@@ -346,9 +346,9 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
         </Field>
         <Field
           id="dietaryRestrictions"
-          label="Dietary restrictions (comma-separated)"
+          label="Restricciones alimentarias (separadas por comas)"
           error={errors.dietaryRestrictions}
-          hint="e.g. halal, no pork"
+          hint="p. ej. halal, sin cerdo"
         >
           <Input
             id="dietaryRestrictions"
@@ -359,9 +359,9 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
         </Field>
         <Field
           id="foodBudget"
-          label="Weekly food budget (optional)"
+          label="Presupuesto semanal para comida (opcional)"
           error={errors.foodBudget}
-          hint="In your local currency"
+          hint="En tu moneda local"
         >
           <Input
             id="foodBudget"
@@ -377,7 +377,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-sm font-semibold">Safety</legend>
+        <legend className="text-sm font-semibold">Seguridad</legend>
         <label className="flex items-start gap-2 text-sm">
           <input
             type="checkbox"
@@ -386,9 +386,9 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
             onChange={(e) => set("flaggedForProfessionalReview", e.target.checked)}
           />
           <span>
-            I have a condition (e.g. pregnancy, an eating disorder, or a metabolic disease)
-            that means automatic calorie targeting should be disabled until a professional
-            reviews my plan.
+            Tengo una condición (p. ej. embarazo, un trastorno alimentario o una enfermedad
+            metabólica) que implica que el cálculo automático de calorías debe desactivarse hasta
+            que un profesional revise mi plan.
           </span>
         </label>
       </fieldset>
@@ -401,7 +401,7 @@ export function ProfileForm({ profile }: { profile: ProfileView | null }) {
 
       <div>
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Saving..." : profile ? "Update profile" : "Save profile"}
+          {isPending ? "Guardando..." : profile ? "Actualizar perfil" : "Guardar perfil"}
         </Button>
       </div>
     </form>

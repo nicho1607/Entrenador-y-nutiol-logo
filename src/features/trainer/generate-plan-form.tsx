@@ -30,10 +30,10 @@ export function GeneratePlanForm() {
       const result = await generatePlanAction({});
       if (result.status === "success" && result.plan) {
         setPlan(result.plan);
-        setMessage(result.message ?? "Plan generated.");
+        setMessage(result.message ?? "Plan generado.");
       } else {
         setPlan(null);
-        setMessage(result.message ?? "Could not generate a plan.");
+        setMessage(result.message ?? "No se pudo generar un plan.");
       }
     });
   }
@@ -45,10 +45,10 @@ export function GeneratePlanForm() {
       const result = await savePlanAction(plan);
       if (result.status === "success") {
         setSaved(true);
-        setMessage("Plan saved to your account.");
+        setMessage("Plan guardado en tu cuenta.");
         router.refresh();
       } else {
-        setMessage(result.message ?? "Could not save the plan.");
+        setMessage(result.message ?? "No se pudo guardar el plan.");
       }
     });
   }
@@ -57,11 +57,11 @@ export function GeneratePlanForm() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center gap-3">
         <Button type="button" onClick={onGenerate} disabled={isGenerating}>
-          {isGenerating ? "Generating..." : plan ? "Regenerate plan" : "Generate a plan"}
+          {isGenerating ? "Generando..." : plan ? "Regenerar plan" : "Generar un plan"}
         </Button>
         {plan && !saved ? (
           <Button type="button" variant="secondary" onClick={onSave} disabled={isSaving}>
-            {isSaving ? "Saving..." : "Save this plan"}
+            {isSaving ? "Guardando..." : "Guardar este plan"}
           </Button>
         ) : null}
       </div>
@@ -79,7 +79,7 @@ export function GeneratePlanForm() {
 
 function PlanPreview({ plan }: { plan: GeneratedPlan }) {
   return (
-    <section aria-label="Generated plan preview" className="flex flex-col gap-5">
+    <section aria-label="Vista previa del plan generado" className="flex flex-col gap-5">
       <div>
         <h3 className="text-lg font-semibold">{plan.name}</h3>
         {plan.description ? (
@@ -91,7 +91,7 @@ function PlanPreview({ plan }: { plan: GeneratedPlan }) {
         {plan.days.map((day) => (
           <li key={day.order} className="rounded-md border border-border p-4">
             <h4 className="text-sm font-semibold">
-              Day {day.order}: {day.name}
+              Día {day.order}: {day.name}
             </h4>
             <ul className="mt-3 flex flex-col gap-3">
               {day.exercises.map((exercise) => (
@@ -102,7 +102,7 @@ function PlanPreview({ plan }: { plan: GeneratedPlan }) {
                       {MUSCLE_GROUP_LABELS[exercise.primaryMuscle]} · {exercise.sets} ×{" "}
                       {exercise.repsMin}-{exercise.repsMax} reps
                       {exercise.restSeconds != null
-                        ? ` · ${exercise.restSeconds}s rest`
+                        ? ` · ${exercise.restSeconds}s de descanso`
                         : ""}
                       {exercise.targetRir != null ? ` · RIR ${exercise.targetRir}` : ""}
                     </span>

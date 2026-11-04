@@ -29,7 +29,7 @@ function remaining(result: DomainResult<TargetComparison>, key: keyof TargetComp
   if (!result.ok) return "—";
   const c = result.value[key];
   const rounded = Math.round(c.remaining);
-  return c.over ? `${rounded} (over)` : `${rounded} left`;
+  return c.over ? `${rounded} (excedido)` : `${rounded} restante`;
 }
 
 export default async function NutritionLogPage() {
@@ -49,10 +49,10 @@ export default async function NutritionLogPage() {
 
   const rows: { label: string; unit: string; macro: keyof Macros; cmp: keyof TargetComparison }[] =
     [
-      { label: "Calories", unit: "kcal", macro: "calories", cmp: "calories" },
-      { label: "Protein", unit: "g", macro: "proteinG", cmp: "proteinG" },
-      { label: "Carbs", unit: "g", macro: "carbsG", cmp: "carbsG" },
-      { label: "Fat", unit: "g", macro: "fatG", cmp: "fatG" },
+      { label: "Calorías", unit: "kcal", macro: "calories", cmp: "calories" },
+      { label: "Proteína", unit: "g", macro: "proteinG", cmp: "proteinG" },
+      { label: "Carbohidratos", unit: "g", macro: "carbsG", cmp: "carbsG" },
+      { label: "Grasa", unit: "g", macro: "fatG", cmp: "fatG" },
     ];
 
   return (
@@ -68,19 +68,19 @@ export default async function NutritionLogPage() {
       </header>
 
       <section className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Daily food log</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Registro diario de alimentos</h1>
         <p className="text-muted-foreground">
-          Log what you ate and see consumed-vs-target for the day. Calories and macros are
-          computed from the catalog values by the domain library.
+          Registra lo que comiste y ve el consumido-vs-objetivo del día. Las calorías y los macros
+          los calcula la biblioteca de dominio a partir de los valores del catálogo.
         </p>
         <Link href="/nutrition" className="text-sm underline underline-offset-4">
-          ← Back to nutrition
+          ← Volver a nutrición
         </Link>
       </section>
 
       <Card>
         <CardHeader>
-          <CardTitle>Log a food</CardTitle>
+          <CardTitle>Registrar un alimento</CardTitle>
         </CardHeader>
         <CardContent>
           <FoodLogForm foods={foodOptions} />
@@ -89,7 +89,7 @@ export default async function NutritionLogPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Today&apos;s summary</CardTitle>
+          <CardTitle>Resumen de hoy</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 text-sm">
           {daily.target.ok ? (
@@ -97,9 +97,9 @@ export default async function NutritionLogPage() {
               <thead>
                 <tr className="text-xs text-muted-foreground">
                   <th className="pb-2 font-medium">Macro</th>
-                  <th className="pb-2 font-medium">Consumed</th>
-                  <th className="pb-2 font-medium">Target</th>
-                  <th className="pb-2 font-medium">Remaining</th>
+                  <th className="pb-2 font-medium">Consumido</th>
+                  <th className="pb-2 font-medium">Objetivo</th>
+                  <th className="pb-2 font-medium">Restante</th>
                 </tr>
               </thead>
               <tbody>
@@ -121,20 +121,20 @@ export default async function NutritionLogPage() {
             </table>
           ) : (
             <p className="text-muted-foreground">
-              Set up your profile (weight, height, age, sex, activity, and a goal) to compute
-              a daily target. Until then, only consumed totals are shown.
+              Configura tu perfil (peso, altura, edad, sexo, actividad y un objetivo) para calcular
+              un objetivo diario. Hasta entonces, solo se muestran los totales consumidos.
             </p>
           )}
 
           <p className="text-muted-foreground">
-            Water today:{" "}
+            Agua hoy:{" "}
             <span className="text-foreground">{Math.round(daily.waterConsumedMl)} ml</span>
             {daily.waterTargetMl.ok
-              ? ` of ${Math.round(daily.waterTargetMl.value)} ml target`
+              ? ` de ${Math.round(daily.waterTargetMl.value)} ml de objetivo`
               : ""}
             {" · "}
             <Link href="/nutrition" className="underline underline-offset-4">
-              log water
+              registrar agua
             </Link>
           </p>
         </CardContent>
@@ -142,11 +142,11 @@ export default async function NutritionLogPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Logged today</CardTitle>
+          <CardTitle>Registrado hoy</CardTitle>
         </CardHeader>
         <CardContent className="text-sm">
           {logs.length === 0 ? (
-            <p className="text-muted-foreground">Nothing logged yet today.</p>
+            <p className="text-muted-foreground">Aún no has registrado nada hoy.</p>
           ) : (
             <ul className="flex flex-col gap-2">
               {logs.map((log) => (
