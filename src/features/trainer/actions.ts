@@ -11,15 +11,9 @@ import { revalidatePath } from "next/cache";
 
 import { getCurrentUser } from "@/features/auth/session";
 import type { GeneratedPlan } from "@/lib/domain/plan-generator";
-import {
-  generatePlanForUser,
-  logSession,
-  savePlan,
-} from "./service";
-import {
-  generatePlanSchema,
-  logSessionSchema,
-} from "./validation";
+import type { WeightRecord } from "@/lib/domain/weight-records";
+import { findWeightRecords, generatePlanForUser, logSession, savePlan } from "./service";
+import { generatePlanSchema, logSessionSchema } from "./validation";
 
 export interface TrainerActionState {
   status: "idle" | "success" | "error";
@@ -40,6 +34,8 @@ export interface SavePlanActionState extends TrainerActionState {
 export interface LogSessionActionState extends TrainerActionState {
   /** The persisted session id when status is "success". */
   sessionId?: string;
+  /** Exercises whose previous heaviest weight this session surpassed. */
+  records?: WeightRecord[];
 }
 
 function collectFieldErrors(
@@ -56,9 +52,7 @@ function collectFieldErrors(
 }
 
 /** Generates (but does not save) a plan from the signed-in user's profile. */
-export async function generatePlanAction(
-  rawInput: unknown = {},
-): Promise<GeneratePlanActionState> {
+export async function generatePlanAction(rawInput: unknown = {}): Promise<GeneratePlanActionState> {
   const user = await getCurrentUser();
   if (!user) {
     return { status: "error", message: "Debes iniciar sesión para generar un plan." };
@@ -82,9 +76,7 @@ export async function generatePlanAction(
 }
 
 /** Persists a generated plan for the signed-in user. */
-export async function savePlanAction(
-  generated: GeneratedPlan,
-): Promise<SavePlanActionState> {
+export async function savePlanAction(generated: GeneratedPlan): Promise<SavePlanActionState> {
   const user = await getCurrentUser();
   if (!user) {
     return { status: "error", message: "Debes iniciar sesión para guardar un plan." };
@@ -101,9 +93,7 @@ export async function savePlanAction(
 }
 
 /** Records a performed workout session for the signed-in user. */
-export async function logSessionAction(
-  rawInput: unknown,
-): Promise<LogSessionActionState> {
+export async function logSessionAction(rawInput: unknown): Promise<LogSessionActionState> {
   const user = await getCurrentUser();
   if (!user) {
     return { status: "error", message: "Debes iniciar sesión para registrar una sesión." };
@@ -119,10 +109,13 @@ export async function logSessionAction(
   }
 
   try {
+    // Compared against history BEFORE the write so the new sets don't count.
+    const records = await findWeightRecords(user.id, parsed.data.entries);
     const sessionId = await logSession(user.id, parsed.data);
     revalidatePath("/trainer");
+    revalidatePath("/trainer/log");
     revalidatePath("/dashboard");
-    return { status: "success", message: "Sesión registrada.", sessionId };
+    return { status: "success", message: "Sesión registrada.", sessionId, records };
   } catch {
     return { status: "error", message: "No se pudo registrar la sesión. Inténtalo de nuevo." };
   }

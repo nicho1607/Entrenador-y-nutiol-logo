@@ -4,11 +4,13 @@ import { getCurrentUser } from "@/features/auth/session";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SignOutButton } from "@/features/auth/sign-out-button";
+import { LogSessionForm, type WorkoutExerciseOption } from "@/features/trainer/log-session-form";
 import {
-  LogSessionForm,
-  type WorkoutExerciseOption,
-} from "@/features/trainer/log-session-form";
-import { getPlan, getVolumeByMuscle, listPlans } from "@/features/trainer/service";
+  getPlan,
+  getVolumeByMuscle,
+  getWeightLogByExercise,
+  listPlans,
+} from "@/features/trainer/service";
 import { MUSCLE_GROUP_LABELS } from "@/features/trainer/labels";
 import type { MuscleGroup } from "@/features/trainer/validation";
 
@@ -36,12 +38,16 @@ export default async function LogWorkoutPage() {
         options.push({
           workoutExerciseId: exercise.id,
           label: `${plan.name} · ${day.name} · ${exercise.exercise.name}`,
+          exerciseName: exercise.exercise.name,
         });
       }
     }
   }
 
-  const volume = await getVolumeByMuscle(user.id);
+  const [volume, weightLog] = await Promise.all([
+    getVolumeByMuscle(user.id),
+    getWeightLogByExercise(user.id),
+  ]);
   const volumeEntries: [MuscleGroup, number][] = volume.ok
     ? (Object.entries(volume.value) as [MuscleGroup, number][]).filter(
         ([, sets]) => typeof sets === "number",
@@ -76,7 +82,7 @@ export default async function LogWorkoutPage() {
           <CardTitle>Registrar una sesión</CardTitle>
         </CardHeader>
         <CardContent>
-          <LogSessionForm options={options} />
+          <LogSessionForm options={options} weightLog={weightLog} />
         </CardContent>
       </Card>
 
@@ -87,8 +93,8 @@ export default async function LogWorkoutPage() {
         <CardContent className="flex flex-col gap-3 text-sm">
           {volumeEntries.length === 0 ? (
             <p className="text-muted-foreground">
-              Aún no hay series registradas. Registra una sesión arriba para ver aquí el volumen
-              por músculo. Esta es una métrica de volumen de repeticiones (series × repeticiones),
+              Aún no hay series registradas. Registra una sesión arriba para ver aquí el volumen por
+              músculo. Esta es una métrica de volumen de repeticiones (series × repeticiones),
               calculada por la biblioteca de dominio.
             </p>
           ) : (

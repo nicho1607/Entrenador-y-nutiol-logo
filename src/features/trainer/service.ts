@@ -23,11 +23,7 @@ import {
   type GeneratePlanInput as DomainGeneratePlanInput,
   generatePlan,
 } from "@/lib/domain/plan-generator";
-import {
-  type DomainResult,
-  type GoalType as DomainGoalType,
-  ok,
-} from "@/lib/domain/types";
+import { type DomainResult, type GoalType as DomainGoalType, ok } from "@/lib/domain/types";
 import {
   type PlateauResult,
   type ProgressionResult,
@@ -45,6 +41,7 @@ import {
   personalRecords,
   topSetE1rmOverTime,
 } from "@/lib/domain/stats";
+import { detectWeightRecords, type WeightRecord } from "@/lib/domain/weight-records";
 import type { GeneratePlanInput, LogSessionInput } from "./validation";
 
 /** An inclusive-start / exclusive-end date range for stats queries. */
@@ -131,8 +128,7 @@ export async function generatePlanForUser(
     listExercises(),
   ]);
 
-  const experienceLevel =
-    overrides?.experienceLevel ?? profile?.experienceLevel ?? null;
+  const experienceLevel = overrides?.experienceLevel ?? profile?.experienceLevel ?? null;
   const resolvedGoal: DomainGoalType | null = overrides?.goal ?? goal?.type ?? null;
   const daysPerWeek = overrides?.daysPerWeek ?? profile?.daysPerWeek ?? null;
   const sessionMinutes = overrides?.sessionMinutes ?? profile?.sessionMinutes ?? null;
@@ -386,6 +382,103 @@ export async function logSession(userId: string, input: LogSessionInput): Promis
 
     return session.id;
   });
+}
+
+/**
+ * Which exercises in `entries` beat the caller's previous heaviest logged
+ * weight. Call BEFORE `logSession` writes them so "previous" excludes the new
+ * sets. Records are keyed by catalog exercise, so history from every one of the
+ * user's plans counts. Only the user's own exercises/logs are read.
+ */
+export async function findWeightRecords(
+  userId: string,
+  entries: LogSessionInput["entries"],
+): Promise<WeightRecord[]> {
+  const workoutExercises = await prisma.workoutExercise.findMany({
+    where: {
+      id: { in: Array.from(new Set(entries.map((e) => e.workoutExerciseId))) },
+      day: { plan: { userId } },
+    },
+    select: { id: true, exercise: { select: { id: true, name: true } } },
+  });
+  const nameByWorkoutExercise = new Map(workoutExercises.map((w) => [w.id, w.exercise.name]));
+
+  const previousLogs = await prisma.exerciseLog.findMany({
+    where: {
+      workoutExercise: {
+        day: { plan: { userId } },
+        exerciseId: { in: workoutExercises.map((w) => w.exercise.id) },
+      },
+    },
+    select: {
+      weightKg: true,
+      workoutExercise: { select: { exercise: { select: { name: true } } } },
+    },
+  });
+  const previousBest = new Map<string, number>();
+  for (const log of previousLogs) {
+    const key = log.workoutExercise.exercise.name;
+    previousBest.set(key, Math.max(previousBest.get(key) ?? -Infinity, log.weightKg));
+  }
+
+  return detectWeightRecords(
+    previousBest,
+    entries.flatMap((e) => {
+      const exerciseKey = nameByWorkoutExercise.get(e.workoutExerciseId);
+      return exerciseKey ? [{ exerciseKey, weightKg: e.weightKg }] : [];
+    }),
+  );
+}
+
+export interface WeightLogSet {
+  performedAt: Date;
+  setNumber: number;
+  reps: number;
+  weightKg: number;
+}
+
+export interface ExerciseWeightLog {
+  /** Heaviest weight ever logged for this exercise. */
+  bestWeightKg: number;
+  /** Most recent sets, newest first (at most `recentLimit`). */
+  recent: WeightLogSet[];
+}
+
+/**
+ * The caller's weight log per catalog exercise (keyed by exercise name), across
+ * all of their plans: best weight plus the most recent sets. Scoped to `userId`.
+ */
+export async function getWeightLogByExercise(
+  userId: string,
+  recentLimit = 12,
+): Promise<Record<string, ExerciseWeightLog>> {
+  const logs = await prisma.exerciseLog.findMany({
+    where: { workoutExercise: { day: { plan: { userId } } } },
+    orderBy: [{ session: { performedAt: "desc" } }, { setNumber: "asc" }],
+    select: {
+      setNumber: true,
+      reps: true,
+      weightKg: true,
+      session: { select: { performedAt: true } },
+      workoutExercise: { select: { exercise: { select: { name: true } } } },
+    },
+  });
+
+  const byExercise: Record<string, ExerciseWeightLog> = {};
+  for (const log of logs) {
+    const key = log.workoutExercise.exercise.name;
+    const entry = (byExercise[key] ??= { bestWeightKg: log.weightKg, recent: [] });
+    entry.bestWeightKg = Math.max(entry.bestWeightKg, log.weightKg);
+    if (entry.recent.length < recentLimit) {
+      entry.recent.push({
+        performedAt: log.session.performedAt,
+        setNumber: log.setNumber,
+        reps: log.reps,
+        weightKg: log.weightKg,
+      });
+    }
+  }
+  return byExercise;
 }
 
 /**
@@ -654,9 +747,7 @@ export async function getStrengthProgression(
  * logged sets, keyed by the exercise's catalog name. Scoped to `userId`; all
  * selection math is deferred to `personalRecords`.
  */
-export async function getPersonalRecords(
-  userId: string,
-): Promise<DomainResult<PersonalRecord[]>> {
+export async function getPersonalRecords(userId: string): Promise<DomainResult<PersonalRecord[]>> {
   const logs = await prisma.exerciseLog.findMany({
     where: { workoutExercise: { day: { plan: { userId } } } },
     include: {
