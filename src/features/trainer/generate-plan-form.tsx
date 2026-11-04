@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { GeneratedPlan } from "@/lib/domain/plan-generator";
 import { generatePlanAction, savePlanAction } from "./actions";
+import { ExerciseAnimation } from "./exercise-animation";
 import { MUSCLE_GROUP_LABELS } from "./labels";
 
 export function GeneratePlanForm() {
@@ -95,19 +96,22 @@ function PlanPreview({ plan }: { plan: GeneratedPlan }) {
             </h4>
             <ul className="mt-3 flex flex-col gap-3">
               {day.exercises.map((exercise) => (
-                <li key={exercise.order} className="flex flex-col gap-1">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <span className="text-sm font-medium">{exercise.exerciseName}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {MUSCLE_GROUP_LABELS[exercise.primaryMuscle]} · {exercise.sets} ×{" "}
-                      {exercise.repsMin}-{exercise.repsMax} reps
-                      {exercise.restSeconds != null
-                        ? ` · ${exercise.restSeconds}s de descanso`
-                        : ""}
-                      {exercise.targetRir != null ? ` · RIR ${exercise.targetRir}` : ""}
-                    </span>
+                <li key={exercise.order} className="flex items-start gap-3">
+                  <ExerciseAnimation exerciseName={exercise.exerciseName} className="w-24" />
+                  <div className="flex min-w-0 flex-1 flex-col gap-1">
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <span className="text-sm font-medium">{exercise.exerciseName}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {MUSCLE_GROUP_LABELS[exercise.primaryMuscle]} · {exercise.sets} ×{" "}
+                        {exercise.repsMin}-{exercise.repsMax} reps
+                        {exercise.restSeconds != null
+                          ? ` · ${exercise.restSeconds}s de descanso`
+                          : ""}
+                        {exercise.targetRir != null ? ` · RIR ${exercise.targetRir}` : ""}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">{exercise.reason}</p>
                   </div>
-                  <p className="text-xs text-muted-foreground">{exercise.reason}</p>
                 </li>
               ))}
             </ul>
