@@ -22,7 +22,7 @@ test("register, sign out, then log back in", async ({ page }) => {
 
   // Sign out from the header; signOut routes back to the landing page.
   await signOutUser(page);
-  await expect(page.getByRole("link", { name: "Create account" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Crear cuenta" })).toBeVisible();
 
   // Log back in with the same credentials and land on /dashboard again.
   await logIn(page, email, TEST_PASSWORD);
@@ -37,9 +37,9 @@ test("login rejects wrong credentials", async ({ page }) => {
   await signOutUser(page);
 
   await page.goto("/login");
-  await page.getByLabel("Email").fill(email);
-  await page.getByLabel("Password").fill("wrong-password-999");
-  await page.getByRole("button", { name: "Log in" }).click();
+  await page.getByLabel("Correo electrónico").fill(email);
+  await page.getByLabel("Contraseña").fill("wrong-password-999");
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
 
   await expect(page.getByRole("alert")).toBeVisible();
   await expect(page).toHaveURL(/\/login$/);

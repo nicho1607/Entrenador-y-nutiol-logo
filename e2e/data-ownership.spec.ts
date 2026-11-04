@@ -22,10 +22,10 @@ test("a fresh second user sees only their own empty data", async ({ page }) => {
   const emailA = uniqueEmail("owner-a");
   await registerUser(page, emailA, TEST_PASSWORD);
   await page.goto("/trainer");
-  await page.getByRole("button", { name: "Generate a plan" }).click();
+  await page.getByRole("button", { name: "Generar un plan" }).click();
   await expect(page.getByRole("status")).toBeVisible();
-  await page.getByRole("button", { name: "Save this plan" }).click();
-  await expect(page.getByText("Plan saved to your account.")).toBeVisible();
+  await page.getByRole("button", { name: "Guardar este plan" }).click();
+  await expect(page.getByText("Plan guardado en tu cuenta.")).toBeVisible();
   await signOutUser(page);
 
   // User B registers fresh and visits the same page. Because reads are scoped
@@ -35,7 +35,7 @@ test("a fresh second user sees only their own empty data", async ({ page }) => {
   await registerUser(page, emailB, TEST_PASSWORD);
   await page.goto("/trainer");
   await expect(
-    page.getByText("You haven't saved any plans yet.", { exact: false }),
+    page.getByText("Aún no has guardado ningún plan.", { exact: false }),
   ).toBeVisible();
 });
 

@@ -7,6 +7,6 @@ import { test, expect } from "@playwright/test";
 test("landing page renders with auth links", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Create account" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Log in" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Crear cuenta" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Iniciar sesión" })).toBeVisible();
 });

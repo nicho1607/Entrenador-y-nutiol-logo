@@ -56,18 +56,18 @@ test.describe("signed-in smoke journeys", () => {
     await registerUser(page, uniqueEmail("smoke-profile"), TEST_PASSWORD);
 
     await page.goto("/profile");
-    await page.getByLabel("Age (years)").fill("30");
-    await page.getByLabel("Physiological sex (for energy calculations)").selectOption("MALE");
-    await page.getByLabel("Weight (kg)").fill("80");
-    await page.getByLabel("Height (cm)").fill("180");
-    await page.getByLabel("Everyday activity level").selectOption("MODERATE");
-    await page.getByLabel("Primary goal").selectOption("HYPERTROPHY");
-    await page.getByRole("button", { name: /Save profile|Update profile/ }).click();
+    await page.getByLabel("Edad (años)").fill("30");
+    await page.getByLabel("Sexo fisiológico (para los cálculos de energía)").selectOption("MALE");
+    await page.getByLabel("Peso (kg)").fill("80");
+    await page.getByLabel("Altura (cm)").fill("180");
+    await page.getByLabel("Nivel de actividad diaria").selectOption("MODERATE");
+    await page.getByLabel("Objetivo principal").selectOption("HYPERTROPHY");
+    await page.getByRole("button", { name: /Guardar perfil|Actualizar perfil/ }).click();
 
-    await expect(page.getByRole("alert")).toHaveText("Profile saved.");
+    await expect(page.getByRole("alert")).toHaveText("Perfil guardado.");
     // Computed values render BMR/TDEE once the profile has enough inputs.
-    await expect(page.getByText("BMR (Mifflin-St Jeor)")).toBeVisible();
-    await expect(page.getByText("TDEE (maintenance estimate)")).toBeVisible();
+    await expect(page.getByText("TMB (Mifflin-St Jeor)")).toBeVisible();
+    await expect(page.getByText("GET (estimación de mantenimiento)")).toBeVisible();
   });
 
   test("generate and save a trainer plan", async ({ page }) => {
@@ -77,10 +77,10 @@ test.describe("signed-in smoke journeys", () => {
     await setUpProfile(page);
 
     await page.goto("/trainer");
-    await page.getByRole("button", { name: "Generate a plan" }).click();
+    await page.getByRole("button", { name: "Generar un plan" }).click();
     await expect(page.getByRole("status")).toBeVisible();
-    await page.getByRole("button", { name: "Save this plan" }).click();
-    await expect(page.getByText("Plan saved to your account.")).toBeVisible();
+    await page.getByRole("button", { name: "Guardar este plan" }).click();
+    await expect(page.getByText("Plan guardado en tu cuenta.")).toBeVisible();
   });
 
   test("view nutrition targets and log a food", async ({ page }) => {
@@ -89,29 +89,43 @@ test.describe("signed-in smoke journeys", () => {
 
     // Targets derive from the profile and appear on the nutrition hub.
     await page.goto("/nutrition");
-    await expect(page.getByRole("heading", { name: "Nutrition" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Nutrición" })).toBeVisible();
 
     // Log a food from the seeded catalog on the daily log page.
     await page.goto("/nutrition/log");
-    await page.getByLabel("Grams").fill("150");
-    await page.getByRole("button", { name: "Log food" }).click();
-    await expect(page.getByRole("status")).toHaveText("Food logged.");
+    await page.getByLabel("Gramos").fill("150");
+    await page.getByRole("button", { name: "Registrar alimento" }).click();
+    await expect(page.getByRole("status")).toHaveText("Alimento registrado.");
   });
 
   test("import a routine from pasted JSON and save", async ({ page }) => {
     await registerUser(page, uniqueEmail("smoke-import"), TEST_PASSWORD);
 
     await page.goto("/trainer/import");
-    await page.getByLabel(/Paste your .* routine/).fill(IMPORT_JSON);
-    await page.getByRole("button", { name: "Preview" }).click();
+    // The link source is the default; switch to paste.
+    await page.getByLabel("Pegar o subir archivo").check();
+    await page.getByLabel(/Pega tu rutina en JSON/).fill(IMPORT_JSON);
+    await page.getByRole("button", { name: "Vista previa" }).click();
 
     // The preview renders the normalized plan name.
-    await expect(
-      page.getByRole("heading", { name: "E2E Imported Routine" }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "E2E Imported Routine" })).toBeVisible();
 
-    await page.getByRole("button", { name: "Confirm & save" }).click();
-    await expect(page.getByRole("status")).toBeVisible();
+    await page.getByRole("button", { name: "Confirmar y guardar" }).click();
+    await expect(page.getByRole("status")).toHaveText("Rutina importada y guardada.");
+  });
+
+  test("import by link refuses a non-public address", async ({ page }) => {
+    await registerUser(page, uniqueEmail("smoke-import-link"), TEST_PASSWORD);
+
+    // The server downloads the link itself, so it must never reach internal
+    // hosts. No outbound network is needed: the address is rejected up front.
+    await page.goto("/trainer/import");
+    await page.getByLabel("Enlace de la rutina").fill("https://127.0.0.1/rutina.json");
+    await page.getByRole("button", { name: "Vista previa" }).click();
+
+    await expect(page.getByRole("status")).toHaveText(
+      "El enlace apunta a una dirección no permitida.",
+    );
   });
 
   test("recommendations shows the insufficient-data state for a fresh user", async ({ page }) => {
@@ -120,23 +134,23 @@ test.describe("signed-in smoke journeys", () => {
     // A brand-new user has no logged data, so the honest "not enough data"
     // state renders rather than fabricated advice.
     await page.goto("/recommendations");
-    await expect(page.getByRole("heading", { name: "Recommendations" })).toBeVisible();
-    await expect(page.getByText("Not enough data yet")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Recomendaciones" })).toBeVisible();
+    await expect(page.getByText("Aún no hay datos suficientes")).toBeVisible();
   });
 });
 
 /** Fill and save the minimum profile needed for plan/target computation. */
 async function setUpProfile(page: import("@playwright/test").Page): Promise<void> {
   await page.goto("/profile");
-  await page.getByLabel("Age (years)").fill("30");
-  await page.getByLabel("Physiological sex (for energy calculations)").selectOption("MALE");
-  await page.getByLabel("Weight (kg)").fill("80");
-  await page.getByLabel("Height (cm)").fill("180");
-  await page.getByLabel("Everyday activity level").selectOption("MODERATE");
-  await page.getByLabel("Experience level").selectOption("BEGINNER");
-  await page.getByLabel("Primary goal").selectOption("HYPERTROPHY");
-  await page.getByLabel("Days available per week").fill("3");
-  await page.getByLabel("Time per session (minutes)").fill("60");
-  await page.getByRole("button", { name: /Save profile|Update profile/ }).click();
-  await expect(page.getByRole("alert")).toHaveText("Profile saved.");
+  await page.getByLabel("Edad (años)").fill("30");
+  await page.getByLabel("Sexo fisiológico (para los cálculos de energía)").selectOption("MALE");
+  await page.getByLabel("Peso (kg)").fill("80");
+  await page.getByLabel("Altura (cm)").fill("180");
+  await page.getByLabel("Nivel de actividad diaria").selectOption("MODERATE");
+  await page.getByLabel("Nivel de experiencia").selectOption("BEGINNER");
+  await page.getByLabel("Objetivo principal").selectOption("HYPERTROPHY");
+  await page.getByLabel("Días disponibles por semana").fill("3");
+  await page.getByLabel("Tiempo por sesión (minutos)").fill("60");
+  await page.getByRole("button", { name: /Guardar perfil|Actualizar perfil/ }).click();
+  await expect(page.getByRole("alert")).toHaveText("Perfil guardado.");
 }
