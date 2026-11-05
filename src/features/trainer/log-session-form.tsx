@@ -250,7 +250,7 @@ export function LogSessionForm({
       {beatsBest && history ? (
         <p
           role="alert"
-          className="rounded-md border border-amber-500/50 bg-amber-500/10 px-3 py-2 text-sm text-foreground"
+          className="rounded-md border border-caution/60 bg-caution/10 px-3 py-2 text-sm text-foreground"
         >
           ⚠️ Estás superando tu mejor peso en este ejercicio: {formatKg(typedMax)} frente a{" "}
           {formatKg(history.bestWeightKg)}. Comprueba la técnica y el calentamiento.
@@ -273,7 +273,7 @@ export function LogSessionForm({
       {records.length > 0 ? (
         <div
           role="alert"
-          className="flex flex-col gap-1 rounded-md border border-emerald-500/50 bg-emerald-500/10 px-3 py-2 text-sm text-foreground"
+          className="flex flex-col gap-1 rounded-md border border-record/70 bg-record/10 px-3 py-2 text-sm text-foreground"
         >
           <p className="font-semibold">
             🏆 ¡Nuevo récord de peso{records.length === 1 ? "" : "s"}!

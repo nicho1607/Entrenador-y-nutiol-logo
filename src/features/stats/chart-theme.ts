@@ -7,8 +7,8 @@
  * resolves it against the current `:root` / `.dark` palette, so every chart
  * follows the active light/dark theme without re-rendering.
  *
- * The multi-series palette is derived from those same tokens (hue-rotated from
- * the primary hue) so a chart with several lines/bars stays readable in both
+ * The multi-series palette is derived from those same tokens (built around the
+ * competition-plate colours) so a chart with several lines/bars stays readable in both
  * themes instead of hard-coding light-only hex values.
  */
 
@@ -25,23 +25,24 @@ export const CARD = "hsl(var(--card))";
 
 /**
  * A small categorical palette for multi-series charts (volume-by-muscle,
- * macros, measurements). Hues are offsets from the primary blue so the set
- * works against both the light and dark backgrounds; each entry is still a
- * literal `hsl(...)` string Recharts can consume directly.
+ * macros, measurements). It opens with the competition-plate colours of the
+ * app's identity (blue 20 kg, yellow 15 kg, red 25 kg, green 10 kg), then
+ * adds hues that stay distinct on both the iron and chalk backgrounds; each
+ * entry is a literal `hsl(...)` string Recharts can consume directly.
  */
 export const SERIES_PALETTE: readonly string[] = [
-  "hsl(221 83% 53%)", // blue (primary-ish)
-  "hsl(160 60% 42%)", // teal/green
-  "hsl(28 90% 55%)", // amber
-  "hsl(291 64% 55%)", // violet
-  "hsl(0 72% 55%)", // red
-  "hsl(199 89% 48%)", // cyan
-  "hsl(84 60% 45%)", // lime
-  "hsl(330 70% 55%)", // pink
-  "hsl(45 93% 47%)", // gold
-  "hsl(258 70% 60%)", // indigo
-  "hsl(14 80% 55%)", // orange-red
-  "hsl(174 60% 40%)", // dark teal
+  "hsl(211 62% 55%)", // plate blue
+  "hsl(45 87% 52%)", // plate yellow
+  "hsl(8 72% 56%)", // plate red
+  "hsl(145 50% 42%)", // plate green
+  "hsl(280 45% 62%)", // violet
+  "hsl(190 70% 45%)", // cyan
+  "hsl(25 85% 55%)", // orange
+  "hsl(330 60% 60%)", // pink
+  "hsl(80 50% 45%)", // olive
+  "hsl(240 45% 65%)", // periwinkle
+  "hsl(170 50% 38%)", // dark teal
+  "hsl(30 25% 55%)", // leather
 ];
 
 /** Returns a stable palette color for the series at `index` (wraps around). */

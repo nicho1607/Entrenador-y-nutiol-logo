@@ -448,7 +448,7 @@ function Field({
       ) : null}
       {control}
       {error ? (
-        <span id={errorId} role="alert" className="text-xs text-red-600 dark:text-red-400">
+        <span id={errorId} role="alert" className="text-xs text-caution">
           {error}
         </span>
       ) : null}

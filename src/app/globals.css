@@ -3,36 +3,56 @@
 @tailwind utilities;
 
 /* Design tokens as HSL channels so Tailwind color utilities can apply opacity.
-   Light theme defaults; .dark overrides below. */
+   "Training notebook" identity: cast-iron surfaces, chalk text, and the
+   competition-plate colour code for meaning: yellow (15 kg plate) = actions
+   and personal records, red (25 kg) = heavy/caution, blue (20 kg) = focus.
+   Dark is the primary theme; .light-only values sit in :root. */
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222 47% 11%;
+  --background: 80 9% 95%; /* chalk */
+  --foreground: 210 12% 13%; /* iron */
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
-  --primary: 221 83% 53%;
-  --primary-foreground: 0 0% 100%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
-  --border: 214 32% 91%;
-  --ring: 221 83% 53%;
+  --card-foreground: 210 12% 13%;
+  --primary: 45 85% 48%; /* plate yellow */
+  --primary-foreground: 210 12% 13%;
+  --muted: 90 8% 90%;
+  --muted-foreground: 175 4% 37%;
+  --border: 135 5% 84%;
+  --ring: 211 59% 45%; /* plate blue */
+  --record: 45 85% 48%;
+  --caution: 6 63% 46%; /* plate red */
+  --link: 211 62% 40%; /* plate blue, text weight */
 }
 
 .dark {
-  --background: 222 47% 11%;
-  --foreground: 210 40% 98%;
-  --card: 217 33% 17%;
-  --card-foreground: 210 40% 98%;
-  --primary: 217 91% 60%;
-  --primary-foreground: 222 47% 11%;
-  --muted: 217 33% 17%;
-  --muted-foreground: 215 20% 65%;
-  --border: 217 33% 24%;
-  --ring: 217 91% 60%;
+  --background: 210 12% 13%; /* iron #1D2125 */
+  --foreground: 90 7% 91%; /* chalk #E9EBE7 */
+  --card: 210 11% 17%; /* raised iron #262B30 */
+  --card-foreground: 90 7% 91%;
+  --primary: 45 87% 56%; /* plate yellow #F0BE2C */
+  --primary-foreground: 210 12% 13%;
+  --muted: 210 11% 20%;
+  --muted-foreground: 165 4% 64%;
+  --border: 210 11% 25%; /* seam #383F46 */
+  --ring: 211 62% 57%; /* plate blue #4D8FD6 */
+  --record: 45 87% 56%;
+  --caution: 8 72% 56%; /* plate red #E0533D */
+  --link: 211 75% 68%; /* plate blue, lifted for text on iron */
 }
 
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
+  font-family: var(--font-sans), system-ui, sans-serif;
+  /* Weights and reps line up in columns everywhere. */
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2 {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  letter-spacing: 0.005em;
+  line-height: 1.05;
 }
 
 /* Exercise demo: cross-fade the end-position frame over the start frame. */
@@ -56,6 +76,50 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .exercise-frame-end {
+    animation: none;
+  }
+}
+
+/* Landing: the record bar fills once, the page's single motion moment. */
+@keyframes record-fill {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.record-bar {
+  transform-origin: bottom;
+  animation: record-fill 700ms cubic-bezier(0.2, 0.7, 0.2, 1) 400ms both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .record-bar {
+    animation: none;
+  }
+}
+
+/* Opening an exercise demo: grows from the thumbnail's side. */
+@keyframes demo-open {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.exercise-demo-open {
+  transform-origin: top left;
+  animation: demo-open 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exercise-demo-open {
     animation: none;
   }
 }
