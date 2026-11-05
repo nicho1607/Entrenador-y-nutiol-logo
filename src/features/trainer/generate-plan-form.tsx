@@ -13,8 +13,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { GeneratedPlan } from "@/lib/domain/plan-generator";
 import { generatePlanAction, savePlanAction } from "./actions";
-import { ExerciseAnimation } from "./exercise-animation";
-import { MUSCLE_GROUP_LABELS } from "./labels";
+import { ExerciseListItem } from "./exercise-list-item";
 
 export function GeneratePlanForm() {
   const router = useRouter();
@@ -94,24 +93,12 @@ function PlanPreview({ plan }: { plan: GeneratedPlan }) {
             <h4 className="text-sm font-semibold">
               Día {day.order}: {day.name}
             </h4>
-            <ul className="mt-3 flex flex-col gap-3">
+            <ul className="mt-4 divide-y divide-border">
               {day.exercises.map((exercise) => (
-                <li key={exercise.order} className="flex items-start gap-3">
-                  <ExerciseAnimation exerciseName={exercise.exerciseName} className="w-24" />
-                  <div className="flex min-w-0 flex-1 flex-col gap-1">
-                    <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <span className="text-sm font-medium">{exercise.exerciseName}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {MUSCLE_GROUP_LABELS[exercise.primaryMuscle]} · {exercise.sets} ×{" "}
-                        {exercise.repsMin}-{exercise.repsMax} reps
-                        {exercise.restSeconds != null
-                          ? ` · ${exercise.restSeconds}s de descanso`
-                          : ""}
-                        {exercise.targetRir != null ? ` · RIR ${exercise.targetRir}` : ""}
-                      </span>
-                    </div>
+                <li key={exercise.order} className="py-4 first:pt-0 last:pb-0">
+                  <ExerciseListItem {...exercise}>
                     <p className="text-xs text-muted-foreground">{exercise.reason}</p>
-                  </div>
+                  </ExerciseListItem>
                 </li>
               ))}
             </ul>

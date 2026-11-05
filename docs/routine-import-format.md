@@ -26,13 +26,46 @@ with `source = IMPORTED`.
 
 ## Import sources
 
-The `/trainer/import` page accepts the routine in three ways:
+The `/trainer/import` page accepts the routine in four ways:
 
-1. **Link (default).** The user pastes a URL; the server downloads it and runs
-   the same parser. The format is detected from the content: text starting
-   with `{` is parsed as JSON, anything else as CSV.
-2. **Paste** the JSON/CSV text.
-3. **Upload** a `.json` / `.csv` file (read in the browser, sent as text).
+1. **Paste from Hevy (default)** — text copied from a Hevy share page (see
+   below).
+2. **Link** to a JSON/CSV file; the server downloads it and runs the same
+   parser. The format is detected from the content: text starting with `{` is
+   parsed as JSON, anything else as CSV.
+3. **Paste** the JSON/CSV text.
+4. **Upload** a `.json` / `.csv` file (read in the browser, sent as text).
+
+### Paste from Hevy
+
+A Hevy share link (`hevy.com/routine/…`) only serves the routine title; the
+exercises are loaded afterwards from Hevy's private API, which the app does not
+use. So the user opens their share link, selects the whole page and pastes it.
+Pasting the bare link shows a hint with a link to open it. The page lists each
+exercise as its name followed by a summary line, in the viewer's language:
+
+```
+Press de Banca (Barra)
+5 series · 6-12 repeticiones
+```
+
+(`5 sets · 6-12 reps` in English.) `parseHevyText` in
+`src/features/workouts/import/hevy-text.ts`:
+
+- ignores the navigation around the routine and everything from
+  `Creado por` / `Created by` / `Resumen de rutina` onwards;
+- uses the line before the first exercise as the plan and day name, without a
+  trailing `(copy)` / `(copia)`; one pasted routine becomes one plan with one day;
+- resolves names through a table of known Hevy exercises (Spanish and English
+  titles), then `matchCatalogName` (e.g. `Bench Press (Barbell)` →
+  `Barbell Bench Press`); anything else keeps its pasted name with a muscle
+  guessed from keywords, and is added to the catalog on confirm
+  (`sourceRef = hevy-text:<slug>`);
+- rejects exercises whose summary has no reps (time/distance based) with a
+  reason.
+
+The share page has no per-set weights, so imported plans carry sets and rep
+ranges only.
 
 ### Supported links
 

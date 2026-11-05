@@ -53,6 +53,12 @@ const DATASET_IDS: Record<string, string> = {
   "Dumbbell Clean and Press": "Clean_and_Press",
   "Treadmill Run": "Running_Treadmill",
   "Jump Rope": "Rope_Jumping",
+  // Exercises added to the catalog by the Hevy import.
+  "Iso-Lateral Chest Press (Machine)": "Leverage_Chest_Press",
+  "Triceps Rope Pushdown": "Triceps_Pushdown_-_Rope_Attachment",
+  "Overhead Triceps Extension (Cable)": "Cable_Rope_Overhead_Triceps_Extension",
+  "Reverse Wrist Curl (Dumbbell)": "Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",
+  "Reverse Curl (Cable)": "Reverse_Cable_Curl",
 };
 
 /** The start/end frame URLs for an exercise, or null when none are known. */

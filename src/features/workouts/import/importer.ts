@@ -8,12 +8,7 @@
  * the valid rows is possible and the user sees exactly what was skipped.
  */
 import { ZodError } from "zod";
-import {
-  csvRowSchema,
-  externalPlanSchema,
-  type CsvRow,
-  type ExternalExercise,
-} from "./schema";
+import { csvRowSchema, externalPlanSchema, type CsvRow, type ExternalExercise } from "./schema";
 import {
   type ImportResult,
   type NormalizedWorkoutDay,
@@ -96,7 +91,13 @@ export function importRoutineFromCsv(raw: string): ImportResult {
     return {
       plan: null,
       importedCount: 0,
-      rejected: [{ index: 1, raw: headers, reason: `Faltan encabezados obligatorios: ${missing.join(", ")}.` }],
+      rejected: [
+        {
+          index: 1,
+          raw: headers,
+          reason: `Faltan encabezados obligatorios: ${missing.join(", ")}.`,
+        },
+      ],
     };
   }
 

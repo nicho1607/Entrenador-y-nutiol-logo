@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getCurrentUser } from "@/features/auth/session";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SignOutButton } from "@/features/auth/sign-out-button";
 import { ImportRoutineForm } from "@/features/workouts/import/import-routine-form";
@@ -32,61 +32,56 @@ export default async function ImportRoutinePage() {
 
       <section className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Importar una rutina</h1>
-        <p className="text-muted-foreground">
-          Pega el enlace de una rutina o pega/sube una exportada como JSON o CSV. Mostramos una
-          vista previa del plan normalizado — días, ejercicios, series y repeticiones — y listamos
-          las filas que no pudimos mapear para que nada se descarte en silencio. Al confirmar, se
-          guarda en tu cuenta como un plan importado. Los nombres de los ejercicios deben coincidir
-          con la biblioteca de ejercicios.
+        <p className="max-w-prose text-muted-foreground">
+          Trae tu rutina de Hevy a FitMind. Antes de guardar verás cada ejercicio con su
+          demostración, series y repeticiones, y lo que no se pueda importar aparecerá con el
+          motivo.
         </p>
         <div className="flex flex-wrap gap-4 text-sm">
           <Link href="/trainer" className="underline underline-offset-4">
             ← Volver al entrenador
           </Link>
         </div>
-        <details className="rounded-md border border-border p-4 text-sm text-muted-foreground">
-          <summary className="cursor-pointer font-medium text-foreground">
-            Formato JSON / CSV admitido
-          </summary>
-          <div className="mt-3 flex flex-col gap-3">
-            <p>
-              Las rutinas se importan como <strong>JSON</strong> (un objeto de plan) o{" "}
-              <strong>CSV</strong> (una fila por ejercicio). Cada campo se valida; las filas que no
-              podemos mapear se listan como rechazadas con un motivo en lugar de descartarse en
-              silencio.
-            </p>
-            <p>
-              <strong>JSON:</strong> un plan con <code>name</code> y un arreglo <code>days</code>;
-              cada día tiene un <code>name</code>, un <code>order</code> entero y un arreglo{" "}
-              <code>exercises</code>. Cada ejercicio necesita <code>name</code>, <code>muscle</code>
-              , <code>sets</code>, <code>repsMin</code> y <code>repsMax</code> (con{" "}
-              <code>repsMax ≥ repsMin</code>); <code>restSeconds</code> y <code>targetRir</code> son
-              opcionales.
-            </p>
-            <p>
-              <strong>Encabezado CSV:</strong>{" "}
-              <code>planName,dayName,dayOrder,exerciseName,muscle,sets,repsMin,repsMax</code> con
-              las columnas opcionales <code>restSeconds,targetRir</code>. La agrupación por día se
-              deriva de <code>dayOrder</code> + <code>dayName</code>.
-            </p>
-            <p>
-              <code>muscle</code> debe ser uno de: CHEST, BACK, SHOULDERS, BICEPS, TRICEPS, QUADS,
-              HAMSTRINGS, GLUTES, CALVES, CORE, FULL_BODY, OTHER. Los nombres de los ejercicios
-              deben coincidir con la biblioteca de ejercicios. La referencia completa está en{" "}
-              <code>docs/routine-import-format.md</code> en el repositorio del proyecto.
-            </p>
-          </div>
-        </details>
       </section>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Importar desde un enlace o archivo</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <ImportRoutineForm />
         </CardContent>
       </Card>
+      <details className="rounded-surface border border-border p-4 text-sm text-muted-foreground">
+        <summary className="cursor-pointer font-medium text-foreground">
+          Formato de los archivos JSON y CSV
+        </summary>
+        <div className="mt-3 flex flex-col gap-3">
+          <p>
+            Las rutinas se importan como <strong>JSON</strong> (un objeto de plan) o{" "}
+            <strong>CSV</strong> (una fila por ejercicio). Cada campo se valida; las filas que no
+            podemos mapear se listan como rechazadas con un motivo en lugar de descartarse en
+            silencio.
+          </p>
+          <p>
+            <strong>JSON:</strong> un plan con <code>name</code> y un arreglo <code>days</code>;
+            cada día tiene un <code>name</code>, un <code>order</code> entero y un arreglo{" "}
+            <code>exercises</code>. Cada ejercicio necesita <code>name</code>, <code>muscle</code>,{" "}
+            <code>sets</code>, <code>repsMin</code> y <code>repsMax</code> (con{" "}
+            <code>repsMax ≥ repsMin</code>); <code>restSeconds</code> y <code>targetRir</code> son
+            opcionales.
+          </p>
+          <p>
+            <strong>Encabezado CSV:</strong>{" "}
+            <code>planName,dayName,dayOrder,exerciseName,muscle,sets,repsMin,repsMax</code> con las
+            columnas opcionales <code>restSeconds,targetRir</code>. La agrupación por día se deriva
+            de <code>dayOrder</code> + <code>dayName</code>.
+          </p>
+          <p>
+            <code>muscle</code> debe ser uno de: CHEST, BACK, SHOULDERS, BICEPS, TRICEPS, QUADS,
+            HAMSTRINGS, GLUTES, CALVES, CORE, FULL_BODY, OTHER. Los nombres de los ejercicios deben
+            coincidir con la biblioteca de ejercicios. La referencia completa está en{" "}
+            <code>docs/routine-import-format.md</code> en el repositorio del proyecto.
+          </p>
+        </div>
+      </details>
     </main>
   );
 }

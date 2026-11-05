@@ -102,8 +102,9 @@ test.describe("signed-in smoke journeys", () => {
     await registerUser(page, uniqueEmail("smoke-import"), TEST_PASSWORD);
 
     await page.goto("/trainer/import");
-    // The link source is the default; switch to paste.
-    await page.getByLabel("Pegar o subir archivo").check();
+    // Pasting from Hevy is the default; the other sources sit in a disclosure.
+    await page.getByText("Otras formas de importar").click();
+    await page.getByLabel("Pegar o subir JSON o CSV").check();
     await page.getByLabel(/Pega tu rutina en JSON/).fill(IMPORT_JSON);
     await page.getByRole("button", { name: "Vista previa" }).click();
 
@@ -114,12 +115,40 @@ test.describe("signed-in smoke journeys", () => {
     await expect(page.getByRole("status")).toHaveText("Rutina importada y guardada.");
   });
 
+  test("import a routine pasted from a Hevy share page", async ({ page }) => {
+    await registerUser(page, uniqueEmail("smoke-import-hevy"), TEST_PASSWORD);
+
+    await page.goto("/trainer/import");
+    // Same shape as the text copied from a Hevy share page.
+    await page
+      .getByLabel("Texto de la rutina")
+      .fill(
+        [
+          "nico",
+          "Pecho día 1 (copy)",
+          "Press de Banca (Barra)",
+          "5 series · 6-12 repeticiones",
+          "Jalón de tríceps con cuerda",
+          "4 series · 10-15 repeticiones",
+          "Creado por",
+        ].join("\n"),
+      );
+    await page.getByRole("button", { name: "Vista previa" }).click();
+
+    await expect(page.getByText("Barbell Bench Press")).toBeVisible();
+    await expect(page.getByText("Triceps Rope Pushdown")).toBeVisible();
+    await page.getByRole("button", { name: "Confirmar y guardar" }).click();
+    await expect(page.getByRole("status")).toHaveText("Rutina importada y guardada.");
+  });
+
   test("import by link refuses a non-public address", async ({ page }) => {
     await registerUser(page, uniqueEmail("smoke-import-link"), TEST_PASSWORD);
 
     // The server downloads the link itself, so it must never reach internal
     // hosts. No outbound network is needed: the address is rejected up front.
     await page.goto("/trainer/import");
+    await page.getByText("Otras formas de importar").click();
+    await page.getByLabel("Enlace a un archivo JSON o CSV").check();
     await page.getByLabel("Enlace de la rutina").fill("https://127.0.0.1/rutina.json");
     await page.getByRole("button", { name: "Vista previa" }).click();
 

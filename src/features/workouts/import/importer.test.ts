@@ -9,7 +9,15 @@ const VALID_JSON = JSON.stringify({
       name: "Push",
       order: 1,
       exercises: [
-        { name: "Bench Press", muscle: "CHEST", sets: 4, repsMin: 6, repsMax: 10, restSeconds: 120, targetRir: 2 },
+        {
+          name: "Bench Press",
+          muscle: "CHEST",
+          sets: 4,
+          repsMin: 6,
+          repsMax: 10,
+          restSeconds: 120,
+          targetRir: 2,
+        },
         { name: "Overhead Press", muscle: "SHOULDERS", sets: 3, repsMin: 8, repsMax: 12 },
       ],
     },

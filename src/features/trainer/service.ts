@@ -110,6 +110,36 @@ export async function listExercises(filter?: ExerciseFilter): Promise<ExerciseVi
   }));
 }
 
+/** Catalog name → primary muscle, for resolving imported exercise names. */
+export async function getCatalogMuscles(): Promise<Map<string, MuscleGroup>> {
+  const rows = await prisma.exercise.findMany({ select: { name: true, primaryMuscle: true } });
+  return new Map(rows.map((r) => [r.name, r.primaryMuscle]));
+}
+
+/**
+ * Adds standard exercises from an external library (Hevy) that the catalog
+ * lacks, so an imported routine can reference them. Existing names are left
+ * untouched. Callers must only pass vetted library exercises — never
+ * user-authored ones — since the catalog is shared across users.
+ */
+export async function addCatalogExercises(
+  exercises: {
+    name: string;
+    primaryMuscle: MuscleGroup;
+    secondaryMuscles: MuscleGroup[];
+    equipment: Equipment[];
+    sourceRef: string;
+  }[],
+): Promise<void> {
+  for (const e of exercises) {
+    await prisma.exercise.upsert({
+      where: { name: e.name },
+      update: {},
+      create: { ...e, sourceName: "Hevy (exercise library)" },
+    });
+  }
+}
+
 /**
  * Generates a plan for the caller from their OWN profile + active goal (scoped
  * to `userId`) and the shared catalog. Returns a `DomainResult<GeneratedPlan>`

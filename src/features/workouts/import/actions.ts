@@ -5,25 +5,33 @@
  * src/features/trainer/actions.ts: the user id always comes from the session
  * (`getCurrentUser`) — the client never supplies it, and the plan it may have
  * previewed is NEVER trusted. Both actions re-run the existing Zod-validated
- * parser (`importRoutineFromJson` / `importRoutineFromCsv`) server-side on the
- * raw content, and on confirm persist via the existing `saveImportedPlan`
- * transaction. On a successful write the trainer and dashboard routes
- * revalidate so the new plan shows.
+ * parser (`importRoutineFromJson` / `importRoutineFromCsv` / `parseHevyText`)
+ * server-side, and on confirm persist via
+ * the existing `saveImportedPlan` transaction. On a successful write the
+ * trainer and dashboard routes revalidate so the new plan shows.
  */
 import { revalidatePath } from "next/cache";
 
 import { getCurrentUser } from "@/features/auth/session";
-import { saveImportedPlan } from "@/features/trainer/service";
+import {
+  addCatalogExercises,
+  getCatalogMuscles,
+  saveImportedPlan,
+} from "@/features/trainer/service";
 import { detectRoutineFormat, fetchRoutineFromUrl, RoutineFetchError } from "./fetch-routine";
+import { isHevyShareLink, parseHevyText, type NewCatalogExercise } from "./hevy-text";
 import { importRoutineFromCsv, importRoutineFromJson } from "./importer";
 import type { ImportResult } from "./types";
 
 /**
- * Raw, client-supplied import request: pasted/uploaded text, or a link the
- * server downloads itself. The parsed plan is never trusted.
+ * Raw, client-supplied import request: a routine copied from a Hevy share
+ * page, pasted/uploaded JSON/CSV, or a link the server downloads itself. The
+ * parsed plan is never trusted.
  */
 export type RoutineImportInput =
-  { source: "text"; format: "json" | "csv"; content: string } | { source: "url"; url: string };
+  | { source: "hevy-text"; content: string }
+  | { source: "text"; format: "json" | "csv"; content: string }
+  | { source: "url"; url: string };
 
 export interface ParseRoutineActionState {
   status: "idle" | "success" | "error";
@@ -39,19 +47,52 @@ export interface ConfirmImportActionState {
   planId?: string;
 }
 
-type Loaded = { result: ImportResult } | { error: string };
+type Loaded = { result: ImportResult; newExercises?: NewCatalogExercise[] } | { error: string };
+
+/** Parses a routine copied from a Hevy share page. */
+async function loadHevyText(content: unknown): Promise<Loaded> {
+  if (typeof content !== "string" || !content.trim()) {
+    return { error: "Primero pega el texto de tu rutina de Hevy." };
+  }
+  if (isHevyShareLink(content)) {
+    return {
+      error:
+        "Eso es el enlace. Ábrelo, selecciona toda la página (Ctrl+A), cópiala (Ctrl+C) y pégala aquí.",
+    };
+  }
+  const catalog = await getCatalogMuscles();
+  const { newExercises, ...result } = parseHevyText(
+    content.slice(0, 50_000),
+    Array.from(catalog.keys()),
+  );
+  // Catalog exercises take their muscle from the catalog.
+  for (const day of result.plan?.days ?? []) {
+    for (const ex of day.exercises) {
+      ex.primaryMuscle = catalog.get(ex.exerciseName) ?? ex.primaryMuscle;
+    }
+  }
+  return { result, newExercises };
+}
 
 /**
  * Resolves the raw content (downloading it for a link) and runs the parser.
  * For links the format is inferred from the downloaded text.
  */
 async function load(input: RoutineImportInput): Promise<Loaded> {
+  if (input?.source === "hevy-text") return loadHevyText(input.content);
+
   let format: "json" | "csv";
   let content: string;
 
   if (input?.source === "url") {
     if (typeof input.url !== "string" || !input.url.trim()) {
       return { error: "Primero pega el enlace de tu rutina." };
+    }
+    if (/^https?:\/\/(www\.)?hevy\.com\//i.test(input.url.trim())) {
+      return {
+        error:
+          "Los enlaces de Hevy no incluyen los ejercicios. Usa «Pegar desde Hevy»: abre el enlace, copia toda la página y pégala.",
+      };
     }
     try {
       content = await fetchRoutineFromUrl(input.url);
@@ -127,7 +168,7 @@ export async function parseRoutineAction(
 /**
  * Persists the pasted/uploaded/linked routine for the signed-in user. Ownership comes
  * from `getCurrentUser()` (never the client); the parser is RE-RUN server-side
- * on the raw content (the client's previewed plan is never trusted). Rejects
+ * on the raw content, re-downloading a link (the client's previewed plan is never trusted). Rejects
  * when the parser yields no plan, surfacing the rejected reasons.
  */
 export async function confirmImportAction(
@@ -142,12 +183,15 @@ export async function confirmImportAction(
   if ("error" in loaded) {
     return { status: "error", message: loaded.error };
   }
-  const { result } = loaded;
+  const { result, newExercises } = loaded;
   if (!result.plan) {
     return { status: "error", message: rejectionMessage(result) };
   }
 
   try {
+    // Standard Hevy exercises missing from the catalog are added first so the
+    // plan's names resolve.
+    if (newExercises?.length) await addCatalogExercises(newExercises);
     const planId = await saveImportedPlan(user.id, result.plan);
     revalidatePath("/trainer");
     revalidatePath("/dashboard");
